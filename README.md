@@ -1,3 +1,6 @@
+
+![Frame 1](https://github.com/user-attachments/assets/6bed9691-a6c2-45ad-925b-6b553d724773)
+
 # SkillUP 
 ## Comment faire pour ajouter votre code
 1. Faites un fork de votre code
