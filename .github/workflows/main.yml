@@ -23,7 +23,7 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./  # The directory to upload (root of your repo)
-        server-dir: /htdocs  # The directory on your FTP server to upload to
+        server-dir: /htdocs/  # The directory on your FTP server to upload to
         exclude: |
           **/.git*
           **/.git*/**
