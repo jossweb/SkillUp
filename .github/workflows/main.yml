@@ -1,0 +1,32 @@
+name: FTP Sync
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to FTP
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./  # The directory to upload (root of your repo)
+        server-dir: /htdocs  # The directory on your FTP server to upload to
+        exclude: |
+          **/.git*
+          **/.git*/**
+          README.md
+          .github/**
+          .env.exemple
