@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
+:root {
+    /* light mode */
+    --bg: #FAFAFA;
+    --alt-bg: #fff;
+    --color: #000;
+    --border: #E3E3E3;
+    /* dark mode */
+    @media (prefers-color-scheme: dark) {
+        --bg: #0D0D0D;
+        --alt-bg: #000;
+        --color: #fff;
+        --border: #2B2B2B;
+    }
+    /* SkillUp pink */
+    --skillup-pink: #A042F0;
+    --skillup-alt-pink: #EDE3FF;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: "Onest", sans-serif;
+    font-optical-sizing: auto;
+}
