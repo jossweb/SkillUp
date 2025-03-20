@@ -1,3 +1,8 @@
+<!--Ajoutez ce code en haut de votr ficher php-->
+<?php
+    require_once("../include/config.php"); 
+    $titre = SITE_NAME . ' - Accueil';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
