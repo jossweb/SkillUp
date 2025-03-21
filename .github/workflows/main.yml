@@ -30,4 +30,5 @@ jobs:
           **/.git*/**
           README.md
           .github/**
+          config.php
           .env.exemple
