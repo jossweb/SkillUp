@@ -10,4 +10,4 @@ body{
     /*exemple 2*/
     color : #fff; /*à éviter au maximum !!!!!!!*/
     color : var(--color); /*Ce que vous devez faire*/
-} 
+}

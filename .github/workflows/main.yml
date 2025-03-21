@@ -19,14 +19,16 @@ jobs:
     - name: FTP Deploy
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        server: ${{ secrets.FTP_SERVER }}
+        server: ftpupload.net
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./  # The directory to upload (root of your repo)
-        server-dir: /htdocs/  # The directory on your FTP server to upload to
+        protocol: ftps
+        local-dir: ./
+        server-dir: /htdocs/
         exclude: |
           **/.git*
           **/.git*/**
           README.md
           .github/**
+          config.php
           .env.exemple
