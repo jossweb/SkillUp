@@ -12,7 +12,7 @@ define('JS_PATH', ASSETS_PATH . '/js');
 define('DB_HOST', 'localhost'); // Hôte de la base de données
 define('DB_PORT', 3306);        // Port (3306 par défaut pour MySQL)
 define('DB_USER', 'root');      // Nom d'utilisateur
-define('DB_PASS', 'root');          // Mot de passe 'mamp = root' autres = '' (pas de mdp)
+define('DB_PASS', '');          // Mot de passe 'mamp = root' autres = '' (pas de mdp)
 define('DB_NAME', 'skillup');  // Nom de la base de données
 
 $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4"; //création de la string de connection à la db
