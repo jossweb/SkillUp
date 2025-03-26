@@ -1,13 +1,3 @@
-@import url(./assets/css/assets.css?v=0.2);
-body {
-    background-color: var(--bg);
-    font-family: "Onest", sans-serif;
-    color: var(--color);
-    width:100vw;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
 nav {
     width: 100%;
     height: 65px;
@@ -28,37 +18,26 @@ nav a {
     text-decoration: none;
     color: var(--color);
 }
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg: #0D0D0D;
-        --alt-bg: #000;
-        --color: #fff;
-        --alt-color: #A1A1A1;
-        --border: #2B2B2B;
-    }
-}
+
 
 .grid-container{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);/*3 colonnes*/
-    gap: 40px;/*Espacement entre les élémentd*/
-    padding: 30px;/*Espacement interne*/
-    justify-content: center;/*Centrer la grille dans son conteneur*/
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4;
+    padding: 30px;
+    justify-content: center;
 }
-/* Style des catégories */
 .category {
     position: relative;
-    background-color: var(--bg);/*Fond des bloc*/
-    border-radius: 20px;/*Coins arrondis*/
-    overflow: hidden;/*Cacher tout dépassement*/
-    cursor: pointer;/*Changer le curseur en main pour indiquer que c'est cliquable*/  
+    background-color: var(--bg);
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
     border-bottom: solid 1px var(--border);
 }
 .category img {
     width: 100%;
-    height: 50%;
-    display: block;/*Supprime les espaces blancs sous l'image*/
-    
+    height: 60%;
+    display: block;
 }
-
 
