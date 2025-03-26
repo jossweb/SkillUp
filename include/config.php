@@ -15,7 +15,5 @@ define('DB_USER', 'root');      // Nom d'utilisateur
 define('DB_PASS', 'root');          // Mot de passe 'mamp = root' autres = '' (pas de mdp)
 define('DB_NAME', 'skillup');  // Nom de la base de données
 
-// Configuration des erreurs
 define('DEBUG', true); //Si true alors les erreurs s'afficheront sur les pages 
-
 ?>
