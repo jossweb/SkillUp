@@ -16,5 +16,5 @@ define('DB_PASS', 'root');          // Mot de passe 'mamp = root' autres = '' (p
 define('DB_NAME', 'skillup');  // Nom de la base de données
 
 $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4"; //création de la string de connection à la db
-$db = new PDO($dsn, DB_USER, DB_PASS); //connexion à la <db></db>
+$db = new PDO($dsn, DB_USER, DB_PASS); //connexion à la db
 ?>

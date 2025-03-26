@@ -25,6 +25,7 @@ body{
 .content {
     display: flex;
     position: relative;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 1;
@@ -60,7 +61,8 @@ form a{
     color: var(--color);
     text-decoration: none ;
 }
-input[type="text"], 
+input[type="text"],
+input[type="email"],
 input[type="password"] {
     width: 90%;
     background-color: transparent;
@@ -78,6 +80,10 @@ form button{
     width: 90%;
     border-radius: var(--radius);
     height: 40px;
+    border: 1px solid var(--border);
+    font-size: 15px;
+    background-color: var(--button-color);
+    color: #000;
 }
 form .mini-inputs {
     width: 90%;
@@ -116,4 +122,15 @@ form .mini-inputs .input-group {
 }
 .form .toggle button.isSelected{
     border-bottom: solid var(--skillup-pink); 
+}
+.message{
+    text-align: center;
+    background-color: var(--skillup-pink);
+    color: #fff;
+    width: 200px;
+    height: auto;
+    padding: 8px;
+    border-radius: var(--radius);
+    margin: 20px;
+
 }

@@ -10,6 +10,7 @@
     --skillup-pink: #A042F0;
     --skillup-alt-pink: #EDE3FF;
     --radius: 8px;
+    --button-color : #efefef;
 
 }
 
@@ -21,6 +22,7 @@
         --color: #fff;
         --alt-color: #A1A1A1;
         --border: #2B2B2B;
+        --button-color : #fff;
     }
 }
 
