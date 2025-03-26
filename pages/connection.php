@@ -1,8 +1,8 @@
 <?php
 session_start(); 
-require_once("../include/config.php"); 
+require_once("../include/connectdb.php"); 
 $titre = SITE_NAME . ' - connexion/inscription';
-$db = new PDO($dsn, DB_USER, DB_PASS); //connexion à la db
+$db =  connectDB();//connexion à la db
 $message = ""; // Variable pour stocker les messages d'erreur ou de succès
 
 function registration() {
