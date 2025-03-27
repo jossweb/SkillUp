@@ -151,7 +151,7 @@ section {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 4px 0 rgba(161, 161, 161, 0.25);
 }
 
 
@@ -174,4 +174,51 @@ section {
 .stat-label {
     color: var(--alt-color);
     font-size: 1.2rem;
+}
+
+.steps-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.step-card {
+    flex: 3;
+    background: var(--alt-bg);
+    border-radius: 20px;
+    padding: 15px 5px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 4px 0 rgba(161, 161, 161, 0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 340px;
+    max-width: 340px;
+    height: 120px;
+    justify-content: center;
+}
+
+.step-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color);
+    margin-bottom: 12px;
+}
+
+.step-description {
+    font-size: 1rem;
+    color: var(--alt-color);
+}
+
+.step-line {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 60px;
+    width: 100%;
+    height: 4px;
+    border-radius: 20px;
+    background-color: var(--border);
 }

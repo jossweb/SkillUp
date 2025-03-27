@@ -1,6 +1,8 @@
 <?php
     require_once("./include/config.php"); 
+    require_once("./include/stats.php"); 
     $titre = SITE_NAME . ' - Accueil';
+    $stats = getStats();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -86,20 +88,43 @@
         <h1 class="title">SkillUp c'est:</h1>
         <div class="stats-container">
             <div class="stat-card">
-                <div class="stat-value">+10 000</div>
+                <div class="stat-value"><?php echo number_format($stats['utilisateurs']); ?></div>
                 <div class="stat-label">utilisateurs</div>
             </div>
             
             <div class="stat-card">
-                <div class="stat-value">323</div>
+                <div class="stat-value"><?php echo number_format($stats['cours']); ?></div>
                 <div class="stat-label">cours</div>
             </div>
             
             <div class="stat-card">
-                <div class="stat-value">30</div>
+                <div class="stat-value"><?php echo number_format($stats['profs']); ?></div>
                 <div class="stat-label">profs</div>
             </div>
         </div>
     </section>
+    <section>
+    <h1 class="title">Comment ça marche ?</h1>
+        <div class="steps-container">
+            <div class="step-card">
+                <h2 class="step-title">Fais un compte</h2>
+                <p class="step-description">Rien de plus simple !</p>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-card">
+                <h2 class="step-title">Explore les cours</h2>
+                <p class="step-description">Choisis ce qui t'intéresse !</p>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-card">
+                <h2 class="step-title">Apprends à ton rythme</h2>
+                <p class="step-description">Progresse à ton propre tempo !</p>
+            </div>
+        </div>
+    </section>
+    <!-- Reste: -->
+    <!-- FAQ -->
+    <!-- CTA -->
+    <!-- FOOTER -->
 </body>
 </html>
