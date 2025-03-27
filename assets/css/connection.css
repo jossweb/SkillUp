@@ -65,7 +65,7 @@ input[type="text"],
 input[type="email"],
 input[type="password"] {
     width: 90%;
-    background-color: transparent;
+    background-color: var(--bg);
     border: var(--border) 1px solid;
     border-radius: var(--radius);
     height: 35px;
@@ -73,7 +73,7 @@ input[type="password"] {
     margin-bottom: 4px;
     padding: 4px;
     color: var(--color);
-    border: var(--border) 1px solid;
+    padding: 21px 11px; /*IL FAUT QUE CA RESPIRE*/
 }
 form button{
     margin: 20px;
@@ -82,8 +82,9 @@ form button{
     height: 40px;
     border: 1px solid var(--border);
     font-size: 15px;
-    background-color: var(--button-color);
-    color: #000;
+    background-color: var(--bg);
+    color: var(--color);
+    cursor: pointer;
 }
 form .mini-inputs {
     width: 90%;
@@ -115,10 +116,11 @@ form .mini-inputs .input-group {
     display: inline;
     width: 50%;
     height: 50px;
-    background-color: transparent;
+    background-color: var(--bg);
     border: none;
     color: var(--color);
     border-bottom: solid var(--border);
+    padding: 21px 11px;
 }
 .form .toggle button.isSelected{
     border-bottom: solid var(--skillup-pink); 
