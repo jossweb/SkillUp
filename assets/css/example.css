@@ -4,7 +4,7 @@
 
 /*Pour les utiliser voilà un exemple :*/
 
-body{
+body{ 
     background-color: var(--bg); /*ici l'arrière plan du body sera défini en fonction de la variable --bg ce qui nous permet d'avoir une adaptation theme clair ou sombre et à avoir des couleurs harmonieuses entre nos page*/
 
     /*exemple 2*/
