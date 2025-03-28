@@ -1,6 +1,4 @@
 @import url("assets.css");
-@import url("landing.css");
-@import url("hearder.css");
 
 body {
     background-color: var(--bg);
@@ -78,12 +76,9 @@ header{
         height: 180px;
         object-fit: cover;
     }
-    .cas contenu{
+    h2, p{
         font-family: "Onest", sans-serif;
         font-optical-sizing: auto;
         color: var(--color);
-    }
-    .cas contenu h2{
-        margin: 0 0 10px;
     }
 }
