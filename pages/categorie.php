@@ -9,15 +9,17 @@
         <link rel="stylesheet" href="../assets/css/categorie.css">
     </head>
     <body>
+        
         <nav>
             <img alt="SkillUp" src="../assets/images/logo.svg">
             <ul>
                 <li><a href="index.html">Accueil</a></li>
-                <li><a href="categorie.html">Catégories</a></li>
+                <li><a href="categorie.php">Catégories</a></li>
                 <li><a href="#">Formations</a></li>
-                <li><a href="connection.php">page</a></li>
+                <li><a href="#">page</a></li>
             </ul>
         </nav>
+        
         <!--Conteneur principal des différents catégories-->
         <br>
         <section class="grid-container">
@@ -33,28 +35,44 @@
             <div class="category">
                 <img src="../assets/images/informatic.jpg" alt="Informatique">
                 <h2>Informatique</h2>
-                <p>Codez, créez, innovez ! Dominez le monde digital avec nos formations en informatique</p>
+                <p>
+                    Codez, créez, innovez ! <br> 
+                    Dominez le monde digital avec 
+                    nos formations en informatique
+                </p>
             </div>
 
             <!--Catégorie 3 : Langues & communication-->
             <div class="category">
                 <img src="../assets/images/langue.jpg" alt="Langues & communication">
                 <h2>Langues & communication</h2>
-                <p>Ouvrez les portes du monde en maîtrisant de nouvelles langues avec nos formations</p>
+                <p>
+                    Ouvrez les portes du monde en<br> 
+                    maîtrisant de nouvelles langues avec 
+                    nos formations
+                </p>
             </div>
 
             <!--Catégorie 4 : Gestions & affaires-->
             <div class="category">
                 <img src="../assets/images/business.jpg" alt="Gestions & affaires">
                 <h2>Gestions & affaires</h2>
-                <p>Maîtrisez l'art du business avec nos formations adaptées à tous les niveaux</p>
+                <p>
+                    Maîtrisez l'art du business<br> 
+                    avec nos formations adaptées 
+                    à tous les niveaux
+                </p>
             </div>
 
             <!--Catégorie 5 : Musique-->
             <div class="category">
                 <img src="../assets/images/musique.jpg" alt="Musique">
                 <h2>Musique</h2>
-                <p>Composez votre avenir avec nos formations en musique accessibles à tous</p>
+                <p>
+                    Composez votre avenir 
+                    avec nos formations en musique 
+                    accessibles à tous
+                </p>
             </div>
 
             <!--Catégorie 6 : Art & design-->
