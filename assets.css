@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
+:root {
+    /* light mode */
+    --bg: #FAFAFA;
+    --alt-bg: #fff;
+    --color: #000;
+    --alt-color: #666;
+    --border: #E3E3E3;
+    /* SkillUp pink */
+    --skillup-pink: #A042F0;
+    --skillup-alt-pink: #EDE3FF;
+    --radius: 8px;
+}
+
+/* dark mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0D0D0D;
+        --alt-bg: #000;
+        --color: #fff;
+        --alt-color: #A1A1A1;
+        --border: #2B2B2B;
+    }
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Onest", sans-serif;
+    font-optical-sizing: auto;
+    transition: background-color 300ms ease, background-image 125ms ease, color 125ms ease, border-color 300ms ease;
+}
+
+html, body {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
