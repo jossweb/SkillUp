@@ -6,16 +6,17 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Catégorie de formations</title>
-        <link rel="stylesheet" href="../assets/css/categorie.css">
+        <link rel="stylesheet" href="../assets/css/assets.css">
+        <link rel="stylesheet" href="../assets/css/categories.css">
     </head>
     <body>
         <nav>
-            <img alt="SkillUp" src="../assets/images/logo.svg">
+            <img alt="SkillUp" src="../assets/images/logo-light.svg">
             <ul>
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="categorie.html">Catégories</a></li>
-                <li><a href="#">Formations</a></li>
-                <li><a href="connection.php">page</a></li>
+                <li><a href="/">Accueil</a></li>
+                <li><a href="categories.php">Catégories</a></li>
+                <li><a href="formations.php">Formations</a></li>
+                <li><a href="#">page</a></li>
             </ul>
         </nav>
         <!--Conteneur principal des différents catégories-->

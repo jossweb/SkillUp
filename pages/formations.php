@@ -1,16 +1,19 @@
+<?php
+    require_once("../include/config.php"); 
+    $titre = SITE_NAME . ' - Accueil';
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formations</title>
-    <link rel="stylesheet" href="formations.css">
+    <title><?php echo htmlspecialchars($titre);?></title>
+    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/formations.css"> 
 </head>
 <body>
 <header>
 <nav>
-    <div class="logo">
-    <img src="assets/images/logo-light.svg" alt="light logo"> 
+    <img src="../assets/images/logo-light.svg" alt="light logo"> 
 </div>
 <ul>
         <li><a href="pageAccueil" Accueil></a> </li>

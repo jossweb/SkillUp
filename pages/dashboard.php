@@ -1,14 +1,14 @@
 <?php
     require_once("../include/config.php"); 
-    $titre = SITE_NAME . ' - Accueil';
+    $titre = SITE_NAME . ' - Dashboard';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>/dashboard.css"> 
-    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/dashboard.css"> 
+    <title><?php echo htmlspecialchars($titre);?></title>
 <body>
     <div class="stats-container">
         <h1>Statistiques du professeur</h1>
