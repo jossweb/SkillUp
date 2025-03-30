@@ -1,10 +1,15 @@
 <?php
 session_start(); 
 require_once("../include/connectdb.php"); 
+require_once("../include/sessionManager.php");
 $titre = SITE_NAME . ' - connexion/inscription';
 $db =  connectDB();//connexion à la db
 $message = ""; // Variable pour stocker les messages d'erreur ou de succès
 
+if(IsConnected($_SERVER['REMOTE_ADDR'])){
+    header('Location: profile.php');
+    exit();
+}
 function registration() {
     global $db, $message;
     $name = $_POST['name'];
@@ -66,10 +71,18 @@ function connection() {
     $result = $request->fetch(PDO::FETCH_ASSOC);
 
     if (($result) && password_verify($password, $result['mot_de_passe'])) {
-        $_SESSION['user_id'] = $result['id'];
-        $_SESSION['user_name'] = $result['nom'];
-        $_SESSION['user_first_name'] = $result['prenom'];
-        $_SESSION['user_email'] = $email;
+        $token = password_hash($result['id'], PASSWORD_DEFAULT);
+        $_SESSION['token'] = $token;
+        $sql_session = 'INSERT INTO sessions (user_id, token, ip_address, expires_at) VALUES (:id, :token, :ip, :expiresDate)';
+        $request_session = $db->prepare($sql_session);
+        $request_session->bindParam(':id', $result['id']);
+        $request_session->bindParam(':token', $token);
+        $request_session->bindParam(':ip', $_SERVER['REMOTE_ADDR']);//get client ip
+        $expiresDate = new DateTime();
+        $expiresDate->modify('+1 day');
+        $expiresDateFormatted = $expiresDate->format('Y-m-d H:i:s');
+        $request_session->bindParam(':expiresDate', $expiresDateFormatted);
+        $request_session->execute();
         header("Location: dashboard.php");
         exit;
     } else {
