@@ -75,11 +75,10 @@ function connection() {
         $token = password_hash($token_seed, PASSWORD_DEFAULT);
     
         setcookie("user_token", $token, time() + 86400, "/"); 
-        $sql_session = 'INSERT INTO sessions (user_id, token, ip_address, expires_at) VALUES (:id, :token, :ip, :expiresDate)';
+        $sql_session = 'INSERT INTO sessions (user_id, token, expires_at) VALUES (:id, :token, :expiresDate)';
         $request_session = $db->prepare($sql_session);
         $request_session->bindParam(':id', $result['id']);
         $request_session->bindParam(':token', $token);
-        $request_session->bindParam(':ip', $_SERVER['REMOTE_ADDR']);  // IP du client
         $expiresDate = new DateTime();
         $expiresDate->modify('+1 day');
         $expiresDateFormatted = $expiresDate->format('Y-m-d H:i:s');
