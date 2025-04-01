@@ -2,10 +2,6 @@
 require_once("../include/config.php"); 
 $titre = SITE_NAME . ' - Accueil';
 
-$serveur= "localhost";
-$utilisateur = "merve";
-$mot_de_passe = "";
-$base_de_donnees = "Formations";
 
 $connexion = new mysqli($serveur, $utilisateur, $mot_de_passe, $base_de_donnees);
 
