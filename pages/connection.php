@@ -71,19 +71,21 @@ function connection() {
     $result = $request->fetch(PDO::FETCH_ASSOC);
 
     if (($result) && password_verify($password, $result['mot_de_passe'])) {
-        $token = password_hash($result['id'], PASSWORD_DEFAULT);
-        $_SESSION['token'] = $token;
+        $token_seed = $result['id'] . (new DateTime())->format('Y-m-d H:i:s');
+        $token = password_hash($token_seed, PASSWORD_DEFAULT);
+    
+        setcookie("user_token", $token, time() + 86400, "/"); 
         $sql_session = 'INSERT INTO sessions (user_id, token, ip_address, expires_at) VALUES (:id, :token, :ip, :expiresDate)';
         $request_session = $db->prepare($sql_session);
         $request_session->bindParam(':id', $result['id']);
         $request_session->bindParam(':token', $token);
-        $request_session->bindParam(':ip', $_SERVER['REMOTE_ADDR']);//get client ip
+        $request_session->bindParam(':ip', $_SERVER['REMOTE_ADDR']);  // IP du client
         $expiresDate = new DateTime();
         $expiresDate->modify('+1 day');
         $expiresDateFormatted = $expiresDate->format('Y-m-d H:i:s');
         $request_session->bindParam(':expiresDate', $expiresDateFormatted);
         $request_session->execute();
-        header("Location: dashboard.php");
+        header("Location: profile.php");
         exit;
     } else {
         $message = "<p>Email ou mot de passe incorrect !</p>";

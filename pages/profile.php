@@ -6,6 +6,7 @@ if(!IsConnected($_SERVER['REMOTE_ADDR'])){
     header('Location:  connection.php');
     exit();
 }
+
 $titre = SITE_NAME . ' - profil';
 $db =  connectDB();
 ?>
@@ -18,6 +19,24 @@ $db =  connectDB();
     <title><?php echo $titre; ?></title>
 </head>
 <body>
-    
+    <section>
+        <h1>Mon compte</h1>
+        <div>
+            <div class="headband">
+
+            </div>
+            <h2>Prénom</h2>
+            <p>emaildetest@test.com</p>
+            <button>Changer mon mot de passe</button>
+        </div>
+        <div>
+            <h2>Mes infos</h2>
+        </div>
+        <div>
+            <h2>Zone de danger</h2>
+            <p>Cette action est permanente et ne pourra pas être annulée.</p>
+            <button>Supprimer mon compte</button>
+        </div>
+    </section>
 </body>
 </html>
