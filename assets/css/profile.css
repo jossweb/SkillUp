@@ -1,1 +1,100 @@
 @import url("assets.css");
+body{
+    background-color: var(--alt-bg);
+    color: var(--color);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+button{
+    border: 0px;
+}
+.infos{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--alt-bg);
+    width: 40%;
+    max-width: 600px;
+    align-items: left;
+    justify-content: left;
+    border-radius: var(--radius);
+    border: none;
+    text-align: left;
+}
+.infos .user-info{
+    border: 2px var(--border) solid;
+    border-radius: var(--radius);
+    padding-bottom: 10px;
+}
+.change-info{
+    border: 2px var(--border) solid;
+    border-radius: var(--radius);
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+input{
+    width: 98%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    border: var(--border) 1px solid;
+    border-radius: var(--radius);
+    height: 35px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 4px;
+    color: var(--color);
+    padding: 21px 11px; 
+    margin-top: 10px;
+}
+.delete-account{
+    border: 2px var(--border) solid;
+    border-radius: var(--radius);
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.delete-account button{
+    background-color: #DF2E4E;
+    border: 0px;
+}
+.infos .headband{
+    background-color: var(--skillup-pink);
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+    width: 100%;
+    height: 70px;
+    margin-bottom: 50px;
+}
+.avatar{
+    margin-top: 4px;
+    margin-left: 20px;
+    border-radius: 50px;
+    width: 100px;
+    height: 100px;
+}
+.avatar:hover{
+    border: var(--border) 2px solid;
+}
+.infos button{
+    width: 98%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: var(--radius);
+    padding: 15px;
+    margin-top: 30px;
+    font-size: 14px;
+}
+.infos h2{
+    margin-left: 5px;
+    font-size: 25px;
+}
+.infos p{
+    margin-left: 5px;
+    font-size: 16px;
+}
