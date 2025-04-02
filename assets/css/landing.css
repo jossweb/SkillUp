@@ -1,4 +1,5 @@
-@import url(../css/assets.css?v=0.2);
+@import url(../css/assets.css?v=1);
+@import url(../css/responsive.css);
 
 body {
   background-color: var(--bg);
@@ -25,7 +26,7 @@ nav ul {
   display: flex;
   list-style: none;
   align-items: center;
-  gap: 10%;
+  gap: 15px;
 }
 
 nav a {
@@ -40,7 +41,9 @@ nav a:hover {
 }
 
 header {
-  height: 90vh;
+  position: relative;
+  flex-direction: column;
+  height: 95vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -52,7 +55,25 @@ header div {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  margin: auto;
 }
+
+#hg, #bd {
+  position: absolute;
+  z-index: -2;
+}
+
+#hg {
+  top: -14%;
+  left: -9%;
+}
+
+#bd {
+  bottom: -23%;
+  right: -13%;
+}
+
+
 header div h1 {
   font-size: 3rem;
   font-weight: 600;
@@ -78,6 +99,37 @@ button:hover {
   background-color: var(--alt-color);
   cursor: pointer;
 }
+
+#scroll {
+  position:  absolute;
+  bottom: 3%;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  background-color:  var(--bg);
+  color: var(--color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: scroll 3s infinite;
+}
+
+#scroll svg {
+  width: 20px;
+  height: auto;
+  color: var(--color);
+}
+
+@keyframes scroll {
+  0%, 30%, 60% {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  40% {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 4px 0 rgba(161, 161, 161, 0.25);
+  }
+}
+
 section {
   min-height: 500px;
   height: fit-content;

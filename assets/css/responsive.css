@@ -1,0 +1,31 @@
+/* 
+ * Ici vous allez définir les styles responsifs 
+ * pour avoir un style qui s'adapte en fonction des
+ * dimensions des appareils. Pour ce faire, nous allons
+ * utiliser des "media queries". Elles vont nous permettre de définir,
+ * pour des dimensions données, des propriétés qui s'appliqueront
+ * uniquement dans la dimension définie.
+ 
+ * Les "dimensions" que nous allons définir sont appelées des breakpoints.
+ * Pour nous simplifier la tâche, nous allons utiliser les breakpoints recommandés par
+ * https://www.browserstack.com/guide/responsive-design-breakpoints
+ 
+ * Breakpoints:
+ * - Mobile: 320px - 480px (Extra Small Mobile Portrait)
+ * - Tablet: 601px - 1024px (Small Tablets Portrait à Large Tablets Landscape)
+ * - Desktop: 1025px et plus (Small Desktops and Laptops et au-delà)
+ 
+ * docs mozilla: https://developer.mozilla.org/fr/docs/Web/CSS/CSS_media_queries/Using_media_queries
+ */
+
+
+ /* Mobile (320px - 480px) */
+@media screen and (min-width: 320px) and (max-width: 480px) {
+    header svg {
+        display: none;
+    }
+}
+
+/* Desktop (1025px et plus) */
+@media screen and (min-width: 1025px) {
+}

@@ -20,6 +20,7 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
+            margin: 0;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -30,24 +31,34 @@
     </style>
 </head>
 <body>
-    <nav>
-        <div class="logo" aria-label="SkillUp"></div>
-        <ul>
-            <li><a href="/">Accueil</a></li>
-            <li><a href="/pages/formations.php">Formations</a></li>
-            <li><a href="/pages/categories.php">Catégories</a></li>
-            <li><a href="#">Page</a></li>
-        </ul>
-        <button onclick="location.href='/pages/connection.php';">Se connecter</button>
-    </nav>
     <header>
+        <svg id="hg" width="549" height="477" viewBox="0 0 549 477" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M549 45.7348L289.099 397.04L189.066 301.434L61.8308 477L0 431.873L178.579 185.46L279.237 281.663L487.615 0L549 45.7348Z" fill="#A042F0" fill-opacity="0.3"></path>
+        </svg>
+        <nav>
+            <div class="logo" aria-label="SkillUp"></div>
+            <ul>
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/pages/formations.php">Formations</a></li>
+                <li><a href="/pages/categories.php">Catégories</a></li>
+                <li><a href="#">Page</a></li>
+            </ul>
+            <button onclick="location.href='/pages/connection.php';">Se connecter</button>    
+        </nav>
         <div>
             <h1>Bienvenue sur la plateforme idéale <br> pour apprendre gratuitement</h1>
             <p>Apprenez à votre rythme, développez <br> vos compétences librement.</p>
             <button onclick="location.href='/pages/connection.php';">Inscrivez-vous maintenant</button>
         </div>
+        <svg id="bd" width="549" height="477" viewBox="0 0 549 477" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M549 45.7348L289.099 397.04L189.066 301.434L61.8308 477L0 431.873L178.579 185.46L279.237 281.663L487.615 0L549 45.7348Z" fill="#A042F0" fill-opacity="0.3"></path>
+        </svg>
+        <button id="scroll" onclick="document.getElementById('why').scrollIntoView()">
+            En apprendre plus
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-icon lucide-arrow-down"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+        </button>
     </header>
-    <section>
+    <section id="why">
         <div class="content">
             <h1 class="title">Pourquoi SkillUp ?</h1>
             <div class="features">
@@ -84,7 +95,7 @@
             </div>
         </div>
     </section>
-    <section>
+    <section id="stat">
         <h1 class="title">SkillUp c'est:</h1>
         <div class="stats-container">
             <div class="stat-card">
@@ -103,7 +114,7 @@
             </div>
         </div>
     </section>
-    <section>
+    <section id="how">
     <h1 class="title">Comment ça marche ?</h1>
         <div class="steps-container">
             <div class="step-card">
@@ -122,7 +133,7 @@
             </div>
         </div>
     </section>
-    <section>
+    <section id="faq">
         <h1 class="title">Foire aux questions</h1>
         <div class="faq-container">
             <div class="faq-item">
@@ -179,7 +190,7 @@
             </div>
         </div>
     </section>
-    <section>
+    <section id="cta">
         <div class="cta-card">
             <h2 class="cta-title">Vous êtes prof ? Partagez votre expertise !</h2>
             <p class="cta-text">Rejoignez SkillUp et créez des cours pour aider des milliers d'apprenants à progresser.</p>
