@@ -73,7 +73,7 @@ input[type="password"] {
     margin-bottom: 4px;
     padding: 4px;
     color: var(--color);
-    padding: 21px 11px; /*IL FAUT QUE CA RESPIRE*/
+    padding: 21px 11px; 
 }
 form button{
     margin: 20px;
