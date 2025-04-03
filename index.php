@@ -33,7 +33,7 @@
 <body>
     <header>
         <svg id="hg" width="549" height="477" viewBox="0 0 549 477" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M549 45.7348L289.099 397.04L189.066 301.434L61.8308 477L0 431.873L178.579 185.46L279.237 281.663L487.615 0L549 45.7348Z" fill="#A042F0" fill-opacity="0.3"></path>
+            <path class="hg-path" fill-rule="evenodd" clip-rule="evenodd" d="M549 45.7348L289.099 397.04L189.066 301.434L61.8308 477L0 431.873L178.579 185.46L279.237 281.663L487.615 0L549 45.7348Z" fill="#A042F0" fill-opacity="0.3"></path>
         </svg>
         <nav>
             <div class="logo" aria-label="SkillUp"></div>
