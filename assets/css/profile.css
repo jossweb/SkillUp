@@ -10,6 +10,8 @@ body{
 }
 button{
     border: 0px;
+    background-color: var(--bg);
+    color: var(--color);
 }
 .infos{
     display: flex;
@@ -40,7 +42,7 @@ input{
     display: block;
     margin-left: auto;
     margin-right: auto;
-    background-color: white;
+    background-color: var(--bg);
     border: var(--border) 1px solid;
     border-radius: var(--radius);
     height: 35px;
@@ -89,12 +91,103 @@ input{
     padding: 15px;
     margin-top: 30px;
     font-size: 14px;
+
+}
+#generatePopup{
+    float: left;
+    width: auto;
+    margin: 0px;
+    padding-top: 0px;
+}
+.headband button{
+    float: left;
+    background-color: transparent;
+    margin-right: 0px;
+    margin-left: 0px
 }
 .infos h2{
-    margin-left: 5px;
+    padding-left: 1%;
+    padding-top: 15px;
     font-size: 25px;
 }
 .infos p{
-    margin-left: 5px;
+    padding-left: 1%;
     font-size: 16px;
+}
+.blurred-bg{
+    background-color: var(--alt-bg);
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+}
+.popup{
+    display: none;
+    position: absolute;
+    opacity: 0;
+    z-index: 100;
+    background-color: var(--alt-bg);
+    border: var(--border) solid 1px;
+    border-radius: var(--radius);
+    width: 40%;
+    max-width: 600px;
+    min-height: 120px;
+    padding: 10px;
+}
+.popup .cross{
+    margin: none;
+    position: absolute; 
+    top: 5px;
+    right: 5px;
+    color: var(--color);
+    background-color: transparent;
+    border: none;
+    width: auto;
+    padding: none;
+}
+.popup button{
+    background-color: var(--alt-bg);
+    border: var(--border) solid 1px;
+    color: var(--color);
+    border-radius: var(--radius);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 8px;
+    width: 98%;
+    font-size: 15px;
+    margin-top: 10px;
+}
+.popup label{
+    margin: 5px;
+}
+.popup h2{
+    padding-top: 25px;
+    padding: 5px;
+    font-size: 18px;
+}
+.popup img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 30%;
+    height: auto;
+    border-radius: 100px;
+    border: var(--border) solid 1px;
+}
+.popup .avatar-container{
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+.popup .avatar-container p{
+    font-size: 25px;
+    font-weight: bolder;
+}
+.popup #agreeAvatar{
+    width: 45%;
 }
