@@ -53,8 +53,7 @@ function getAvatar(){
 }
 function SetNewAvatar() {
     if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){
-        global $new_avatar;
-        global $result;
+        global $new_avatar, $result;
         $db = connectDB();
         $sql = "UPDATE Utilisateurs SET avatar_url = :avatarUrl WHERE id = :id";
         $request = $db->prepare($sql);
@@ -66,12 +65,48 @@ function SetNewAvatar() {
         exit();
     }
 }
+function ChangeUserInfos() {
+    global $db, $result;
+    $name = $_POST['new-name'];
+    $firstname = $_POST['new-firstname'];
+    $sql="UPDATE Utilisateurs SET Utilisateurs.nom = :name, Utilisateurs.prenom = :firstname WHERE Utilisateurs.id = :id";
+    $request = $db->prepare($sql);
+    $request->bindParam(':name', $name );
+    $request->bindParam(':firstname', $firstname );
+    $request->bindParam(':id', $result['id']);
+    $request->execute();
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+function DeleteUser(){
+    global $db, $result;
+    $sql="DELETE FROM Utilisateurs WHERE Utilisateurs.id = :id";
+    $request = $db->prepare($sql);
+    $request->bindParam(':id', $result['id'] );
+    $request->execute();
+
+    $sql="DELETE FROM sessions WHERE sessions.token = :token";
+    $request = $db->prepare($sql);
+    $request->bindParam(':token', $_COOKIE['user_token'] );
+    $request->execute();
+
+    setcookie('user_token', '', time(), '/');
+    session_destroy();
+    header("Location: /index.php");
+    exit();
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['avatar-gen'])) {
         getAvatar();
     }
     if (isset($_POST['agreeAvatar'])) {
         SetNewAvatar();
+    }
+    if (isset($_POST['change-infos'])) {
+        ChangeUserInfos();
+    }
+    if (isset($_POST['delete'])) {
+        DeleteUser();
     }
 }
 ?>
@@ -87,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <section class="infos">
         <div class="user-info">
             <div class="headband">
-                <button id="generatePopup">
+                <button id="generatePopup" onclick="OpenAvatarPopup()">
                     <img src="<?php echo $avatar ?>" alt="Your profile picture" class="avatar"/>
                 </button>
             </div>
@@ -99,34 +134,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="change-info">
             <h2>Mes infos</h2>
             <form method="POST">
-                <input type="test" placeholder="<?php echo $result['nom']?>">
-                <input type="test" placeholder="<?php echo $result['prenom']?>">
-                <button type="submit">Enregistrer</button>
+                <input type="test" id="new-name" name="new-name" placeholder="<?php echo $result['nom']?>" required>
+                <input type="test" id="new-firstname" name="new-firstname" placeholder="<?php echo $result['prenom']?>" required>
+                <button type="submit" id="change-infos" name='change-infos' onclick="OpenMessagePopup()">Enregistrer</button>
             </form>
         </div>
         <div class="delete-account">
             <h2>Zone de danger</h2>
             <p>Cette action est permanente et ne pourra pas être annulée.</p>
-            <button onclick="openDeletePopup">Supprimer mon compte</button>
+            <button onclick="OpenDeleteCheck()">Supprimer mon compte</button>
         </div>
     </section>
     <div class="blurred-bg" id="blurred-bg"></div>
-
     <section class="popup" id="delete-check">
-        <button class="cross">X</button>
+        <button class="cross" onclick="CloseDeleteCheck()">X</button>
         <h2>Voulez-vous vraiment supprimer votre compte ?</h2>
         <p>Cette opération est irréversible</p>
-        <button id="delete">Supprimer mon compte</button>
+        <form method="POST">
+            <button type="submit" id="delete" name="delete" onclick="CloseDeleteCheck()">Supprimer mon compte</button>
+        </form>
     </section>
-
-    <section class="popup" id="message">
-        <button class="cross">X</button>
-        <h2>Message</h2>
-        <button id="Okk">D'accord !</button>
+    <section class="popup" id="message-pop">
+        <button class="cross" onclick="CloseMessagePopup()">X</button>
+        <h2>Message :</h2>
+        <p>Vos informations ont été modifiées avec succès !</p>
+        <button id="Okk" onclick="CloseMessagePopup()">D'accord !</button>
     </section>
 
     <section class="popup" id="new-pp">
-        <button id="cross-npp" class="cross">X</button>
+        <button onclick="CloseAvatarPopup()" class="cross">X</button>
         <h2>Changer mon avatar</h2>
         <div class="avatar-container">
             <img src="<?php echo $avatar ?>">
@@ -137,20 +173,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="POST">
             <label for="prompt">Mon avatar doit ressembler à :</label>
             <input id="prompt" name="prompt" type="text">
-            <button id="generate" name="avatar-gen">Générer mon avatar</button>
-        </form>
+            <button id="generate" name="avatar-gen" onclick="ShowLoading()">Générer mon avatar</button>
+            <div class="loading-part" id="loading-emo">
+                <p>Chargement</p>
+                <div id="spinner"></div>
+            </div>
+       </form>
     </section>
 </body>
 
 <script>
     //get elements
     var blurredBg = document.getElementById('blurred-bg');
-    var closeButtonsNpp = document.getElementById('cross-npp');
-    var generateButton = document.getElementById('generatePopup');
     var deleteMyAccount = document.getElementById('delete');
+    var deletePopup = document.getElementById('delete-check');
     var okClosePopup = document.getElementById('Okk');
-    var newPP = document.getElementById('new-pp')
+    var newPP = document.getElementById('new-pp');
+    var loading = document.getElementById('loading-emo');
+    var message = document.getElementById('message-pop')
 
+    function ShowLoading(){
+        loading.style.display = "block";
+    }
     function OpenAvatarPopup() {
         blurredBg.style.opacity = "90%";
         newPP.style.opacity = "1";
@@ -163,14 +207,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         newPP.style.display = "none";
         localStorage.removeItem('avatarPopupOpen'); 
     }
+    function CheckOpenCondition(){
+        var nameValue = document.getElementById("new-name").value;
+        var firstnameValue = document.getElementById("new-firstname").value;
+        if(nameValue && firstnameValue){
+            OpenMessagePopup();
+        }
+    }
+    function OpenMessagePopup(){
+        blurredBg.style.opacity = "90%";
+        message.style.opacity = "1";
+        message.style.display = "block";
+        localStorage.setItem('messagePopOpen', 'true');
 
-    //event listener
-    generateButton.addEventListener("click", OpenAvatarPopup);
-    closeButtonsNpp.addEventListener("click", CloseAvatarPopup);
-
+    }
+    function CloseMessagePopup(){
+        blurredBg.style.opacity = "0";
+        message.style.opacity = "0";
+        message.style.display = "none";
+        localStorage.removeItem('messagePopOpen');
+    }
+    function OpenDeleteCheck(){
+        blurredBg.style.opacity = "90%";
+        deletePopup.style.opacity = "1";
+        deletePopup.style.display = "block";
+        localStorage.setItem('deletePopup', 'true');
+    }
+    function CloseDeleteCheck(){
+        blurredBg.style.opacity = "0";
+        deletePopup.style.opacity = "0";
+        deletePopup.style.display = "none";
+        localStorage.removeItem('deletePopup');
+        }
     document.addEventListener("DOMContentLoaded", function () {
         if (localStorage.getItem('avatarPopupOpen') === 'true') {
             OpenAvatarPopup(); 
+        }
+        if(localStorage.getItem('messagePopOpen') === 'true'){
+            OpenMessagePopup();
+        }
+        if(localStorage.getItem('deletePopup') === 'true'){
+            OpenDeleteCheck();
         }
     });
 

@@ -92,8 +92,7 @@ function connection() {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['connectionForm'])) {
-        
+    if (isset($_POST['connectionForm'])) { 
         connection();
     } elseif (isset($_POST['registrationForm'])) {
         registration();

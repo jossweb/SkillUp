@@ -191,3 +191,38 @@ input{
 .popup #agreeAvatar{
     width: 45%;
 }
+.loading-part{
+    display: none;
+    text-align: center;
+    margin-top: 1px;
+}
+.loading-part #spinner{
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--alt-bg);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+}
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+#message-pop h2{
+    margin-top: 10px;
+}
+#message-pop p{
+    font-size: 22px;
+    text-align: center;
+    margin: 20px;
+    margin-top: 30px;
+}
+#message-pop #Okk{
+    width: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
