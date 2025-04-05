@@ -115,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <div class="content">
         <?php if ($message): ?>
-                    <div class="message" class="message"><?php echo $message; ?></div>
+                    <div class="message"><?php echo $message; ?></div>
         <?php endif; ?>
         <section class="form">
             <div class="toggle">
@@ -128,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="password">Mot de passe</label>
                 <input type="password" id="password" maxlength="255" name="password"/>
                 <button type="submit" name="connectionForm">Connexion</button>
-                <a href="">mot de passe oublié</a>
+                
             </form>
             <form id="register-form" method="POST">
                 <div class="mini-inputs">
@@ -149,6 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="password" id="check-pass" maxlength="255" name="cPassword"/>
                 <button type="submit" name="registrationForm">Inscription</button>
             </form>
+            <a href="../">Accueil</a>
         </section>
     </div>
 </body>

@@ -125,6 +125,10 @@ form .mini-inputs .input-group {
 .form .toggle button.isSelected{
     border-bottom: solid var(--skillup-pink); 
 }
+.form button:hover{
+    background-color: var(--border);
+    transition: 600ms ease-in;
+}
 .message{
     text-align: center;
     background-color: var(--skillup-pink);
@@ -135,4 +139,14 @@ form .mini-inputs .input-group {
     border-radius: var(--radius);
     margin: 20px;
 
+}
+a{
+    color: var(--color);
+    text-decoration: none;
+    padding: 5px;
+    padding-bottom: 15px;
+}
+a:hover{
+    color: var(--border);
+    transition: 500ms ease-in;
 }

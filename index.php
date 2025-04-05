@@ -43,7 +43,7 @@
                 <li><a href="/pages/categories.php">Catégories</a></li>
                 <li><a href="#">Page</a></li>
             </ul>
-            <button onclick="location.href='/pages/connection.php';">Se connecter</button>    
+            <button onclick="location.href='pages/connection.php';">Se connecter</button>    
         </nav>
         <div>
             <h1>Bienvenue sur la plateforme idéale <br> pour apprendre gratuitement</h1>

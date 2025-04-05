@@ -13,6 +13,9 @@ button{
     background-color: var(--bg);
     color: var(--color);
 }
+a{
+    text-decoration: none;
+}
 .infos{
     display: flex;
     flex-direction: column;
@@ -71,6 +74,11 @@ input{
     width: 100%;
     height: 70px;
     margin-bottom: 50px;
+    position: relative;
+}
+.infos .headband .cross{
+    font-size: 25px;
+    color: var(--bg);
 }
 .avatar{
     margin-top: 4px;
@@ -80,7 +88,8 @@ input{
     height: 100px;
 }
 .avatar:hover{
-    border: var(--border) 2px solid;
+    filter: brightness(40%);
+    transition: 250ms ease-in;
 }
 .infos button{
     width: 98%;
@@ -136,7 +145,7 @@ input{
     min-height: 120px;
     padding: 10px;
 }
-.popup .cross{
+.cross{
     margin: none;
     position: absolute; 
     top: 5px;
@@ -212,17 +221,111 @@ input{
     to { transform: rotate(360deg); }
 }
 #message-pop h2{
+    margin: 20px;
     margin-top: 10px;
+    font-size: 22px;
+    font-weight: bold;
 }
 #message-pop p{
-    font-size: 22px;
+    font-size: 18px;
     text-align: center;
     margin: 20px;
-    margin-top: 30px;
+    margin-top: 40px;
 }
-#message-pop #Okk{
+#message-pop button{
+    float: right;
     width: auto;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-right: 3%;
+}
+#message-pop button:hover{
+    background-color: var(--border);
+    transition: 500ms ease-in-out;
+}
+.popup .button-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    float: right;
+    justify-content: flex-end;
+    padding-top : 20px
+}
+.popup .button-container button{
+    float: right;
+    margin: 5px;
+    width: 20%;
+}
+.popup .button-container form{
+    float: right;
+    margin: 5px;
+    width: 20%;
+}
+.popup .button-container form button{
+    width: 100%;
+    margin: 0;
+}
+.popup .button-container #delete{
+    background-color: #DF2E4E;
+}
+.popup .button-container button:hover{
+    background-color: var(--border);
+    transition: 500ms ease-in-out;
+}
+#delete-check h2{
+    margin-left: 20px;
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: bold;
+}
+#delete-check p{
+    font-size: 18px;
+    text-align: left;
+    margin-left: 30px;
+    margin-top: 25px;
 }
 
+/*reset password*/
+.reset{
+    border: solid 1px var(--border);
+    padding: 20px;
+    border-radius: var(--radius);
+    width: 40%;
+    max-width: 600px;
+    display: block;
+    position: relative;
+}
+.reset h1{
+    padding: 12px;
+    padding-left: 0px;
+}
+.reset button{
+    width: 98%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: var(--radius);
+    padding: 15px;
+    margin-top: 30px;
+    font-size: 14px;
+}
+.print-message{
+    text-align: center;
+    background-color: var(--skillup-pink);
+    color: #fff;
+    width: 200px;
+    height: auto;
+    padding: 8px;
+    border-radius: var(--radius);
+    margin: 20px;
+
+}
+#reset {
+    flex-direction: column;
+}
+.reset .cross{
+    font-size: 25px;
+    padding: 10px;
+    padding-top: 20px
+}

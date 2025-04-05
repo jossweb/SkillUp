@@ -122,6 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <section class="infos">
         <div class="user-info">
             <div class="headband">
+                <a href="../" class="cross">&crarr; </a>
                 <button id="generatePopup" onclick="OpenAvatarPopup()">
                     <img src="<?php echo $avatar ?>" alt="Your profile picture" class="avatar"/>
                 </button>
@@ -129,7 +130,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <h2><?php echo $result['prenom']?></h2>
             <p><?php echo $result['e_mail']?></p>
-            <button>Changer mon mot de passe</button>
+            <a href="reset-pass.php"><button>Changer mon mot de passe</button></a>
+            
         </div>
         <div class="change-info">
             <h2>Mes infos</h2>
@@ -147,12 +149,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </section>
     <div class="blurred-bg" id="blurred-bg"></div>
     <section class="popup" id="delete-check">
-        <button class="cross" onclick="CloseDeleteCheck()">X</button>
-        <h2>Voulez-vous vraiment supprimer votre compte ?</h2>
-        <p>Cette opération est irréversible</p>
-        <form method="POST">
-            <button type="submit" id="delete" name="delete" onclick="CloseDeleteCheck()">Supprimer mon compte</button>
-        </form>
+        <h2>Supprimer le compte ?</h2>
+        <p>Cette ne peut pas être annulée</p>
+        <div class="button-container">
+            <button onclick="CloseDeleteCheck()">Annuler</button>
+            <form method="POST">
+                <button type="submit" id="delete" name="delete" onclick="CloseDeleteCheck()">Supprimer mon compte</button>
+            </form>
+        </div>
     </section>
     <section class="popup" id="message-pop">
         <button class="cross" onclick="CloseMessagePopup()">X</button>
