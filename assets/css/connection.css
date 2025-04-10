@@ -1,26 +1,12 @@
 @import url("assets.css");
+@import url("responsive.css");
+
 body{
     background-color: var(--alt-bg);
     color: var(--color);
     width: 100%;
     height: 100vh;
     display: flex;
-}
-.background {
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-}
-.background img{
-    position: absolute;
-}
-.background #img-top{
-    top: 0;
-    left: 0;
-}
-.background #img-bottom {
-    bottom: 0;
-    right: 0;
 }
 .content {
     display: flex;

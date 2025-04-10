@@ -48,7 +48,7 @@
     const dates = [];
     const today = new Date();
 
-    for (let i = 6; i >= 0; i--) {
+    for (let i = 30; i >= 0; i--) {
       const date = new Date(today);
       date.setDate(today.getDate() - i);
 
@@ -68,7 +68,7 @@
       {
         
       label: "Nouveaux inscrits cette semaine",
-      data: [8, 10, 2, 7, 17, 15, 19],
+      data: [8, 10, 2, 7, 17, 15, 19, 8, 10, 2, 7, 17, 15, 19, 8, 10, 2, 7, 17, 15, 19, 8, 10, 2, 7, 17, 15, 19, 25, 19, 3],
       backgroundColor: "rgba(160, 66, 240, 0.8)",
       borderColor: "rgba(0, 0, 0, 1)",
       borderWidth: 1,

@@ -25,7 +25,36 @@
         display: none;
     }
 }
+ /* Tablet (601px - 1024px) */
+@media screen and (min-width: 601px) and (max-width: 1024px) {
 
+}
+/* Tablet and smartphone (less than 1024px)*/
+@media screen and (min-width: 0px) and (max-width: 1024px) {
+    /*connection/registration form*/
+    .form{
+        width: 100% !important;
+        overflow: hidden;
+        justify-content: center !important;
+    }
+    .infos{
+        width: 100% !important;
+        padding-top: 100px !important;
+    }
+    .reset{
+        width: 100% !important;
+    }
+    .popup {
+        width: 100% !important;
+        overflow: hidden;
+    }
+    .popup .button-container button {
+        width: 30%;
+    }
+    .popup .button-container form {
+        width: 30% !important;
+    }
+}
 /* Desktop (1025px et plus) */
 @media screen and (min-width: 1025px) {
 }

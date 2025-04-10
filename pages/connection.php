@@ -109,10 +109,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title><?php echo $titre; ?></title>
 </head>
 <body>
-    <div class="background">
-        <img src="../<?php echo IMG_PATH; ?>/skillup-logo.svg" alt="background" id="img-top"/>
-        <img src="../<?php echo IMG_PATH; ?>/skillup-logo2.svg" alt="background" id="img-bottom"/>
-    </div>
     <div class="content">
         <?php if ($message): ?>
                     <div class="message"><?php echo $message; ?></div>
