@@ -158,14 +158,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
         </div>
     </section>
-    <section class="popup" id="message-pop">
+    <div class="popup" id="message-pop">
         <button class="cross" onclick="CloseMessagePopup()">X</button>
         <h2>Message :</h2>
         <p>Vos informations ont été modifiées avec succès !</p>
         <button id="Okk" onclick="CloseMessagePopup()">D'accord !</button>
-    </section>
+    </div>
 
-    <section class="popup" id="new-pp">
+    <div class="popup" id="new-pp">
         <button onclick="CloseAvatarPopup()" class="cross">X</button>
         <h2>Changer mon avatar</h2>
         <div class="avatar-container">
@@ -183,7 +183,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div id="spinner"></div>
             </div>
        </form>
-    </section>
+    </div>
 </body>
 
 <script>
