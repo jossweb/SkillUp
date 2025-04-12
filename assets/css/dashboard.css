@@ -2,21 +2,29 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: var(--bg);
+    background-color: var(--alt-bg);
     color: var(--color);
     margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: 100vh;
 }
-
+#stats{
+    display: flex;
+    flex-direction: column;
+}
+#cours{
+    display: none;
+    flex-direction: column;
+}
 .stats-container {
     background-color: var(--alt-bg);
     border-radius: var(--radius);
     border: 1px solid var(--border);
     width: 100%;
-    height: 100vh;
+    height: auto;
     max-width: 1500px;
     padding: 24px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
@@ -38,16 +46,16 @@ h1 {
     justify-content: space-between;
     margin-bottom: 20px;
     gap: 10px;
+    margin-top: 40px;
 }
 
 .stat-box {
-    background-color: var(--alt-bg);
+    background-color: var(--bg);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 15px;
-    text-align: center;
+    text-align: left;
     flex: 1;
-    min-width: 100px;
 }
 
 .stat-box h3 {
@@ -94,3 +102,78 @@ h1 {
     background-color: var(--bg);
     border-radius: 20px;
   }
+  .avatar{
+    margin-top: 4px;
+    margin-left: 20px;
+    border-radius: 50px;
+    width: 100px;
+    height: 100px;
+}
+.top{
+    display: flex;
+    flex-direction: row;
+}
+.top .title{
+    margin-top: 40px;
+    margin-left: 10px;
+}
+.top .title h1{
+    font-size: 35px;
+}
+.top .title p{
+    margin-top: 5px;
+    color: var(--border);
+}
+.toggle {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    gap: 0;
+    border-radius: var(--radius);
+    margin-top: 20px;
+}
+.toggle button{
+    padding: 5px;
+    font-size: large;
+    width: 50%;
+    height: 50px;
+    background-color: var(--bg);
+    border: none;
+    color: var(--color);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.toggle .left{
+    border-top-left-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
+}
+.toggle .right{
+    border-top-right-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+}
+.toggle .isSelected{
+    background-color: var(--skillup-pink);
+}
+.stat-box p{
+    font-size: 16px;
+    font-weight: 200;
+    margin-bottom: 20px;
+}
+.stat-box .value{
+    font-size: 25px;
+    font-weight: 500;
+    margin-left: 8px;
+}
+.stat-box .value-box{
+    display: flex;
+    flex-direction: row;
+}
+.nothing-to-show{
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: 500;
+}
