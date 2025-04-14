@@ -53,8 +53,31 @@
     $request_data->execute();
     $result_data = $request_data->fetch(PDO::FETCH_ASSOC);
 
-  
-?>
+    //get courses infos
+    $sql_courses = "SELECT Cours.id, Cours.nom, Cours.illustration_url, Cours.description, Categories.nom AS 'cat_nom', COUNT(Vues.id) AS 'Vues', COUNT(Inscriptions.id) AS 'Inscrits', COUNT(Favoris.id) AS 'like' FROM Cours INNER JOIN Utilisateurs ON Cours.prof_id = Utilisateurs.id LEFT JOIN Vues ON Cours.id = Vues.cours_id LEFT JOIN Inscriptions ON Cours.id = Inscriptions.cours_id LEFT JOIN Favoris ON Cours.id = Favoris.cours_id LEFT JOIN Categories ON Categories.id = Cours.categorie_id WHERE Utilisateurs.id = :id GROUP BY Cours.id;";
+    $request_courses = $db->prepare($sql_courses);
+    $request_courses->bindParam(":id", $result["id"]);
+    $request_courses->execute();
+    $result_courses = $request_courses->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      if(isset($_POST["id"])){
+        $sql_delete = "DELETE FROM Cours WHERE id = :cid AND prof_id = :pid;";
+        $request_delete = $db->prepare($sql_delete);
+        $request_delete->bindParam(":cid", $_POST["id"]);
+        $request_delete->bindParam(":pid", $result['id']);
+        $request_delete->execute();
+        if ($request_delete->rowCount() > 0) {
+          $_SESSION['message'] = 'Success';
+      } else {
+          $_SESSION['message'] = 'Error';
+      }
+      header("Location: dashboard.php");
+      exit();
+      }
+
+    }
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,6 +86,16 @@
     <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/dashboard.css"> 
     <title><?php echo htmlspecialchars($titre);?></title>
 <body>
+  <?php
+    if (isset($_SESSION['message'])) {
+      if($message='Success'){
+        echo '<div class="message">Cours Supprimé avec succès</div>';
+      }else{
+        echo '<div class="message">Erreur, impossible de supprimer le cours</div>';
+      }
+      unset($_SESSION['message']); 
+    }
+  ?>
   <div class="stats-container">
     <div class="top">
       <img src="<?php echo $avatar ?>" alt="profile picture" class="avatar">
@@ -148,12 +181,99 @@
       ?>
     </div>
     <div id="cours">
-        <h1>TEST</h1>
+        <div class="top">
+          <h2>Liste des cours</h2>
+          <button onclick="location.href='addCourse.php?cours=00000';">
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6.25 15H23.75" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15 6.25V23.75" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p>Nouveau cours</p>
+          </button>
+        </div>
+        <?php
+        if ($result_courses){
+          echo "<table>";
+          echo "<thead>";
+          echo "<tr>";
+          echo "<td class='name'>Nom</td>";
+          echo "<td>Catégorie</td>";
+          echo "<td>Étudiant</td>";
+          echo "<td>Vues</td>";
+          echo "<td>J'aimes</td>";
+          echo "<td>Actions</td>";
+          echo "</tr>";
+          echo "</thead>";
+          echo "<tbody>";
+          foreach ($result_courses as $course) {
+            echo "<tr>";
+            echo "<td>" . $course['nom'] . "</td>";
+            echo "<td>" . $course['cat_nom'] . "</td>";
+            echo "<td>" . $course['Inscrits'] . "</td>";
+            echo "<td>" . $course['Vues'] . "</td>";
+            echo "<td>" . $course['like'] . "</td>";
+            echo '<td>
+              <button onclick="location.href=\'addCourse.php?cours=' . $course['id'] . '\'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil">
+                  <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                  <path d="m15 5 4 4"/>
+                </svg>
+              </button>
+              <button onclick="OpenPopup('. $course['id'] .')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2">
+                  <path d="M3 6h18"/>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                  <line x1="10" y1="11" x2="10" y2="17"/>
+                  <line x1="14" y1="11" x2="14" y2="17"/>
+                </svg>
+              </button>
+            </td>';
+            echo "</tr>";
+          }
+          echo "</tbody>";
+          echo "</table>";
+        }else{
+          echo "<h2 class='nothing-to-show'>Vous n'avez pas encore publié de cours ...</h2>";
+        }
+
+        ?>
     </div>
   </div>
+  <div class="blurred-bg" id="blurred-bg"></div>
+  <div class="popup" id="delete-check">
+        <h2>Supprimer ce cours ?</h2>
+        <p>Cette opération ne peut pas être annulée</p>
+        <div class="button-container">
+            <button onclick="CloseDeleteCheck()">Annuler</button>
+            <form method="POST">
+              <input type="hidden" id="id-c" name="id">
+              <button type="submit" id="delete" name="delete" onclick="CloseDeleteCheck()">Supprimer ce cours</button>
+            </form>
+        </div>
+    </div>
 </body>
+<script src="../<?php echo JS_PATH; ?>/forms.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+  var blurredBg = document.getElementById('blurred-bg');
+  var popup = document.getElementById('delete-check');
+  var hiddenInput = document.getElementById('id-c');
+
+  function OpenPopup(id){
+    blurredBg.style.display = "flex";
+    blurredBg.style.opacity = 1;
+    popup.style.display = "flex";
+    popup.style.opacity = 1;
+    hiddenInput.value = id;
+    
+  }
+  function CloseDeleteCheck(){
+    blurredBg.style.display = "none";
+    blurredBg.style.opacity = 0;
+    popup.style.display = "none";
+    popup.style.opacity = 0;
+  }
   const today = new Date();
   const day = String(today.getDate()).padStart(2, '0');
   const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -210,5 +330,4 @@
   });
   });
 </script>
-<script src="../<?php echo JS_PATH; ?>/forms.js"></script>
 </html>

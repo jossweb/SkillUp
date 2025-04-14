@@ -148,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </section>
     <div class="blurred-bg" id="blurred-bg"></div>
-    <section class="popup" id="delete-check">
+    <div class="popup" id="delete-check">
         <h2>Supprimer le compte ?</h2>
         <p>Cette ne peut pas être annulée</p>
         <div class="button-container">
@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="submit" id="delete" name="delete" onclick="CloseDeleteCheck()">Supprimer mon compte</button>
             </form>
         </div>
-    </section>
+    </div>
     <div class="popup" id="message-pop">
         <button class="cross" onclick="CloseMessagePopup()">X</button>
         <h2>Message :</h2>
