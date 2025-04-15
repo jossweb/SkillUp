@@ -58,6 +58,7 @@ input{
     color: var(--color);
     padding: 21px 11px; 
     margin-top: 10px;
+    outline: none;
 }
 .delete-account{
     border: 2px var(--border) solid;

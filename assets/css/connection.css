@@ -60,6 +60,7 @@ input[type="password"] {
     padding: 4px;
     color: var(--color);
     padding: 21px 11px; 
+    outline: none;
 }
 form button{
     margin: 20px;

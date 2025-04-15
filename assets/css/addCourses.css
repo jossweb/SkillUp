@@ -1,1 +1,119 @@
 @import url("assets.css");
+body{
+    display: flex;
+    flex-direction: row;
+    background-color: var(--bg);
+}
+.left-bar{
+    width: 25%;
+    height: 100vh;
+    max-width: 550px;
+    min-width: 400px;
+    border-right: 2px var(--border) solid;
+    color: var(--color);
+}
+.left-bar .cours-primary-infos{
+    width: 100%;
+    height: auto;
+    border-bottom: 1px var(--border) solid;
+    color: var(--color);
+    display: flex;
+    flex-direction: row;
+}
+.left-bar .cours-primary-infos img{
+    width: 65px;
+    height: 65px;
+    border-radius: 50px;
+    margin: 20px;
+} 
+.left-bar .cours-primary-infos img:hover{
+    background-color: var(--alt-bg);
+}
+.left-bar .cours-primary-infos .f-name{
+    background-color: transparent;
+    color: var(--color);
+    width: 80%;
+    font-size: 25px;
+    font-weight: 400;
+    margin-top: 30px;
+    margin-left: 20px;
+    border: none;
+}
+.left-bar .cours-primary-infos .f-name:focus{
+    border: none;
+    outline: none;
+}
+.left-bar .cours-primary-infos button{
+    background-color: transparent;
+    color: var(--color);
+    border: none;
+    margin-left: auto;
+}
+.left-bar .description{
+    flex-direction: column;
+    color: var(--color);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 15px;
+}
+.left-bar .description textarea{
+    display: block;
+    width: 80%;
+    height: 40vh;
+    margin-left: auto;
+    margin-right: auto;
+    resize: none;
+    background-color: var(--alt-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--color);
+    font-size: 17px;
+    font-weight: 200;
+    margin-top: 20px;
+    padding: 5px;
+}
+.left-bar h2{
+    margin-top: 10px;
+    margin-left: 20px;
+    font-size: 18px;
+    font-weight: 400;
+}
+.left-bar .description textarea:focus{
+    outline: none;
+}
+.left-bar .description-head{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.left-bar .description-head button{
+    margin-left: auto;
+    margin-top: 10px;
+    margin-right: 20px;
+    background-color: transparent;
+    border: none;
+    color: var(--color);
+}
+.left-bar .chapter .chapter-container{
+    display: block;
+    width: 60%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: var(--alt-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-top: 20px;
+}
+.left-bar .chapter .chapter-container button{
+    width: 100%;
+    font-size: 18px;
+    overflow: hidden;
+    background-color : transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--color);
+    padding: 5px;
+}
+.left-bar .chapter .chapter-container button:hover{
+    background-color: var(--bg);
+}
