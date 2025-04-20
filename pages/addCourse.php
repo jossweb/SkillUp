@@ -12,7 +12,7 @@
     }
     $titre = SITE_NAME . ' - Dashboard prof';
     $db =  connectDB();
-    $sql = 'SELECT Utilisateurs.id, Utilisateurs.prenom, Utilisateurs.nom, Utilisateurs.e_mail, Utilisateurs.avatar_url, Utilisateurs.role FROM sessions INNER JOIN Utilisateurs ON Utilisateurs.id = sessions.user_id WHERE sessions.token = :token';
+    $sql = 'SELECT Utilisateurs.id, Utilisateurs.prenom, Utilisateurs.nom, Utilisateurs.e_mail, Utilisateurs.avatar_url, Utilisateurs.role, KeyTable.token FROM sessions INNER JOIN Utilisateurs ON Utilisateurs.id = sessions.user_id INNER JOIN KeyTable ON KeyTable.key_id = Utilisateurs.key_id WHERE sessions.token = :token';
     $request = $db->prepare($sql);
     $request->bindParam(':token', $_COOKIE['user_token']);
     $request->execute();
@@ -21,6 +21,8 @@
         header('Location:  ../');
         exit();
     }
+    setcookie("token_api", $result['token'], time() + 3600*24);
+    $_COOKIE['token_api'] = $result['token'];
     if($_GET['cours'] == "00000"){ //new course
         $sql_new = 'INSERT INTO Cours (nom, illustration_url, description, prof_id) 
         VALUES ("Nouveau cours", "https://remyweb.fr/images/1361465141845032960.webp", "Entrez votre description", :prof)';
@@ -115,6 +117,23 @@
         $request->bindParam(":id", $_COOKIE['activeChapId']);
         $request->execute() ;
     }
+    function DeleteChap(){
+        global $db;
+        $sql = "DELETE FROM Chapitres WHERE id = :id ";
+        $request = $db->prepare($sql);
+        $request->bindParam(":id", $_COOKIE['activeChapId']);
+        $request->execute();
+        $path = "../md_files/". $_GET['cours'] . '/'. $_COOKIE['activeChapId'] . '.md';
+        if (file_exists($path)) {
+            if (!unlink($path)) {
+                header('Location: dashboard.php');
+            }
+        }
+        //remove cookie
+        setcookie("activeChapId", "", time() - 3600, "./");
+        header('Location: addCourse.php?cours=' . $_GET['cours']);
+        exit();
+    }
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST["change-name"])) {
             ChangeName($_POST["name"]);
@@ -130,6 +149,9 @@
         }
         if (isset($_POST["chap-name"])) {
             ChangeChapName($_POST["new-name"]);
+        }
+        if (isset($_POST["delete-chap"])){
+            DeleteChap() ;
         }
     }
     //Check if the user connected is the teacher who own this course and get infos on course
@@ -163,7 +185,9 @@
     if((!isset($_COOKIE['activeChapId']))) {
         //set 1h cookies
         setcookie("activeChapId", $results_chapters[0]['id'], time() + 3600);
+        $_COOKIE['activeChapId'] = $results_chapters[0]['id'];
         setcookie('activeChapTitle', $results_chapters[0]['titre'], time() + 3600);
+        $_COOKIE['activeChapTitle'] = $results_chapters[0]['titre'];
         if (file_exists($results_chapters[0]["fichier_url"])) {
             $markdownContent = file_get_contents($results_chapters[0]["fichier_url"]);
             setcookie('activeChapMd', $markdownContent, time() + 3600);
@@ -175,9 +199,12 @@
         $chapter = FindLineById($results_chapters, $_COOKIE['activeChapId']);
         if($chapter != NULL){
             setcookie('activeChapTitle', $chapter['titre'], time() + 3600);
+            $_COOKIE['activeChapTitle'] = $chapter['titre'];
+            
             if (file_exists($chapter["fichier_url"])) {
                 $markdownContent = file_get_contents($chapter["fichier_url"]);
                 setcookie('activeChapMd', $markdownContent, time() + 3600);
+                $_COOKIE['activeChapMd'] = $markdownContent;
             } else {
                 header('Location: dashboard.php');
                 exit();
@@ -186,9 +213,7 @@
             header('Location: dashboard.php');
             exit();
         }
-
     }
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -236,8 +261,10 @@
             </div>
             <div class="chapter-container">
                 <?php
+                    $nbChap = 0;
                     foreach ($results_chapters as $chapter) {
                         echo "<button onclick='ChangeActiveChapter(" . $chapter["id"] . ")'>" . $chapter['titre'] . "</button>";
+                        $nbChap ++ ;
                     }   
                 ?>
             </div>
@@ -254,43 +281,54 @@
                     </svg>   
                  </button>
             </form>
-            <button class="save">Enregistrer</button>
+            <?php
+                if ($nbChap > 1) {
+                    echo '<form class="deleteForm" method="POST">
+                        <button name="delete-chap" class="delete">Supprimer</button>
+                    </form>';
+                }
+            ?>
+
         </div>
         <div class="toggle-bar">
             <div class="toggle">
-                <button>Modifer</button>
-                <button>Aperçu</button>
+                <button id="to-edit" onclick="ShowEdit()">Modifer</button>
+                <button id="to-preview" onclick="ShowPreview()">Aperçu</button>
             </div>
         </div>
-        <div class="edit">
+        <div class="edit" id="edit">
             <div class="tool-bar">
                 <div class="button-container">
-                    <button>
+                    <button onclick="AddToMd('**Gras**')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bold-icon lucide-bold"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8"/></svg>
                     </button>
-                    <button>
+                    <button onclick="AddToMd('__Italic__')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-italic-icon lucide-italic"><line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/></svg>
                     </button>
-                    <button>
+                    <button onclick="AddToMd('# ')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading1-icon lucide-heading-1"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="m17 12 3-2v8"/></svg>
                     </button>
-                    <button>
+                    <button onclick="AddToMd('## ')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading2-icon lucide-heading-2"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1"/></svg>
                     </button>
                 </div>
             </div>
             <div class="text-editor">
                 <form method="POST">
-                    <button type="submit" name="save-md">Enregistrer</button>
+                    <button name="save-md" onclick="save()">Enregistrer</button>
                     <textarea id="md-editor" name="md-editor"></textarea>
+                    <div id="md" value=""></div>
                 </form>
             </div>
         </div>
-        <div class="preview">
-            
+        <div id="preview" class="preview">
+            <div id="md-output">
+
+            </div>
         </div>
 
     </section>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="../<?php echo JS_PATH; ?>/texteditor.js"></script>
 </html>

@@ -17,6 +17,12 @@ $avatar = $result['avatar_url'];
 if($avatar == null){
     $avatar = 'https://remyweb.fr/images/1356835268082008064.webp';
 }
+$sql_prof_requests = "SELECT DemandeProf.id FROM DemandeProf WHERE DemandeProf.id_utilisateur = :id";
+$request = $db->prepare( $sql_prof_requests);
+$request->bindParam(':id', $result['id']);
+$request->execute();
+$profRequest = $request->fetch(PDO::FETCH_ASSOC);
+
 function getAvatar(){
     global $new_avatar;
     if (!isset($_POST['prompt']) || empty($_POST['prompt'])) {
@@ -95,6 +101,27 @@ function DeleteUser(){
     header("Location: /index.php");
     exit();
 }
+function CheckInTeacherTable(){
+    global $db, $result;
+    $sql= "SELECT DemandeProf.id FROM DemandeProf WHERE DemandeProf.id_utilisateur = :id";
+    $request = $db->prepare($sql);
+    $request->bindParam(':id', $result['id'] );
+    $request->execute();
+    $response = $request->fetch(PDO::FETCH_ASSOC);
+    if ($response) {
+        return true;
+    } else {
+        return false;
+    }
+}
+function AddTeacherRequest($text){
+    global $db, $result;
+    $sql= "INSERT INTO DemandeProf (DemandeProf.id_utilisateur, DemandeProf.presentation) VALUES (:id, :text);";
+    $request = $db->prepare($sql);
+    $request->bindParam(':id', $result['id'] );
+    $request->bindParam(':text', $text );
+    $request->execute();
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['avatar-gen'])) {
         getAvatar();
@@ -107,6 +134,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     if (isset($_POST['delete'])) {
         DeleteUser();
+    }
+    if (isset($_POST['teacher'])) {
+        if(CheckInTeacherTable()){
+            //afficher l'erreur
+        }else{
+            AddTeacherRequest($_POST['cv']);
+        }
     }
 }
 ?>
@@ -141,6 +175,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="submit" id="change-infos" name='change-infos' onclick="OpenMessagePopup()">Enregistrer</button>
             </form>
         </div>
+        <?php
+            if($result['role'] != 'professeur'){
+               echo "<div class='teacher-request'><button>Accéder au dashboard prof</button></div>";
+            }
+            else{
+                if ($profRequest) {
+                    echo "<div class='teacher-request' id='inprogress'><h2>Votre demande est en cours de traitement !</h2></div>";
+                } else {
+                    echo "<div class='teacher-request'><h2>Devenir prof ?</h2>
+                    <form method='POST'>
+                    <input type='text' name='cv' placeholder='Parlez nous de vous'>
+                    <button name='teacher' type='submit'>Devenir prof !</button>
+                    </form></div>";
+                }
+            }?>
         <div class="delete-account">
             <h2>Zone de danger</h2>
             <p>Cette action est permanente et ne pourra pas être annulée.</p>
@@ -185,75 +234,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
        </form>
     </div>
 </body>
-
-<script>
-    //get elements
-    var blurredBg = document.getElementById('blurred-bg');
-    var deleteMyAccount = document.getElementById('delete');
-    var deletePopup = document.getElementById('delete-check');
-    var okClosePopup = document.getElementById('Okk');
-    var newPP = document.getElementById('new-pp');
-    var loading = document.getElementById('loading-emo');
-    var message = document.getElementById('message-pop')
-
-    function ShowLoading(){
-        loading.style.display = "block";
-    }
-    function OpenAvatarPopup() {
-        blurredBg.style.opacity = "90%";
-        newPP.style.opacity = "1";
-        newPP.style.display = "block";
-        localStorage.setItem('avatarPopupOpen', 'true'); 
-    }
-    function CloseAvatarPopup() {
-        blurredBg.style.opacity = "0";
-        newPP.style.opacity = "0";
-        newPP.style.display = "none";
-        localStorage.removeItem('avatarPopupOpen'); 
-    }
-    function CheckOpenCondition(){
-        var nameValue = document.getElementById("new-name").value;
-        var firstnameValue = document.getElementById("new-firstname").value;
-        if(nameValue && firstnameValue){
-            OpenMessagePopup();
-        }
-    }
-    function OpenMessagePopup(){
-        blurredBg.style.opacity = "90%";
-        message.style.opacity = "1";
-        message.style.display = "block";
-        localStorage.setItem('messagePopOpen', 'true');
-
-    }
-    function CloseMessagePopup(){
-        blurredBg.style.opacity = "0";
-        message.style.opacity = "0";
-        message.style.display = "none";
-        localStorage.removeItem('messagePopOpen');
-    }
-    function OpenDeleteCheck(){
-        blurredBg.style.opacity = "90%";
-        deletePopup.style.opacity = "1";
-        deletePopup.style.display = "block";
-        localStorage.setItem('deletePopup', 'true');
-    }
-    function CloseDeleteCheck(){
-        blurredBg.style.opacity = "0";
-        deletePopup.style.opacity = "0";
-        deletePopup.style.display = "none";
-        localStorage.removeItem('deletePopup');
-        }
-    document.addEventListener("DOMContentLoaded", function () {
-        if (localStorage.getItem('avatarPopupOpen') === 'true') {
-            OpenAvatarPopup(); 
-        }
-        if(localStorage.getItem('messagePopOpen') === 'true'){
-            OpenMessagePopup();
-        }
-        if(localStorage.getItem('deletePopup') === 'true'){
-            OpenDeleteCheck();
-        }
-    });
-
-</script>
+<script src="../<?php echo JS_PATH; ?>/profile.js"></script>
 </html>

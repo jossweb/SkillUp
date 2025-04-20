@@ -331,3 +331,14 @@ input{
 #reset {
     flex-direction: column;
 }
+.teacher-request{
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    margin-top: 20px;
+}
+.teacher-request #inprogress{
+    padding: 10px;
+    text-align: center;
+    font-weight: 400;
+    padding-bottom: 20px;
+}

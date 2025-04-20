@@ -17,6 +17,11 @@
         header('Location:  connection.php');
         exit();
     }
+    //reset cookies
+    setcookie("activeChapId", "", time() - 3600, "./");
+    setcookie("activeChapTitle", "", time() - 3600, "./");
+    setcookie("activeChapMd", "", time() - 3600, "./");
+
     $avatar = $result['avatar_url'];
     if($avatar == null){
         $avatar = 'https://remyweb.fr/images/1356835268082008064.webp';
