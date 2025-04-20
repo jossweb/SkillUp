@@ -1,35 +1,61 @@
 <?php
-    require_once("../include/config.php"); 
-    $titre = SITE_NAME . ' - Accueil';
+require_once("../include/config.php"); 
+$titre = SITE_NAME . ' - Accueil';
+
+$connexion = new mysqli($serveur, $utilisateur, $mot_de_passe, $base_de_donnees);
+
+if ($connexion->connect_error) {
+    die("Connexion échouée :" . $connexion->connect_error);
+}
+
+$categorie = isset($_GET['categorie']) ? $_GET['categorie'] : '';
+$recherche = isset($_GET['recherche']) ? $_GET['recherche'] : '';
+
+$requete = "SELECT id, nom, description, illustration_url FROM Cours WHERE 1=1";
+if ($categorie) {
+    $categorie = $connexion->real_escape_string($categorie);
+    $requete .= "AND categorie_id = '$categorie'";
+} elseif ($recherche) {
+    $recherche = $connexion->real_escape_string($recherche);
+    $requete .= " AND (nom LIKE '%$recherche%' OR description LIKE '%$recherche%')";
+}
+
+$resultat = $connexion->query($requete);
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($titre);?></title>
-    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/formations.css"> 
+    <title>Formations</title>
+    <link rel="stylesheet" href="formations.css">
 </head>
 <body>
 <header>
 <nav>
-    <img src="../assets/images/logo-light.svg" alt="light logo"> 
+    <div class="logo">
+    <img src="assets/images/logo-light.svg" alt="light logo"> 
 </div>
 <ul>
-        <li><a href="pageAccueil" Accueil></a> </li>
-        <li><a href="formations.html" Formations></a> </li>
-        <li><a href="pageCatégories" Catégories></a> </li>
-        <li><a href="pageProfil" Profil></a> </li>
+        <li><a href="pageAccueil"> Accueil </a> </li>
+        <li><a href="formations.php"> Formations </a> </li>
+        <li><a href="categorie.php"> Catégories </a> </li>
+        <li><a href="connection.php"> <img src="assets/images/user.svg" alt="user"> </a> </li>
     </ul>
 </nav>
 </header>
+
+<main>
 <div class="barre">
-    <input type="text" placeholder="WEB">
-    <button>Rechercher</button>
+    <form action="formations.php" method="get">
+    <input type="text" name="recherche" placeholder="Formations diplômantes en C">
+    <button type="submit">Rechercher</button>
+</form>
 </div>
 
     <div class="filtrage">
-        <span>5 résultats</span>
+    <span><?php echo $resultat ? $resultat->num_rows : 0; ?> résultats</span>
         <select>
             <option value="1">Filtrer</option>
             <option value="2">Les plus populaires</option>
@@ -38,45 +64,28 @@
         </select>
     </div>
 
-    <section class="container">
-    <div class="cas">
-        <img src="images/360_F_292887204_2wH041phSQo70eqaE9GRqFvn5MmQ4B8w.jpg" alt="dvt web">
-        <h2>Développement Web</h2>
-        <p>Apprenez le développement en langages HTML, CSS et JavaScript pour créer des sites web attrayants et stylisés ; gérez-en aussi les données grâce aux langages PHP et SQL </p>
-    </div>
+    <ul class="liste">
+    <?php 
+        if ($resultat && $resultat->num_rows > 0) {
+            while ($row = $resultat->fetch_assoc()) {
+        echo '<li class="resultat">';
+        echo '  <h2 class="titre">'. htmlspecialchars($row["nom"]) . '</h2>';
+        echo '  <p class="description">' . htmlspecialchars($row["description"]) . '</p>';
+        echo '  <div class="info">';
+        echo'        <span><img src="assets/images/heart.svg" alt="illustration_url">' . htmlspecialchars($row["illustration_url"]) . '</span>';
+        echo'        <span><img src="assets/images/clock.svg" alt="illustration_url">' .  htmlspecialchars($row["illustration_url"]) . '</span>';
+echo '</div>';
+echo '</li>';
+            }
+        } else {
+            echo '<p> Aucune formation trouvée. </p>';
+        }
+?>
+</ul>
+</main>
 
-    <div class="cas">
-        <img src="images/IPI-Langages-programmation-IA.png" alt="IA et Machine Learning">
-        <h2>IA & Machine Learning</h2>
-        <p>Soyez au cœur du développement de l’IA avec Python: créez des modèles complexes, analysez des données et manipulez des algorithmes d’IA avancés</p>
-    </div>
-    
-    <div class="cas">
-        <img src="images/Applications-apprendre-code.jpg" alt="dvt jeux mobiles">
-        <h2>Développement de jeux mobiles</h2>
-        <p>Vous avez toujours voulu développer des jeux mobiles? Réalisez votre rêve en apprenant à créer des jeux avec les langages Unity et Java ! </p>
-    </div>
-    
-
-    <div class="cas">
-        <img src="images/Capture d'écran 2025-03-28 133618.png" alt="design">
-        <h2>Design graphique</h2>
-        <p>Exprimez votre créativité en vous formant au design graphique : apprenez à manipuler des outils de création graphique tels que UX/UI, Adobe Illustrator et Photoshop </p>
-    </div>
-
-    <div class="cas">
-        <img src="images/chsarp-intro-1024x683.jpg" alt="Programmation C">
-        <h2>Programmation en C#</h2>
-        <p>Découvrez les bases de la programmation avec cette formation au langage C. Vous souhaitez créer des applications sous Windows? Vous êtes aussi au bon endroit!</p>
-    </div>
-
-    <div class="cas">
-        <img src="images/Capture d'écran 2025-03-28 133618.png" alt="Cybersécurité">
-        <h2>Cybersécurité</h2>
-        <p>La sécurité informatique et ses diverses branches vos ouvrent leurs portes : formez vous dès maintenant en sécurité réseaux et en cryptographie pour la protection contre les menaces informatiques</p>
-    </div>
-
-    </section>
+    <?php $connexion->close();
+    ?>
 
 </body>
     </html>
