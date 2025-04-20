@@ -12,6 +12,20 @@ function toggleForm(toregister){
         loginForm.style.display = 'flex';
     }
 }
+function toggleStats(tocours){
+    var stats = document.getElementById('stats');
+    var cours = document.getElementById('cours');
+    if(tocours){
+        toggleIsSelected(true, stats, cours);
+        cours.style.display = 'flex';
+        stats.style.display = 'none';
+    }else{
+        toggleIsSelected(false, stats, cours);
+
+        cours.style.display = 'none';
+        stats.style.display = 'flex';
+    }
+}
 function toggleIsSelected(registerIsClicked){
     var loginBtn = document.getElementById('login-btn');
     var registerBtn = document.getElementById('register-btn');

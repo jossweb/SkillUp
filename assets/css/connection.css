@@ -1,26 +1,12 @@
 @import url("assets.css");
+@import url("responsive.css");
+
 body{
     background-color: var(--alt-bg);
     color: var(--color);
     width: 100%;
     height: 100vh;
     display: flex;
-}
-.background {
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-}
-.background img{
-    position: absolute;
-}
-.background #img-top{
-    top: 0;
-    left: 0;
-}
-.background #img-bottom {
-    bottom: 0;
-    right: 0;
 }
 .content {
     display: flex;
@@ -73,7 +59,8 @@ input[type="password"] {
     margin-bottom: 4px;
     padding: 4px;
     color: var(--color);
-    padding: 21px 11px; /*IL FAUT QUE CA RESPIRE*/
+    padding: 21px 11px; 
+    outline: none;
 }
 form button{
     margin: 20px;
@@ -125,6 +112,10 @@ form .mini-inputs .input-group {
 .form .toggle button.isSelected{
     border-bottom: solid var(--skillup-pink); 
 }
+.form button:hover{
+    background-color: var(--border);
+    transition: 600ms ease-in;
+}
 .message{
     text-align: center;
     background-color: var(--skillup-pink);
@@ -135,4 +126,14 @@ form .mini-inputs .input-group {
     border-radius: var(--radius);
     margin: 20px;
 
+}
+a{
+    color: var(--color);
+    text-decoration: none;
+    padding: 5px;
+    padding-bottom: 15px;
+}
+a:hover{
+    color: var(--border);
+    transition: 500ms ease-in;
 }

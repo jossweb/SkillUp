@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <title><?php echo htmlspecialchars($titre);?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="./<?php echo CSS_PATH; ?>/style.css">
+    <link rel="stylesheet" type="text/css" href="./<?php echo CSS_PATH; ?>/assets.css">
     <link rel="stylesheet" type="text/css" href="./<?php echo CSS_PATH; ?>/landing.css">
     <style>
         .logo {
@@ -20,6 +20,7 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
+            margin: 0;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -30,24 +31,34 @@
     </style>
 </head>
 <body>
-    <nav>
-        <div class="logo" aria-label="SkillUp"></div>
-        <ul>
-            <li><a href="#">Page</a></li>
-            <li><a href="#">Page</a></li>
-            <li><a href="#">Page</a></li>
-            <li><a href="#">Page</a></li>
-        </ul>
-        <button>Se connecter</button>
-    </nav>
     <header>
+        <svg id="hg" width="549" height="477" viewBox="0 0 549 477" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="hg-path" fill-rule="evenodd" clip-rule="evenodd" d="M549 45.7348L289.099 397.04L189.066 301.434L61.8308 477L0 431.873L178.579 185.46L279.237 281.663L487.615 0L549 45.7348Z" fill="#A042F0" fill-opacity="0.3"></path>
+        </svg>
+        <nav>
+            <div class="logo" aria-label="SkillUp"></div>
+            <ul>
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/pages/formations.php">Formations</a></li>
+                <li><a href="/pages/categories.php">Catégories</a></li>
+                <li><a href="#">Page</a></li>
+            </ul>
+            <button onclick="location.href='pages/connection.php';">Se connecter</button>    
+        </nav>
         <div>
             <h1>Bienvenue sur la plateforme idéale <br> pour apprendre gratuitement</h1>
             <p>Apprenez à votre rythme, développez <br> vos compétences librement.</p>
-            <button>Inscrivez-vous maintenant</button>
+            <button onclick="location.href='/pages/connection.php';">Inscrivez-vous maintenant</button>
         </div>
+        <svg id="bd" width="549" height="477" viewBox="0 0 549 477" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M549 45.7348L289.099 397.04L189.066 301.434L61.8308 477L0 431.873L178.579 185.46L279.237 281.663L487.615 0L549 45.7348Z" fill="#A042F0" fill-opacity="0.3"></path>
+        </svg>
+        <button id="scroll" onclick="document.getElementById('why').scrollIntoView()">
+            En apprendre plus
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-icon lucide-arrow-down"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+        </button>
     </header>
-    <section>
+    <section id="why">
         <div class="content">
             <h1 class="title">Pourquoi SkillUp ?</h1>
             <div class="features">
@@ -84,7 +95,7 @@
             </div>
         </div>
     </section>
-    <section>
+    <section id="stat">
         <h1 class="title">SkillUp c'est:</h1>
         <div class="stats-container">
             <div class="stat-card">
@@ -103,7 +114,7 @@
             </div>
         </div>
     </section>
-    <section>
+    <section id="how">
     <h1 class="title">Comment ça marche ?</h1>
         <div class="steps-container">
             <div class="step-card">
@@ -122,9 +133,106 @@
             </div>
         </div>
     </section>
-    <!-- Reste: -->
-    <!-- FAQ -->
-    <!-- CTA -->
-    <!-- FOOTER -->
+    <section id="faq">
+        <h1 class="title">Foire aux questions</h1>
+        <div class="faq-container">
+            <div class="faq-item">
+                <input type="checkbox" id="faq-1" class="faq-toggle">
+                <label for="faq-1" class="faq-question">
+                    SkillUp est-il vraiment gratuit ?
+                    <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus">
+                        <path id="horizontale" d="M5 12h14"/>
+                        <path id="verticale" d="M12 5v14"/>
+                    </svg>
+                </label>
+                <div class="faq-answer">
+                    <p>Oui, SkillUp est une plateforme 100% gratuite ! Tous nos cours et ressources sont accessibles sans frais.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <input type="checkbox" id="faq-2" class="faq-toggle">
+                <label for="faq-2" class="faq-question">
+                    Les contenus sont-ils vérifiés avant publication ?
+                    <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus">
+                        <path id="horizontale" d="M5 12h14"/>
+                        <path id="verticale" d="M12 5v14"/>
+                    </svg>
+                </label>
+                <div class="faq-answer">
+                    <p>Absolument ! Tous les contenus publiés sur SkillUp passent par un processus de vérification rigoureux.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <input type="checkbox" id="faq-3" class="faq-toggle">
+                <label for="faq-3" class="faq-question">
+                    Comment puis-je contribuer en tant que formateur ?
+                    <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus">
+                        <path id="horizontale" d="M5 12h14"/>
+                        <path id="verticale" d="M12 5v14"/>
+                    </svg>
+                </label>
+                <div class="faq-answer">
+                    <p>Pour devenir formateur sur SkillUp, il vous suffit de créer un compte, puis de postuler pour devenir Prof. Après validation de votre profil par notre équipe, vous pourrez créer et publier vos propres cours sur la plateforme.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <input type="checkbox" id="faq-4" class="faq-toggle">
+                <label for="faq-4" class="faq-question">
+                    Puis-je accéder aux cours depuis n'importe quel appareil ?
+                    <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus">
+                        <path id="horizontale" d="M5 12h14"/>
+                        <path id="verticale" d="M12 5v14"/>
+                    </svg>
+                </label>
+                <div class="faq-answer">
+                    <p>Oui, SkillUp est entièrement responsive ! Vous pouvez accéder à tous nos cours depuis votre ordinateur, tablette ou smartphone. Notre plateforme s'adapte automatiquement à la taille de votre écran pour vous offrir une expérience d'apprentissage optimale.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="cta">
+        <div class="cta-card">
+            <h2 class="cta-title">Vous êtes prof ? Partagez votre expertise !</h2>
+            <p class="cta-text">Rejoignez SkillUp et créez des cours pour aider des milliers d'apprenants à progresser.</p>
+            <button>Devenir formateur</button>
+        </div>
+    </section>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo" aria-label="SkillUp"></div>
+                <p class="copyright">Copyright © 2025 - SkillUp</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h3>Plateforme</h3>
+                    <ul>
+                        <li><a href="#">Accueil</a></li>
+                        <li><a href="#">Formations</a></li>
+                        <li><a href="#">Catégories</a></li>
+                        <li><a href="#">Tableau de Bord</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Catégories</h3>
+                    <ul>
+                        <li><a href="#">Éducation de base</a></li>
+                        <li><a href="#">Informatique</a></li>
+                        <li><a href="#">Langues & communication</a></li>
+                        <li><a href="#">Gestions & affaires</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <ul>
+                        <li><a href="#">Musique</a></li>
+                        <li><a href="#">Art & design</a></li>
+                        <li><a href="#">Sciences médicales</a></li>
+                        <li><a href="#">Sciences sociales</a></li>
+                        <li><a href="#">Sciences & Ingénierie</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

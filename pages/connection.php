@@ -1,10 +1,15 @@
 <?php
 session_start(); 
 require_once("../include/connectdb.php"); 
+require_once("../include/sessionManager.php");
 $titre = SITE_NAME . ' - connexion/inscription';
 $db =  connectDB();//connexion à la db
 $message = ""; // Variable pour stocker les messages d'erreur ou de succès
 
+if(IsConnected($_SERVER['REMOTE_ADDR'])){
+    header('Location: profile.php');
+    exit();
+}
 function registration() {
     global $db, $message;
     $name = $_POST['name'];
@@ -66,11 +71,20 @@ function connection() {
     $result = $request->fetch(PDO::FETCH_ASSOC);
 
     if (($result) && password_verify($password, $result['mot_de_passe'])) {
-        $_SESSION['user_id'] = $result['id'];
-        $_SESSION['user_name'] = $result['nom'];
-        $_SESSION['user_first_name'] = $result['prenom'];
-        $_SESSION['user_email'] = $email;
-        header("Location: dashboard.php");
+        $token_seed = $result['id'] . (new DateTime())->format('Y-m-d H:i:s');
+        $token = password_hash($token_seed, PASSWORD_DEFAULT);
+    
+        setcookie("user_token", $token, time() + 86400, "/"); 
+        $sql_session = 'INSERT INTO sessions (user_id, token, expires_at) VALUES (:id, :token, :expiresDate)';
+        $request_session = $db->prepare($sql_session);
+        $request_session->bindParam(':id', $result['id']);
+        $request_session->bindParam(':token', $token);
+        $expiresDate = new DateTime();
+        $expiresDate->modify('+1 day');
+        $expiresDateFormatted = $expiresDate->format('Y-m-d H:i:s');
+        $request_session->bindParam(':expiresDate', $expiresDateFormatted);
+        $request_session->execute();
+        header("Location: profile.php");
         exit;
     } else {
         $message = "<p>Email ou mot de passe incorrect !</p>";
@@ -78,7 +92,7 @@ function connection() {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['connectionForm'])) {
+    if (isset($_POST['connectionForm'])) { 
         connection();
     } elseif (isset($_POST['registrationForm'])) {
         registration();
@@ -95,13 +109,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title><?php echo $titre; ?></title>
 </head>
 <body>
-    <div class="background">
-        <img src="../<?php echo IMG_PATH; ?>/skillup-logo.svg" alt="background" id="img-top"/>
-        <img src="../<?php echo IMG_PATH; ?>/skillup-logo2.svg" alt="background" id="img-bottom"/>
-    </div>
     <div class="content">
         <?php if ($message): ?>
-                    <div class="message" class="message"><?php echo $message; ?></div>
+                    <div class="message"><?php echo $message; ?></div>
         <?php endif; ?>
         <section class="form">
             <div class="toggle">
@@ -114,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="password">Mot de passe</label>
                 <input type="password" id="password" maxlength="255" name="password"/>
                 <button type="submit" name="connectionForm">Connexion</button>
-                <a href="">mot de passe oublié</a>
+                
             </form>
             <form id="register-form" method="POST">
                 <div class="mini-inputs">
@@ -135,6 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="password" id="check-pass" maxlength="255" name="cPassword"/>
                 <button type="submit" name="registrationForm">Inscription</button>
             </form>
+            <a href="../">Accueil</a>
         </section>
     </div>
 </body>
