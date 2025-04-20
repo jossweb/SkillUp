@@ -2,7 +2,6 @@
 require_once("../include/config.php"); 
 $titre = SITE_NAME . ' - Accueil';
 
-
 $connexion = new mysqli($serveur, $utilisateur, $mot_de_passe, $base_de_donnees);
 
 if ($connexion->connect_error) {
@@ -12,13 +11,13 @@ if ($connexion->connect_error) {
 $categorie = isset($_GET['categorie']) ? $_GET['categorie'] : '';
 $recherche = isset($_GET['recherche']) ? $_GET['recherche'] : '';
 
-$requete = "SELECT titre, description, image FROM formations WHERE 1=1";
+$requete = "SELECT id, nom, description, illustration_url FROM Cours WHERE 1=1";
 if ($categorie) {
     $categorie = $connexion->real_escape_string($categorie);
-    $requete .= "AND categorie = '$categorie'";
+    $requete .= "AND categorie_id = '$categorie'";
 } elseif ($recherche) {
     $recherche = $connexion->real_escape_string($recherche);
-    $requete .= "AND (titre LIKE '%$recherche%' OR description LIKE '%$recherche%')";
+    $requete .= " AND (nom LIKE '%$recherche%' OR description LIKE '%$recherche%')";
 }
 
 $resultat = $connexion->query($requete);
@@ -29,8 +28,7 @@ $resultat = $connexion->query($requete);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formations en <?php echo htmlspecialchars($categorie ? $categorie : ($recherche ? "Recherche : " . $recherche : "")); ?></title>
-    <link rel="stylesheet" href="<?php echo CSS_PATH; ?>/formations.css">
+    <link rel="stylesheet" href="formations.css">
 </head>
 <body>
 <header>
@@ -39,20 +37,24 @@ $resultat = $connexion->query($requete);
     <img src="assets/images/logo-light.svg" alt="light logo"> 
 </div>
 <ul>
-        <li><a href="pageAccueil" Accueil></a> </li>
-        <li><a href="formations.php" Formations></a> </li>
-        <li><a href="categorie.php" Catégories></a> </li>
-        <li><a href="pageProfil" Profil></a> </li>
+        <li><a href="pageAccueil"> Accueil </a> </li>
+        <li><a href="formations.php"> Formations </a> </li>
+        <li><a href="categorie.php"> Catégories </a> </li>
+        <li><a href="connection.php"> <img src="assets/images/user.svg" alt="user"> </a> </li>
     </ul>
 </nav>
 </header>
+
+<main>
 <div class="barre">
-    <input type="text" placeholder="WEB">
-    <button>Rechercher</button>
+    <form action="formations.php" method="get">
+    <input type="text" name="recherche" placeholder="Formations diplômantes en C">
+    <button type="submit">Rechercher</button>
+</form>
 </div>
 
     <div class="filtrage">
-        <span><?php echo $resultat ? $resultat->num_rows : 0; ?> résultats</span>
+    <span><?php echo $resultat ? $resultat->num_rows : 0; ?> résultats</span>
         <select>
             <option value="1">Filtrer</option>
             <option value="2">Les plus populaires</option>
@@ -61,26 +63,25 @@ $resultat = $connexion->query($requete);
         </select>
     </div>
 
-    <section class="container">
-        <?php 
-        if ($resultat) {
-            if ($resultat->num_rows > 0) {
-                while ($row = $resultat->fetch_assoc()) {
-                    echo "<div class='cas'>";
-                    echo "<img src='" . htmlspecialchars($row["image"]) . "' alt='" . htmlspecialchars($row["titre"]) . "'>";
-                    echo "<h2>" . htmlspecialchars($row["titre"]) . "</h2>";
-                    echo "<p>" . htmlspecialchars($row["description"]) . "</p>";
-                    echo "</div>";
-                }
-            } else {
-                echo "Aucune formation trouvée.";
+    <ul class="liste">
+    <?php 
+        if ($resultat && $resultat->num_rows > 0) {
+            while ($row = $resultat->fetch_assoc()) {
+        echo '<li class="resultat">';
+        echo '  <h2 class="titre">'. htmlspecialchars($row["nom"]) . '</h2>';
+        echo '  <p class="description">' . htmlspecialchars($row["description"]) . '</p>';
+        echo '  <div class="info">';
+        echo'        <span><img src="assets/images/heart.svg" alt="illustration_url">' . htmlspecialchars($row["illustration_url"]) . '</span>';
+        echo'        <span><img src="assets/images/clock.svg" alt="illustration_url">' .  htmlspecialchars($row["illustration_url"]) . '</span>';
+echo '</div>';
+echo '</li>';
             }
-            $resultat->free_result();
-            } else {
-                echo "Erreur de requête : " . $connexion->error;
-            }
-        ?>
-        </section>
+        } else {
+            echo '<p> Aucune formation trouvée. </p>';
+        }
+?>
+</ul>
+</main>
 
     <?php $connexion->close();
     ?>
