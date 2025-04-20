@@ -20,4 +20,4 @@ Pour configurer correctement la base de données du projet, suivez ces étapes:
    define('DB_PASS', 'votre_mot_de_passe');
    define('DB_NAME', 'votre_bdd');
    ```
-3. Assurez-vous que la connexion est ok en vous rendant sur : `include/config.php`
+3. Assurez-vous que la connexion est ok en vous rendant sur : `include/test.php`

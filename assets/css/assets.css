@@ -10,7 +10,6 @@
     --skillup-pink: #A042F0;
     --skillup-alt-pink: #EDE3FF;
     --radius: 8px;
-
 }
 
 /* dark mode */
@@ -29,5 +28,11 @@
     box-sizing: border-box;
     font-family: "Onest", sans-serif;
     font-optical-sizing: auto;
-    transition: background-color 300ms ease, color 125ms ease, border-color 300ms ease;
+    transition: background-color 300ms ease, background-image 125ms ease, color 125ms ease, border-color 300ms ease;
+}
+
+html, body {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }

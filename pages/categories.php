@@ -37,6 +37,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <li><a href="#">Page</a></li>
                 <li><a href="#">Page</a></li>
             </ul>
+            <img alt="SkillUp" src="../assets/images/logo-light.svg">
             <div id="profil">
                 <a href="#"><img src="../assets/images/profil.png" alt="Profil"/></a>
             </div>

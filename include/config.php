@@ -1,6 +1,6 @@
 <?php
 // Configuration globale du site
-define('SITE_NAME', 'VideVendu');
+define('SITE_NAME', 'SkillUp');
 
 // Configuration des chemins
 define('ASSETS_PATH', 'assets');
@@ -15,6 +15,5 @@ define('DB_USER', 'root');      // Nom d'utilisateur
 define('DB_PASS', '');          // Mot de passe 'mamp = root' autres = '' (pas de mdp)
 define('DB_NAME', 'skillup');  // Nom de la base de données
 
-$dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4"; //création de la string de connection à la db
-$db = new PDO($dsn, DB_USER, DB_PASS); //connexion à la <db></db>
+define('DEBUG', true); //Si true alors les erreurs s'afficheront sur les pages 
 ?>

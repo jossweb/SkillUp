@@ -1,4 +1,6 @@
 @import url("assets.css");
+@import url("responsive.css");
+
 body{
     background-color: var(--alt-bg);
     color: var(--color);
@@ -6,25 +8,10 @@ body{
     height: 100vh;
     display: flex;
 }
-.background {
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-}
-.background img{
-    position: absolute;
-}
-.background #img-top{
-    top: 0;
-    left: 0;
-}
-.background #img-bottom {
-    bottom: 0;
-    right: 0;
-}
 .content {
     display: flex;
     position: relative;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 1;
@@ -60,10 +47,11 @@ form a{
     color: var(--color);
     text-decoration: none ;
 }
-input[type="text"], 
+input[type="text"],
+input[type="email"],
 input[type="password"] {
     width: 90%;
-    background-color: transparent;
+    background-color: var(--bg);
     border: var(--border) 1px solid;
     border-radius: var(--radius);
     height: 35px;
@@ -71,13 +59,19 @@ input[type="password"] {
     margin-bottom: 4px;
     padding: 4px;
     color: var(--color);
-    border: var(--border) 1px solid;
+    padding: 21px 11px; 
+    outline: none;
 }
 form button{
     margin: 20px;
     width: 90%;
     border-radius: var(--radius);
     height: 40px;
+    border: 1px solid var(--border);
+    font-size: 15px;
+    background-color: var(--bg);
+    color: var(--color);
+    cursor: pointer;
 }
 form .mini-inputs {
     width: 90%;
@@ -109,11 +103,37 @@ form .mini-inputs .input-group {
     display: inline;
     width: 50%;
     height: 50px;
-    background-color: transparent;
+    background-color: var(--bg);
     border: none;
     color: var(--color);
     border-bottom: solid var(--border);
+    padding: 21px 11px;
 }
 .form .toggle button.isSelected{
     border-bottom: solid var(--skillup-pink); 
+}
+.form button:hover{
+    background-color: var(--border);
+    transition: 600ms ease-in;
+}
+.message{
+    text-align: center;
+    background-color: var(--skillup-pink);
+    color: #fff;
+    width: 200px;
+    height: auto;
+    padding: 8px;
+    border-radius: var(--radius);
+    margin: 20px;
+
+}
+a{
+    color: var(--color);
+    text-decoration: none;
+    padding: 5px;
+    padding-bottom: 15px;
+}
+a:hover{
+    color: var(--border);
+    transition: 500ms ease-in;
 }
