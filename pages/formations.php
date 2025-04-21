@@ -29,7 +29,7 @@ $resultat = $connexion->query($requete);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formations</title>
-    <link rel="stylesheet" href="formations.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>/formations.css">
 </head>
 <body>
 <header>
