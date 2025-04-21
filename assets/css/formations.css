@@ -35,6 +35,21 @@
         display: inline-flex;
         justify-items: left;
     }
+    .logo-light {
+        display: inline;
+    }
+    .logo-dark {
+        display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .logo-light {
+            display: none;
+        }
+        .logo-dark {
+            display: inline;
+        }
+    }
 
     main {
         padding: 20px;
