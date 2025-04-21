@@ -1,4 +1,5 @@
 @import url("assets.css");
+@import url("responsive.css");
 
     body {
         background-color: var(--bg);

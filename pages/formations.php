@@ -1,26 +1,27 @@
 <?php
+session_start();
 require_once("../include/config.php"); 
+require_once("../include/connectdb.php");
 $titre = SITE_NAME . ' - Accueil';
+$db = connectDB();
 
-$connexion = new mysqli($serveur, $utilisateur, $mot_de_passe, $base_de_donnees);
+$requete = "SELECT * FROM Cours";
 
-if ($connexion->connect_error) {
-    die("Connexion échouée :" . $connexion->connect_error);
+if ($categorie) {
+    $categorie = $stmt->real_escape_string($categorie);
+    $requete .= "AND categorie_id = '$categorie'";
+} elseif ($recherche) {
+    $recherche = $stmt->real_escape_string($recherche);
+    $requete .= " AND (nom LIKE '%$recherche%' OR description LIKE '%$recherche%')";
 }
 
 $categorie = isset($_GET['categorie']) ? $_GET['categorie'] : '';
 $recherche = isset($_GET['recherche']) ? $_GET['recherche'] : '';
 
-$requete = "SELECT id, nom, description, illustration_url FROM Cours WHERE 1=1";
-if ($categorie) {
-    $categorie = $connexion->real_escape_string($categorie);
-    $requete .= "AND categorie_id = '$categorie'";
-} elseif ($recherche) {
-    $recherche = $connexion->real_escape_string($recherche);
-    $requete .= " AND (nom LIKE '%$recherche%' OR description LIKE '%$recherche%')";
-}
+$stmt = $db->prepare($query);
+$stmt->execute();
 
-$resultat = $connexion->query($requete);
+$resultat = $stmt->query($requete);
 ?>
 
 <!DOCTYPE html>
@@ -28,8 +29,8 @@ $resultat = $connexion->query($requete);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/formations.css">
     <title>Formations</title>
-    <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH; ?>/formations.css">
 </head>
 <body>
 <header>
