@@ -1,3 +1,13 @@
+@import url("assets.css");
+@import url("responsive.css");
+body {
+    background-color: var(--bg);
+    color: var(--color);
+    width:100vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
 nav {
     width: 100%;
     height: 65px;
@@ -18,26 +28,76 @@ nav a {
     text-decoration: none;
     color: var(--color);
 }
-
-
+.logo-light {
+    display: inline;
+}
+.logo-dark {
+    display: none;
+}
+@media (prefers-color-scheme: dark) {
+    .logo-light {
+        display: none;
+    }
+    .logo-dark {
+        display: inline;
+    }
+}
+.profil-light, .profil-dark {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #A042F0;/*j'ai juste ajouter comme ça*/
+    border-radius: var(--radius);
+}
+.profil-light {
+    display: inline;
+}
+.profil-dark {
+    display: none;
+}
+@media (prefers-color-scheme: dark) {
+    .profil-light {
+        display: none;
+    }
+    .profil-dark {
+        display: inline;
+    }
+}
 .grid-container{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 4;
-    padding: 30px;
+    gap: 15px;
+    padding: 20px;
     justify-content: center;
 }
+/* Style des catégories */
 .category {
     position: relative;
-    background-color: var(--bg);
-    border-radius: 20px;
+    background-color: var(--alt-bg);
+    border-radius: 15px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
     cursor: pointer;
-    border-bottom: solid 1px var(--border);
-}
-.category img {
-    width: 100%;
-    height: 60%;
-    display: block;
+    border: solid 1px var(--border);
 }
 
+.category img {
+    width: 100%;
+    height: 199px;
+    object-fit: cover;
+    display: block;
+}
+.category :hover{
+    transition: background-color 300ms ease, color 125ms ease, border-color 300ms ease;
+}
+
+.category h2{
+    font-size: 20px;
+    margin: 10px;
+}
+
+.category p{
+    font-size: 14px;
+    color: var(--alt-color);
+    margin: 10px;       
+}
