@@ -13,12 +13,9 @@ function IsConnected(): bool {
     $stmt->bindParam(':now', $nowFormatted);
     $stmt->execute();
 
-    // Vérifier la présence du cookie
     if (!isset($_COOKIE['user_token'])) {
         return false; 
     }
-
-    // Vérifier si une session valide existe
     $sql = "SELECT user_id, expires_at FROM sessions WHERE token = :token";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':token', $_COOKIE['user_token'], PDO::PARAM_STR);

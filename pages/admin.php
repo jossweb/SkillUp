@@ -51,7 +51,7 @@
         $sql = 'UPDATE Utilisateurs SET Utilisateurs.key_id = :kid WHERE Utilisateurs.id = :id';
         $request = $db->prepare($sql);
         $request->bindParam(':kid', $keyId);
-        $request->bindParam(':id', $result['id']);
+        $request->bindParam(':id', $_POST['user']);
         $request->execute();
     }
 

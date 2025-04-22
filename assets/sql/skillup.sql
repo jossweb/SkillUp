@@ -1,14 +1,16 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Généré le :  jeu. 03 avr. 2025 à 21:15
--- Version du serveur :  10.6.19-MariaDB
--- Version de PHP :  7.2.22
+-- Hôte : localhost:8889
+-- Généré le : lun. 21 avr. 2025 à 10:07
+-- Version du serveur : 8.0.40
+-- Version de PHP : 8.3.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,8 +18,21 @@ START TRANSACTION;
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `skillup`
+-- Base de données : `skillup`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `ApiLogs`
+--
+
+CREATE TABLE `ApiLogs` (
+  `id` int NOT NULL,
+  `ip` varchar(45) NOT NULL,
+  `succes` tinyint(1) NOT NULL DEFAULT '0',
+  `date_heure` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -26,9 +41,9 @@ START TRANSACTION;
 --
 
 CREATE TABLE `Categories` (
-  `id` int(11) NOT NULL,
-  `nom` varchar(50) DEFAULT NULL,
-  `description` text DEFAULT NULL,
+  `id` int NOT NULL,
+  `nom` varchar(50) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb3_unicode_ci,
   `date_creation` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -39,10 +54,10 @@ CREATE TABLE `Categories` (
 --
 
 CREATE TABLE `Chapitres` (
-  `id` int(11) NOT NULL,
-  `titre` varchar(50) DEFAULT NULL,
-  `fichier_url` varchar(255) DEFAULT NULL,
-  `cours_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL,
+  `titre` varchar(50) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `fichier_url` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `cours_id` int DEFAULT NULL,
   `date_creation` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -53,15 +68,27 @@ CREATE TABLE `Chapitres` (
 --
 
 CREATE TABLE `Cours` (
-  `id` int(11) NOT NULL,
-  `nom` varchar(255) DEFAULT NULL,
-  `illustration_url` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `categorie_id` int(11) DEFAULT NULL,
-  `prof_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL,
+  `nom` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `illustration_url` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb3_unicode_ci,
+  `categorie_id` int DEFAULT NULL,
+  `prof_id` int DEFAULT NULL,
   `date_creation` datetime DEFAULT NULL,
   `date_update` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `DemandeProf`
+--
+
+CREATE TABLE `DemandeProf` (
+  `id` int NOT NULL,
+  `id_utilisateur` int DEFAULT NULL,
+  `presentation` varchar(250) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -70,11 +97,23 @@ CREATE TABLE `Cours` (
 --
 
 CREATE TABLE `Favoris` (
-  `id` int(11) NOT NULL,
-  `utilisateur_id` int(11) NOT NULL,
-  `cours_id` int(11) NOT NULL,
-  `date_ajout` datetime DEFAULT current_timestamp()
+  `id` int NOT NULL,
+  `utilisateur_id` int NOT NULL,
+  `cours_id` int NOT NULL,
+  `date_ajout` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `Images`
+--
+
+CREATE TABLE `Images` (
+  `id` int NOT NULL,
+  `id_chapitre` int NOT NULL,
+  `nom_fichier` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -83,11 +122,24 @@ CREATE TABLE `Favoris` (
 --
 
 CREATE TABLE `Inscriptions` (
-  `id` int(11) NOT NULL,
-  `etudiant_id` int(11) DEFAULT NULL,
-  `cours_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL,
+  `etudiant_id` int DEFAULT NULL,
+  `cours_id` int DEFAULT NULL,
   `date_inscription` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `KeyTable`
+--
+
+CREATE TABLE `KeyTable` (
+  `key_id` int NOT NULL,
+  `date_creation` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `actif` tinyint(1) NOT NULL DEFAULT '1',
+  `token` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -96,43 +148,62 @@ CREATE TABLE `Inscriptions` (
 --
 
 CREATE TABLE `sessions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `token` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` int NOT NULL,
+  `token` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `expires_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Structure de la table `Utilisateurs`
 --
 
 CREATE TABLE `Utilisateurs` (
-  `id` int(11) NOT NULL,
-  `prenom` varchar(15) DEFAULT NULL,
-  `nom` varchar(40) DEFAULT NULL,
-  `e_mail` varchar(255) DEFAULT NULL,
-  `mot_de_passe` varchar(255) DEFAULT NULL,
-  `avatar_url` varchar(255) DEFAULT NULL,
-  `role` enum('professeur','etudiant') NOT NULL DEFAULT 'etudiant',
-  `date_creation` datetime DEFAULT NULL
+  `id` int NOT NULL,
+  `prenom` varchar(15) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `nom` varchar(40) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `e_mail` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `mot_de_passe` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `avatar_url` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `role` enum('professeur','etudiant') COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'etudiant',
+  `date_creation` datetime DEFAULT NULL,
+  `admin` tinyint(1) NOT NULL DEFAULT '0',
+  `key_id` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Déchargement des données de la table `Utilisateurs`
+--
+
+INSERT INTO `Utilisateurs` (`id`, `prenom`, `nom`, `e_mail`, `mot_de_passe`, `avatar_url`, `role`, `date_creation`, `admin`, `key_id`) VALUES
+(5, 'admin', NULL, 'admin@skillup.com', '$2y$10$Ik.Rg.BWGfle4Vx4ZGbtHuY8fw6eAXQcttYfezurbq9CG97QLkQ3m', NULL, 'etudiant', NULL, 1, NULL);
+
+-- --------------------------------------------------------
 
 --
 -- Structure de la table `Vues`
 --
 
 CREATE TABLE `Vues` (
-  `id` int(11) NOT NULL,
-  `utilisateur_id` int(11) DEFAULT NULL,
-  `cours_id` int(11) NOT NULL,
-  `date_vue` datetime DEFAULT current_timestamp(),
-  `ip_address` varchar(45) DEFAULT NULL
+  `id` int NOT NULL,
+  `utilisateur_id` int DEFAULT NULL,
+  `cours_id` int NOT NULL,
+  `date_vue` datetime DEFAULT CURRENT_TIMESTAMP,
+  `ip_address` varchar(45) COLLATE utf8mb3_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `ApiLogs`
+--
+ALTER TABLE `ApiLogs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `Categories`
@@ -156,6 +227,13 @@ ALTER TABLE `Cours`
   ADD KEY `idx_cours_cree_par_prof` (`prof_id`);
 
 --
+-- Index pour la table `DemandeProf`
+--
+ALTER TABLE `DemandeProf`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_utilisateur` (`id_utilisateur`);
+
+--
 -- Index pour la table `Favoris`
 --
 ALTER TABLE `Favoris`
@@ -165,12 +243,25 @@ ALTER TABLE `Favoris`
   ADD KEY `idx_favoris_cours` (`cours_id`);
 
 --
+-- Index pour la table `Images`
+--
+ALTER TABLE `Images`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_chapitre` (`id_chapitre`);
+
+--
 -- Index pour la table `Inscriptions`
 --
 ALTER TABLE `Inscriptions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_inscriptions_etudiant` (`etudiant_id`),
   ADD KEY `idx_inscriptions_concerne_cours` (`cours_id`);
+
+--
+-- Index pour la table `KeyTable`
+--
+ALTER TABLE `KeyTable`
+  ADD PRIMARY KEY (`key_id`);
 
 --
 -- Index pour la table `sessions`
@@ -185,7 +276,8 @@ ALTER TABLE `sessions`
 --
 ALTER TABLE `Utilisateurs`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id` (`id`);
+  ADD KEY `id` (`id`),
+  ADD KEY `fk_key_id` (`key_id`);
 
 --
 -- Index pour la table `Vues`
@@ -200,52 +292,76 @@ ALTER TABLE `Vues`
 --
 
 --
+-- AUTO_INCREMENT pour la table `ApiLogs`
+--
+ALTER TABLE `ApiLogs`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT pour la table `Categories`
 --
 ALTER TABLE `Categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `Chapitres`
 --
 ALTER TABLE `Chapitres`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `Cours`
 --
 ALTER TABLE `Cours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `DemandeProf`
+--
+ALTER TABLE `DemandeProf`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `Favoris`
 --
 ALTER TABLE `Favoris`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `Images`
+--
+ALTER TABLE `Images`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `Inscriptions`
 --
 ALTER TABLE `Inscriptions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `KeyTable`
+--
+ALTER TABLE `KeyTable`
+  MODIFY `key_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `Utilisateurs`
 --
 ALTER TABLE `Utilisateurs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `Vues`
 --
 ALTER TABLE `Vues`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées
@@ -265,6 +381,12 @@ ALTER TABLE `Cours`
   ADD CONSTRAINT `cle_etrangere_cours_cree_par_prof` FOREIGN KEY (`prof_id`) REFERENCES `Utilisateurs` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
+-- Contraintes pour la table `DemandeProf`
+--
+ALTER TABLE `DemandeProf`
+  ADD CONSTRAINT `demandeprof_ibfk_1` FOREIGN KEY (`id_utilisateur`) REFERENCES `Utilisateurs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Contraintes pour la table `Favoris`
 --
 ALTER TABLE `Favoris`
@@ -272,11 +394,23 @@ ALTER TABLE `Favoris`
   ADD CONSTRAINT `cle_etrangere_favoris_utilisateur` FOREIGN KEY (`utilisateur_id`) REFERENCES `Utilisateurs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Contraintes pour la table `Images`
+--
+ALTER TABLE `Images`
+  ADD CONSTRAINT `images_ibfk_1` FOREIGN KEY (`id_chapitre`) REFERENCES `Chapitres` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Contraintes pour la table `Inscriptions`
 --
 ALTER TABLE `Inscriptions`
   ADD CONSTRAINT `cle_etrangere_inscriptions_concerne_cours` FOREIGN KEY (`cours_id`) REFERENCES `Cours` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `cle_etrangere_inscriptions_etudiant` FOREIGN KEY (`etudiant_id`) REFERENCES `Utilisateurs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `Utilisateurs`
+--
+ALTER TABLE `Utilisateurs`
+  ADD CONSTRAINT `fk_key_id` FOREIGN KEY (`key_id`) REFERENCES `KeyTable` (`key_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `Vues`

@@ -154,6 +154,7 @@
             DeleteChap() ;
         }
     }
+
     //Check if the user connected is the teacher who own this course and get infos on course
     $sql_check = "SELECT Cours.nom, Cours.illustration_url, Cours.description, Cours.categorie_id FROM Cours WHERE Cours.prof_id = :id AND Cours.id = :cid";
     $request_check = $db->prepare($sql_check);
@@ -165,7 +166,7 @@
        header("Location: dashboard.php");
        exit();
     }
-    function FindLineById(array $chapitres, int $idRecherche): ?array {
+    function FindLineById($chapitres, $idRecherche){
         foreach ($chapitres as $chapitre) {
             if ($chapitre['id'] == $idRecherche) {
                 return $chapitre;
@@ -214,6 +215,10 @@
             exit();
         }
     }
+    //get chapters infos
+    $sql_cat = "SELECT Categories.nom, Categories.id FROM Categories";
+    $request = $db->prepare($sql_cat);
+    $request_check->execute();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -224,111 +229,118 @@
     <title><?php echo htmlspecialchars($titre);?></title>
 </head>
 <body>
-    <section class="left-bar">
-        <div class="cours-primary-infos">
-            <img src="<?php echo $result_check['illustration_url']?>"/>
-            <div>
+    <nav>
+        <div class="logo" aria-label="SkillUp"></div>
+        <button name="save-md" onclick="save()">Enregistrer</button>
+    </nav>
+    <div class="page-content">
+        <section class="left-bar">
+            <div class="cours-primary-infos">
+                <img src="<?php echo $result_check['illustration_url']?>"/>
+                <div>
+                    <form method="POST">
+                        <input class="f-name" name="name" type="text" maxlength="255" value="<?php echo $result_check['nom']?>" required>
+                        <button type="submit" name="change-name">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil">
+                                <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                <path d="m15 5 4 4"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="description">
                 <form method="POST">
-                    <input class="f-name" name="name" type="text" maxlength="255" value="<?php echo $result_check['nom']?>" required>
-                    <button type="submit" name="change-name">
+                    <div class="description-head">
+                        <h2 for="description">Description du cours</h2>
+                        <button type="submit" name="description-b">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+                        </button>
+                    </div>
+                    <textarea type="textfield" name="description"><?php echo $result_check['description']?></textarea>
+                </form>
+            </div>
+            <div class="chapter">
+                <div class="description-head">
+                    <h2 for="description">Chapitres</h2>
+                    <form method="POST" id="add-chapter">
+                        <button type="submit" name="add-chapter">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>                
+                        </button>
+                    </form>
+                </div>
+                <div class="chapter-container">
+                    <?php
+                        $nbChap = 0;
+                        foreach ($results_chapters as $chapter) {
+                            echo "<button onclick='ChangeActiveChapter(" . $chapter["id"] . ")'>" . $chapter['titre'] . "</button>";
+                            $nbChap ++ ;
+                        }   
+                    ?>
+                </div>
+            </div>
+        </section>
+        <section class="main-part">
+            <div class="head">
+                <form method="POST">
+                    <input type="text" name="new-name" value="<?php echo $_COOKIE['activeChapTitle'] ?>">
+                    <button type="submit" name="chap-name" class="save-name-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil">
                             <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
                             <path d="m15 5 4 4"/>
-                        </svg>
+                        </svg>   
                     </button>
                 </form>
-            </div>
-        </div>
-        <div class="description">
-            <form method="POST">
-                <div class="description-head">
-                    <h2 for="description">Description du cours</h2>
-                    <button type="submit" name="description-b">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
-                    </button>
-                </div>
-                <textarea type="textfield" name="description"><?php echo $result_check['description']?></textarea>
-            </form>
-        </div>
-        <div class="chapter">
-            <div class="description-head">
-                <h2 for="description">Chapitres</h2>
-                <form method="POST">
-                    <button type="submit" name="add-chapter">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>                
-                    </button>
-                </form>
-            </div>
-            <div class="chapter-container">
                 <?php
-                    $nbChap = 0;
-                    foreach ($results_chapters as $chapter) {
-                        echo "<button onclick='ChangeActiveChapter(" . $chapter["id"] . ")'>" . $chapter['titre'] . "</button>";
-                        $nbChap ++ ;
-                    }   
+                    if ($nbChap > 1) {
+                        echo '<form class="deleteForm" method="POST">
+                            <button name="delete-chap" class="delete">Supprimer</button>
+                        </form>';
+                    }
                 ?>
-            </div>
-        </div>
-    </section>
-    <section class="main-part">
-        <div class="head">
-            <form method="POST">
-                <input type="text" name="new-name" value="<?php echo $_COOKIE['activeChapTitle'] ?>">
-                <button type="submit" name="chap-name" class="save-name-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil">
-                        <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
-                        <path d="m15 5 4 4"/>
-                    </svg>   
-                 </button>
-            </form>
-            <?php
-                if ($nbChap > 1) {
-                    echo '<form class="deleteForm" method="POST">
-                        <button name="delete-chap" class="delete">Supprimer</button>
-                    </form>';
-                }
-            ?>
 
-        </div>
-        <div class="toggle-bar">
-            <div class="toggle">
-                <button id="to-edit" onclick="ShowEdit()">Modifer</button>
-                <button id="to-preview" onclick="ShowPreview()">Aperçu</button>
             </div>
-        </div>
-        <div class="edit" id="edit">
-            <div class="tool-bar">
-                <div class="button-container">
-                    <button onclick="AddToMd('**Gras**')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bold-icon lucide-bold"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8"/></svg>
-                    </button>
-                    <button onclick="AddToMd('__Italic__')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-italic-icon lucide-italic"><line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/></svg>
-                    </button>
-                    <button onclick="AddToMd('# ')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading1-icon lucide-heading-1"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="m17 12 3-2v8"/></svg>
-                    </button>
-                    <button onclick="AddToMd('## ')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading2-icon lucide-heading-2"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1"/></svg>
-                    </button>
+            <div class="chapter-content">
+                <div class="toggle-bar">
+                    <div class="toggle">
+                        <button id="to-edit" class="selected" onclick="ShowEdit()">Modifer</button>
+                        <button id="to-preview" onclick="ShowPreview()">Aperçu</button>
+                    </div>
+                </div>
+                <div class="edit" id="edit">
+                    <div class="tool-bar">
+                        <div class="button-container">
+                            <button onclick="AddToMd('*Gras*')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bold-icon lucide-bold"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8"/></svg>
+                            </button>
+                            <button onclick="AddToMd('_Italic_')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-italic-icon lucide-italic"><line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/></svg>
+                            </button>
+                            <button onclick="AddToMd('# ')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading1-icon lucide-heading-1"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="m17 12 3-2v8"/></svg>
+                            </button>
+                            <button onclick="AddToMd('## ')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading2-icon lucide-heading-2"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-editor">
+                        <textarea id="md-editor" name="md-editor"></textarea>
+                        <div id="md" value=""></div>
+                    </div>
+                </div>
+                <div id="preview" class="preview">
+                    <div id="md-output">
+
+                    </div>
                 </div>
             </div>
-            <div class="text-editor">
-                <form method="POST">
-                    <button name="save-md" onclick="save()">Enregistrer</button>
-                    <textarea id="md-editor" name="md-editor"></textarea>
-                    <div id="md" value=""></div>
-                </form>
-            </div>
-        </div>
-        <div id="preview" class="preview">
-            <div id="md-output">
+            
 
-            </div>
-        </div>
-
-    </section>
+        </section>
+    </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.3/purify.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="../<?php echo JS_PATH; ?>/texteditor.js"></script>
 </html>

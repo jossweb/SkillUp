@@ -1,8 +1,42 @@
 @import url("assets.css");
 body{
+    display: block;
+    background-color: var(--bg);
+}
+nav{
+    border-bottom: 1px solid var(--border);
     display: flex;
     flex-direction: row;
-    background-color: var(--bg);
+    padding: 10px;
+}
+nav button{
+    margin: 10px;
+    margin-left: auto;
+    background-color: var(--skillup-pink);
+    border-radius: var(--radius);
+    border: none;
+    color: #fff;
+    padding: 10px;
+    font-size: 15px;
+}
+.logo {
+    width: 100px;
+    height: 40px;
+    background-image: url('../images/icône.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    margin-left: 20px;
+    align-self: center;
+}
+@media (prefers-color-scheme: dark) {
+    .logo {
+        background-image: url('../images/logo-dark.svg');
+    }
+}
+.page-content{
+    display: flex;
+    flex-direction: row;
 }
 .left-bar{
     width: 25%;
@@ -137,7 +171,6 @@ body{
     display: flex;
     flex-direction: row;
     width: 100%;
-    border-bottom: solid var(--border) 1px;
 }
 .main-part .head input{
     margin: 15px;
@@ -176,22 +209,38 @@ body{
 }
 .main-part .tool-bar{
     width: 100%;
-    background-color: var(--alt-bg);
     display: flex;
     flex-direction: row;
+    border-top: var(--border) 1px solid;
+    border-bottom: var(--border) 1px solid;
+}
+.main-part .toggle-bar {
+    width: 100%;
+    display: flex;
+    flex-direction:row;
+    overflow: hidden;
 }
 .main-part .toggle-bar .toggle{
-    margin-left: 20px;
-    display: flex;
+    width: auto;
     gap: 0;
+    border: solid var(--border) 1px;
+    border-radius: var(--radius);
+    margin: 8px;
+    margin-left: 20px;
+    overflow: hidden;
+    display: flex;
 }
 .main-part .toggle-bar .toggle button{
     padding: 10px;
-    background-color: var(--alt-bg);
+    background-color: var(--border);
     border: none;
     margin: none;
     color: var(--color);
-
+    font-weight: 400;
+    font-size: 16px;
+}
+.main-part .toggle-bar .toggle button.selected{
+    background-color: var(--skillup-pink);
 }
 .main-part .tool-bar .button-container{
     margin-left: 5%;
@@ -218,34 +267,19 @@ body{
     display: block;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1000px;
-    min-width: 500px;
-    width: 60%;
+    width: 100%;
     margin-top: 5vh;
     background-color: var(--bg);
-    border: solid 2px var(--border);
-    border-radius: var(--radius);
     resize: none;
     height: 80vh;
     color: var(--color);
     font-size: 20px;
     padding: 20px;
+    border: none;
+    border-top: 1px solid var(--border);
 }
 .text-editor textarea:focus{
     outline: none;
-}
-.text-editor button{
-    margin: 10px;
-    margin-left: auto;
-    background-color: var(--skillup-pink);
-    border-radius: var(--radius);
-    border: none;
-    color: #fff;
-    padding: 10px;
-    font-size: 15px;
-    position: absolute;
-    top: 0;
-    right: 0;
 }
 .preview{
     width: 100%;
@@ -262,8 +296,32 @@ body{
     margin-right: auto;
     max-width: 1000px;
     min-width: 500px;
-    width: 60%;
-    height: 40vh;
+    width: 100%;
+    height: 80vh;
     overflow-y: auto;
     padding: 15px;
 } 
+.preview #md-output *{
+    width: 98%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.preview #md-output img{
+    width: 80%;
+}
+.preview #md-output hr{
+    padding: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+#add-chapter{
+    width: 100%;
+    display: flex;
+}
+.chapter-content{
+    margin: 20px;
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
