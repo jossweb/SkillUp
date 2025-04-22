@@ -1,0 +1,130 @@
+@import url("assets.css");
+@import url("responsive.css");
+
+    body {
+        background-color: var(--bg);
+        color: var(--color);
+        width:100vw;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        font-family: "Onest", sans-serif;
+    }
+    nav {
+        width: 100%;
+        height: 65px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0px 12px;
+        background-color: var(--alt-bg);
+        border-bottom: solid 1px var(--border);
+    }
+    nav ul {
+        display: flex;
+        list-style: none;
+        align-items: center;
+        gap: 5%;
+    }
+    nav a {
+        text-decoration: none;
+        color: var(--color);
+        font-family: "Onset", sans-serif;
+    }
+    .logo{
+        display: inline-flex;
+        justify-items: left;
+    }
+    .logo-light {
+        display: inline;
+    }
+    .logo-dark {
+        display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .logo-light {
+            display: none;
+        }
+        .logo-dark {
+            display: inline;
+        }
+    }
+
+    .details{
+        max-width: 960px;
+        margin: 20px auto;
+        background-color: var(--bg);
+        padding: 30px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        background-color: var(--bg);
+        padding: 20px;
+        border-radius: 5px;
+    }
+    .hero .image-container{
+        flex-shrink: 0;
+        margin-right: 20px;
+        border-radius: 5px;
+        overflow: hidden;
+        width: 150px;
+        height: 100px;
+    }
+    .hero .image-container img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .hero .title-container h1{
+        margin: 0;
+        font-size: 2em;
+    }
+
+    .description{
+        margin-bottom: 20px;
+    }
+
+    .info ul{
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 20px; 
+        align-items: center;
+    }
+
+    .info li{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .info img{
+        width: 15px;
+        height: 15px; 
+    }
+
+    .button{
+        text-align: center;
+        margin-top: 30px;
+    }
+    .enroll-button{
+        background-color: var(--bg);
+        color: var(--color);
+        border: none;
+        padding: 15px 30px;
+        font-size: 1em;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 300ms ease;
+    }
+    .enroll-button:hover{
+        background-color: var(--alt-bg);
+    }
+
+
