@@ -1,4 +1,5 @@
 @import url("assets.css");
+@import url("responsive.css");
 
     body {
         background-color: var(--bg);
@@ -33,6 +34,21 @@
     .logo{
         display: inline-flex;
         justify-items: left;
+    }
+    .logo-light {
+        display: inline;
+    }
+    .logo-dark {
+        display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .logo-light {
+            display: none;
+        }
+        .logo-dark {
+            display: inline;
+        }
     }
 
     main {
