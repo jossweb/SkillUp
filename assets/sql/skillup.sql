@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : lun. 21 avr. 2025 à 10:07
+-- Généré le : mer. 23 avr. 2025 à 18:02
 -- Version du serveur : 8.0.40
 -- Version de PHP : 8.3.14
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `skillup`
+-- Base de données : `skillup2`
 --
 
 -- --------------------------------------------------------
@@ -42,10 +42,31 @@ CREATE TABLE `ApiLogs` (
 
 CREATE TABLE `Categories` (
   `id` int NOT NULL,
-  `nom` varchar(50) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `description` text COLLATE utf8mb3_unicode_ci,
-  `date_creation` datetime DEFAULT NULL
+  `nom` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `date_creation` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Déchargement des données de la table `Categories`
+--
+
+INSERT INTO `Categories` (`id`, `nom`, `description`, `date_creation`) VALUES
+(1, 'Développement Web', 'Apprenez à créer des sites et applications web avec HTML, CSS, JavaScript, et des frameworks modernes.', '2025-04-23 20:01:05'),
+(2, 'Cybersécurité', 'Comprenez les principes de sécurité informatique, les menaces et la protection des systèmes.', '2025-04-23 20:01:05'),
+(3, 'Intelligence Artificielle', 'Explorez le machine learning, le deep learning et les applications de l’IA.', '2025-04-23 20:01:05'),
+(4, 'Réseaux Informatiques', 'Étudiez les protocoles, l’architecture réseau, et la communication entre machines.', '2025-04-23 20:01:05'),
+(5, 'Systèmes d’Exploitation', 'Analysez le fonctionnement des systèmes comme Windows, Linux, et macOS.', '2025-04-23 20:01:05'),
+(6, 'Base de Données', 'Apprenez à concevoir, interroger et administrer des bases de données relationnelles ou NoSQL.', '2025-04-23 20:01:05'),
+(7, 'Développement Mobile', 'Créez des applications mobiles natives ou hybrides pour Android et iOS.', '2025-04-23 20:01:05'),
+(8, 'Programmation Orientée Objet', 'Maîtrisez les concepts fondamentaux de la POO avec des langages comme Java, C# ou Python.', '2025-04-23 20:01:05'),
+(9, 'Architecture Logicielle', 'Concevez des logiciels robustes et maintenables avec des modèles d’architecture.', '2025-04-23 20:01:05'),
+(10, 'Cloud Computing', 'Découvrez les services cloud comme AWS, Azure ou GCP, et le déploiement d’applications à l’échelle.', '2025-04-23 20:01:05'),
+(11, 'DevOps', 'Automatisez le déploiement, améliorez l’intégration continue et gérez l’infrastructure efficacement.', '2025-04-23 20:01:05'),
+(12, 'Algorithmique', 'Étudiez les structures de données et les algorithmes fondamentaux pour résoudre des problèmes complexes.', '2025-04-23 20:01:05'),
+(13, 'Informatique Théorique', 'Approfondissez les bases mathématiques et logiques de l’informatique.', '2025-04-23 20:01:05'),
+(14, 'UX/UI Design', 'Apprenez à concevoir des interfaces utilisateurs intuitives et attrayantes.', '2025-04-23 20:01:05'),
+(15, 'Robotique', 'Initiez-vous à la programmation et au contrôle de robots autonomes.', '2025-04-23 20:01:05');
 
 -- --------------------------------------------------------
 
@@ -55,8 +76,8 @@ CREATE TABLE `Categories` (
 
 CREATE TABLE `Chapitres` (
   `id` int NOT NULL,
-  `titre` varchar(50) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `fichier_url` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `titre` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `fichier_url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `cours_id` int DEFAULT NULL,
   `date_creation` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -69,9 +90,9 @@ CREATE TABLE `Chapitres` (
 
 CREATE TABLE `Cours` (
   `id` int NOT NULL,
-  `nom` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `illustration_url` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `description` text COLLATE utf8mb3_unicode_ci,
+  `nom` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `illustration_url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `categorie_id` int DEFAULT NULL,
   `prof_id` int DEFAULT NULL,
   `date_creation` datetime DEFAULT NULL,
@@ -111,8 +132,7 @@ CREATE TABLE `Favoris` (
 
 CREATE TABLE `Images` (
   `id` int NOT NULL,
-  `id_chapitre` int NOT NULL,
-  `nom_fichier` varchar(255) NOT NULL
+  `id_chapitre` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -150,7 +170,7 @@ CREATE TABLE `KeyTable` (
 CREATE TABLE `sessions` (
   `id` bigint UNSIGNED NOT NULL,
   `user_id` int NOT NULL,
-  `token` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `token` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `expires_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -163,12 +183,12 @@ CREATE TABLE `sessions` (
 
 CREATE TABLE `Utilisateurs` (
   `id` int NOT NULL,
-  `prenom` varchar(15) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `nom` varchar(40) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `e_mail` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `mot_de_passe` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `avatar_url` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `role` enum('professeur','etudiant') COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'etudiant',
+  `prenom` varchar(15) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `nom` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `e_mail` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `mot_de_passe` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `avatar_url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `role` enum('professeur','etudiant') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'etudiant',
   `date_creation` datetime DEFAULT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   `key_id` int DEFAULT NULL
@@ -192,7 +212,7 @@ CREATE TABLE `Vues` (
   `utilisateur_id` int DEFAULT NULL,
   `cours_id` int NOT NULL,
   `date_vue` datetime DEFAULT CURRENT_TIMESTAMP,
-  `ip_address` varchar(45) COLLATE utf8mb3_unicode_ci DEFAULT NULL
+  `ip_address` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
@@ -301,7 +321,7 @@ ALTER TABLE `ApiLogs`
 -- AUTO_INCREMENT pour la table `Categories`
 --
 ALTER TABLE `Categories`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT pour la table `Chapitres`

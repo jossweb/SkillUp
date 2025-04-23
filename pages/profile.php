@@ -26,8 +26,7 @@ $profRequest = $request->fetch(PDO::FETCH_ASSOC);
 function getAvatar(){
     global $new_avatar;
     if (!isset($_POST['prompt']) || empty($_POST['prompt'])) {
-        echo "<h1>Erreur : Aucun prompt fourni.</h1>";
-        return;
+        return null;
     }
 
     $prompt = $_POST['prompt'];
@@ -150,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/profile.css">
-    <title><?php echo $titre; ?></title>
+    <title><?php echo htmlspecialchars($titre); ?></title>
 </head>
 <body>
     <section class="infos">
@@ -158,12 +157,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="headband">
                 <a href="../" class="cross">&crarr; </a>
                 <button id="generatePopup" onclick="OpenAvatarPopup()">
-                    <img src="<?php echo $avatar ?>" alt="Your profile picture" class="avatar"/>
+                    <img src="<?php echo htmlspecialchars($avatar) ?>" alt="Your profile picture" class="avatar"/>
                 </button>
             </div>
 
-            <h2><?php echo $result['prenom']?></h2>
-            <p><?php echo $result['e_mail']?></p>
+            <h2><?php echo htmlspecialchars($result['prenom'])?></h2>
+            <p><?php echo htmlspecialchars($result['e_mail'])?></p>
             <a href="reset-pass.php"><button>Changer mon mot de passe</button></a>
             
         </div>
@@ -219,7 +218,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>Changer mon avatar</h2>
         <div class="avatar-container">
             <img src="<?php echo $avatar ?>">
-            <?php if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){echo "<p>&#x2794;</p><img src=". $_SESSION['new_avatar']  ." alt='nouveau avatar' />";}?>
+            <?php if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){echo "<p>&#x2794;</p><img src=". htmlspecialchars($_SESSION['new_avatar'])  ." alt='nouveau avatar' />";}?>
         </div>
             <?php if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){echo "<form method='POST'><button name='agreeAvatar' id='agreeAvatar'>Accepter l'avatar</button></form>";}?>
         

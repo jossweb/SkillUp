@@ -58,11 +58,12 @@
         header('Location:  addCourse.php?cours=' . $idCours);
         exit();
     }
-    function ChangeName($name) {
+    function ChangeName($name, $cat) {
         global $db;
-        $sql = "UPDATE Cours SET Cours.nom = :name WHERE Cours.id = :id";
+        $sql = "UPDATE Cours SET Cours.nom = :name, Cours.categorie_id = :categorie WHERE Cours.id = :id";;
         $request = $db->prepare($sql);
         $request->bindParam(":name", $name);
+        $request->bindParam(":categorie", $cat);
         $request->bindParam(":id", $_GET['cours']);
         $request->execute() ;
     }
@@ -134,9 +135,57 @@
         header('Location: addCourse.php?cours=' . $_GET['cours']);
         exit();
     }
+    function getAvatar(){
+        global $new_avatar;
+        if (!isset($_POST['prompt']) || empty($_POST['prompt'])) {
+            echo "<h1>Erreur : Aucun prompt fourni.</h1>";
+            return;
+        }
+    
+        $prompt = $_POST['prompt'];
+    
+        $url = "https://remyweb.fr/emoji.php";
+        $data = ['prompt' => $prompt];
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']); 
+        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
+        $response = curl_exec($curl);
+        if (curl_errno($curl)) {
+            echo "<h1>Erreur cURL : " . curl_error($curl) . "</h1>";
+            curl_close($curl);
+            return;
+        }
+        curl_close($curl);
+        $decodedResponse = json_decode($response, true);
+    
+        if (isset($decodedResponse['imagePath'])) {
+            $imagePath = htmlspecialchars($decodedResponse['imagePath']);
+            $new_avatar = 'https://remyweb.fr/' . $imagePath;
+            $_SESSION['new_avatar'] = $new_avatar;
+        } else {
+            echo "<h1>Erreur : Réponse invalide</h1>";
+            echo "<pre>" . htmlspecialchars($response) . "</pre>";
+        }
+    }
+    function SetNewAvatar() {
+        if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){
+            global $new_avatar, $result;
+            $db = connectDB();
+            $sql = "UPDATE Cours SET illustration_url = :avatarUrl WHERE id = :id";
+            $request = $db->prepare($sql);
+            $request->bindParam(':avatarUrl', $_SESSION['new_avatar'] );
+            $request->bindParam(':id', $_GET['cours']);
+            $request->execute();
+            $_SESSION['new_avatar'] = null;
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            exit();
+        }
+    }
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST["change-name"])) {
-            ChangeName($_POST["name"]);
+            ChangeName($_POST["name"], $_POST["categorie"]);
         }
         if (isset($_POST["description-b"])) {
             ChangeDescription($_POST["description"]);
@@ -152,6 +201,12 @@
         }
         if (isset($_POST["delete-chap"])){
             DeleteChap() ;
+        }
+        if (isset($_POST['avatar-gen'])) {
+            getAvatar();
+        }
+        if (isset($_POST['agreeAvatar'])) {
+            SetNewAvatar();
         }
     }
 
@@ -218,7 +273,8 @@
     //get chapters infos
     $sql_cat = "SELECT Categories.nom, Categories.id FROM Categories";
     $request = $db->prepare($sql_cat);
-    $request_check->execute();
+    $request->execute();
+    $categories = $request->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -231,15 +287,29 @@
 <body>
     <nav>
         <div class="logo" aria-label="SkillUp"></div>
+        <button id="back" onclick="location.href='dashboard.php'">Dashboard</button>
         <button name="save-md" onclick="save()">Enregistrer</button>
     </nav>
     <div class="page-content">
-        <section class="left-bar">
+        <section class="left-bar" id="left-bar">
+            <button class="cross" onclick="ResponsiveSys(false)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>            </button>
             <div class="cours-primary-infos">
-                <img src="<?php echo $result_check['illustration_url']?>"/>
+                <button id="generatePopup" onclick="OpenAvatarPopup()">
+                    <img src="<?php echo $result_check['illustration_url'] ?>" alt="Your profile picture" class="avatar"/>
+                </button>
                 <div>
                     <form method="POST">
                         <input class="f-name" name="name" type="text" maxlength="255" value="<?php echo $result_check['nom']?>" required>
+                        <select name="categorie" id="categorie">
+                        <?php
+                            foreach ($categories as $category) {
+                                echo '<option value="' . htmlspecialchars($category['id']) . '">'
+                                    . htmlspecialchars($category['nom']) .
+                                '</option>';
+                            }
+                        ?>
+                        </select>
                         <button type="submit" name="change-name">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil">
                                 <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
@@ -273,17 +343,20 @@
                     <?php
                         $nbChap = 0;
                         foreach ($results_chapters as $chapter) {
-                            echo "<button onclick='ChangeActiveChapter(" . $chapter["id"] . ")'>" . $chapter['titre'] . "</button>";
+                            echo "<button onclick='ChangeActiveChapter(" . htmlspecialchars($chapter["id"]) . ")'>" . htmlspecialchars($chapter['titre']) . "</button>";
                             $nbChap ++ ;
                         }   
                     ?>
                 </div>
             </div>
         </section>
-        <section class="main-part">
+        <section class="main-part" id="main-part">
+            <button class="burger" onclick="ResponsiveSys(true)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu-icon lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
             <div class="head">
                 <form method="POST">
-                    <input type="text" name="new-name" value="<?php echo $_COOKIE['activeChapTitle'] ?>">
+                    <input type="text" name="new-name" id="new-name" value="<?php echo htmlspecialchars($_COOKIE['activeChapTitle']) ?>">
                     <button type="submit" name="chap-name" class="save-name-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil">
                             <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
@@ -320,7 +393,10 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading1-icon lucide-heading-1"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="m17 12 3-2v8"/></svg>
                             </button>
                             <button onclick="AddToMd('## ')">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading2-icon lucide-heading-2"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading2-icon lucide-heading-2"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1"/></svg>
+                            </button>
+                            <button onclick="AddToMd('### ')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading3-icon lucide-heading-3"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="M17.5 10.5c1.7-1 3.5 0 3.5 1.5a2 2 0 0 1-2 2"/><path d="M17 17.5c2 1.5 4 .3 4-1.5a2 2 0 0 0-2-2"/></svg>
                             </button>
                         </div>
                     </div>
@@ -335,9 +411,29 @@
                     </div>
                 </div>
             </div>
-            
-
         </section>
+        <div class="blurred-bg" id="blurred-bg"></div>
+        <div class="popup" id="new-pp">
+            <button onclick="CloseAvatarPopup()" class="cross">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>            </button>
+             </button>
+            <h2>Changer mon avatar</h2>
+            <div class="avatar-container">
+                <img src="<?php echo  htmlspecialchars($result_check['illustration_url'])?>">
+                <?php if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){echo "<p>&#x2794;</p><img src=". $_SESSION['new_avatar']  ." alt='nouveau avatar' />";}?>
+            </div>
+                <?php if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){echo "<form method='POST'><button name='agreeAvatar' id='agreeAvatar'>Accepter l'avatar</button></form>";}?>
+            
+            <form method="POST">
+                <label for="prompt">Mon avatar doit ressembler à :</label>
+                <input id="prompt" name="prompt" type="text">
+                <button id="generate" name="avatar-gen" onclick="ShowLoading()">Générer mon avatar</button>
+                <div class="loading-part" id="loading-emo">
+                    <p>Chargement</p>
+                    <div id="spinner"></div>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.3/purify.min.js"></script>

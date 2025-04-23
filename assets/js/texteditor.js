@@ -4,8 +4,21 @@ var edit = document.getElementById('edit');
 var toEdit = document.getElementById('to-edit');
 var toPrev = document.getElementById('to-preview');
 
+var leftBar = document.getElementById('left-bar');
+var mainPart = document.getElementById('main-part');
+
 const urlParams = new URLSearchParams(window.location.search);
 const cours = urlParams.get('cours');
+
+function ResponsiveSys(way){
+  if(way){
+    leftBar.style.display = "block";
+    mainPart.style.display = "none";
+  }else{
+    leftBar.style.display = "none";
+    mainPart.style.display = "block";
+  }
+}
 
 function getCookie(name) {
     const cookies = document.cookie.split("; ");
@@ -105,7 +118,7 @@ mdEditor.addEventListener('drop', async (e) => {
       const cursorPos = mdEditor.selectionStart;
       const before = mdEditor.value.substring(0, cursorPos);
       const after = mdEditor.value.substring(cursorPos);
-      const markdownFinal = `[image](${savedPath})`; // tu peux aussi personnaliser ici
+      const markdownFinal = `![image](${savedPath})`; // ----------- !!
       mdEditor.value = before + markdownFinal + after;
     } else {
       alert("Erreur lors de la sauvegarde de l'image.");
@@ -181,3 +194,26 @@ function SaveImg(img){
   })
   .catch(() => false);
 }
+var blurredBg = document.getElementById('blurred-bg');
+var newPP = document.getElementById('new-pp');
+var loading = document.getElementById('loading-emo');
+
+function OpenAvatarPopup() {
+  blurredBg.style.opacity = "90%";
+  newPP.style.opacity = "1";
+  newPP.style.display = "block";
+  localStorage.setItem('avatarPopupOpen', 'true'); 
+}
+function CloseAvatarPopup() {
+  blurredBg.style.opacity = "0";
+  newPP.style.opacity = "0";
+  newPP.style.display = "none";
+  localStorage.removeItem('avatarPopupOpen');
+}
+function ShowLoading(){
+    loading.style.display = "block";
+}
+document.addEventListener("DOMContentLoaded", function () {
+  if (localStorage.getItem('avatarPopupOpen') === 'true') {
+      OpenAvatarPopup(); 
+  }});

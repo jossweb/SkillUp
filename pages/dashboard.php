@@ -137,9 +137,9 @@
                 <path d="M37.5835 35.8751V32.4584C37.5824 30.9444 37.0784 29.4736 36.1508 28.277C35.2232 27.0803 33.9245 26.2257 32.4585 25.8472" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M27.3335 5.34717C28.8034 5.72352 30.1062 6.57837 31.0365 7.77695C31.9669 8.97553 32.4719 10.4497 32.4719 11.967C32.4719 13.4843 31.9669 14.9584 31.0365 16.157C30.1062 17.3556 28.8034 18.2104 27.3335 18.5868" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <p class="value"><?php echo $nb_inscription?></p>
+              <p class="value"><?php echo htmlspecialchars($nb_inscription)?></p>
               <?php if($nb_inscription - $nb_inscription_yesterday > 0){
-                echo '<p> + '. $nb_inscription_yesterday ." inscription aujourd'hui <p>";
+                echo '<p> + '. htmlspecialchars($nb_inscription_yesterday) ." inscription aujourd'hui <p>";
               } 
               ?> 
             </div>
@@ -154,7 +154,7 @@
               </svg>
               <p class="value"><?php echo $nb_vues?></p>
               <?php if($nb_inscription - $nb_inscription_yesterday > 0){
-                echo '<p> + '. $nb_inscription_yesterday ." inscription aujourd'hui <p>";
+                echo '<p> + '. htmlspecialchars($nb_inscription_yesterday) ." inscription aujourd'hui <p>";
               } 
               ?> 
             </div>
@@ -169,7 +169,7 @@
               </svg>
               <p class="value"><?php echo $nb_likes?></p>
               <?php if($nb_inscription - $nb_inscription_yesterday > 0){
-                echo '<p> + '. $nb_inscription_yesterday ." inscription aujourd'hui <p>";
+                echo '<p> + '. htmlspecialchars($nb_inscription_yesterday) ." inscription aujourd'hui <p>";
               } 
               ?> 
             </div>
@@ -260,79 +260,5 @@
 </body>
 <script src="../<?php echo JS_PATH; ?>/forms.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  var blurredBg = document.getElementById('blurred-bg');
-  var popup = document.getElementById('delete-check');
-  var hiddenInput = document.getElementById('id-c');
-
-  function OpenPopup(id){
-    blurredBg.style.display = "flex";
-    blurredBg.style.opacity = 1;
-    popup.style.display = "flex";
-    popup.style.opacity = 1;
-    hiddenInput.value = id;
-    
-  }
-  function CloseDeleteCheck(){
-    blurredBg.style.display = "none";
-    blurredBg.style.opacity = 0;
-    popup.style.display = "none";
-    popup.style.opacity = 0;
-  }
-  const today = new Date();
-  const day = String(today.getDate()).padStart(2, '0');
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const formattedDate = `${day}/${month}`
-
-  document.addEventListener("DOMContentLoaded", function () {
-  var ctx = document.getElementById("myBarChart").getContext("2d");
-
-  function getLast7Days() {
-    const dates = [];
-    const today = new Date();
-
-    for (let i = 30; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(today.getDate() - i);
-
-      const day = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-
-      dates.push(`${day}/${month}`);
-    }
-
-    return dates;
-  }
-  var myBarChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-    labels: getLast7Days(),
-    datasets: [
-      {
-        
-      label: "Nouveaux inscrits cette semaine",
-      data: [8, 10, 2, 7, 17, 15, 19, 8, 10, 2, 7, 17, 15, 19, 8, 10, 2, 7, 17, 15, 19, 8, 10, 2, 7, 17, 15, 19, 25, 19, 3],
-      backgroundColor: "rgba(160, 66, 240, 0.8)",
-      borderColor: "rgba(0, 0, 0, 1)",
-      borderWidth: 1,
-      },
-    ],
-    },
-    options: {
-    responsive: true,
-    maintainAspectRatio: false, 
-    plugins: {
-      legend: {
-      position: 'top',
-      },
-    },
-    scales: {
-      y: {
-      beginAtZero: true,
-      },
-    },
-    },
-  });
-  });
-</script>
+<script src="../<?php echo JS_PATH; ?>/dashboard.js"></script>
 </html>

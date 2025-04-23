@@ -75,7 +75,7 @@
     <title><?php echo htmlspecialchars($titre);?></title>
 </head>
 <body>
-    <h1>Bienvenue <?php echo $result['prenom']?></h1>
+    <h1>Bienvenue <?php echo htmlspecialchars(htmlspecialchars($result['prenom']))?></h1>
     <?php 
     if(isset($profRequests[0]["id"])){
         echo "<form method='POST'>";
@@ -90,10 +90,10 @@
         echo "<tbody>";
         foreach ($profRequests as $request) {
             echo "<tr>";
-            echo "<td> ". $request['id']. "</td>";
-            echo "<td>". $request['presentation']. "</td>";
+            echo "<td> ". htmlspecialchars($request['id']). "</td>";
+            echo "<td>". htmlspecialchars($request['presentation']). "</td>";
             echo '<td>
-            <input type="hidden" value="'. $request['id_utilisateur']. '" name="user">
+            <input type="hidden" value="'. htmlspecialchars($request['id_utilisateur']). '" name="user">
             <button name="action" value="1" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-icon lucide-circle-check"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></button>
             <button name="action" value="0" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x-icon lucide-circle-x"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></button>
             </td>';
