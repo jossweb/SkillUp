@@ -106,7 +106,7 @@
       <img src="<?php echo $avatar ?>" alt="profile picture" class="avatar">
       <div class="title">
         <h1>Tableau de bord professeur</h1>
-        <p style="color: white;"><?php echo $result['e_mail'] ?></p>
+        <p><?php echo $result['e_mail'] ?></p>
       </div>
     </div>
     <div class="toggle">
@@ -129,7 +129,7 @@
       <div class="stats-header">
         <div class="stat-box">
             <h2>Total étudiants</h2>
-            <p style="color: gray;">Toutes les personnes inscrites à vos cours</p>
+            <p>Toutes les personnes inscrites à vos cours</p>
             <div class="value-box">
               <svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M27.3332 35.875V32.4583C27.3332 30.646 26.6132 28.9079 25.3317 27.6264C24.0502 26.3449 22.3121 25.625 20.4998 25.625H10.2498C8.43752 25.625 6.69944 26.3449 5.41794 27.6264C4.13644 28.9079 3.4165 30.646 3.4165 32.4583V35.875" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -146,7 +146,7 @@
         </div>
         <div class="stat-box">
             <h2>Vues totales</h2>
-            <p style="color: gray;">Sur la totalité des vos cours</p>
+            <p>Sur la totalité des vos cours</p>
             <div class="value-box">
               <svg width="34" height="33" viewBox="0 0 34 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2.92107 16.9784C2.803 16.6697 2.803 16.3301 2.92107 16.0214C4.07098 13.3152 6.02288 11.0013 8.52933 9.37312C11.0358 7.74493 13.9839 6.87573 16.9999 6.87573C20.0159 6.87573 22.964 7.74493 25.4705 9.37312C27.9769 11.0013 29.9288 13.3152 31.0787 16.0214C31.1968 16.3301 31.1968 16.6697 31.0787 16.9784C29.9288 19.6846 27.9769 21.9985 25.4705 23.6267C22.964 25.2548 20.0159 26.124 16.9999 26.124C13.9839 26.124 11.0358 25.2548 8.52933 23.6267C6.02288 21.9985 4.07098 19.6846 2.92107 16.9784Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -161,7 +161,7 @@
         </div>
         <div class="stat-box">
             <h2>Popularité</h2>
-            <p style="color: gray;">Toutes les personnes qui apprécient votre travail</p>
+            <p>Toutes les personnes qui apprécient votre travail</p>
             <div class="value-box">
               <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9.9165 14.1667V31.1667" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
