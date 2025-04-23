@@ -2,7 +2,7 @@
 <?php
 require_once("../include/config.php"); 
 require_once("../include/connectdb.php");
-$titre = SITE_NAME . ' - Accueil';
+$titre = SITE_NAME . ' - Formations';
 $db = connectDB();//connexion à la db
 //Récupération des paramètres
 $categorie = isset($_GET['categorie']) ? $_GET['categorie'] : '';
@@ -32,7 +32,7 @@ $resultat = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Formations</title>
-        <link rel="stylesheet" href="../assets/css/formations.css">
+        <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/formations.css">
     </head>
     <body>
         <header>
@@ -108,7 +108,8 @@ $resultat = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <ul class="liste">
                 <?php if (!empty($resultat)) : ?>
                     <?php foreach ($resultat as $row): ?>
-                        <li class="resultat">;
+                        <li class="resultat">
+                            <a href="detail.php?id=<?php echo htmlspecialchars($row['id']); ?>">
                             <h2 class="titre">'. htmlspecialchars($row["nom"]) . '</h2>';
                             <p class="description">' . htmlspecialchars($row["description"]) . '</p>';
                             <?php if (!empty($row['illustration_url'])): ?>

@@ -176,7 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
         </div>
         <?php
-            if($result['role'] != 'professeur'){
+            if($result['role'] == 'professeur'){
                echo "<div class='teacher-request'><button>Accéder au dashboard prof</button></div>";
             }
             else{
