@@ -129,7 +129,7 @@
       <div class="stats-header">
         <div class="stat-box">
             <h2>Total étudiants</h2>
-            <p>Toute les personnes inscrites à vos cours</p>
+            <p>Toutes les personnes inscrites à vos cours</p>
             <div class="value-box">
               <svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M27.3332 35.875V32.4583C27.3332 30.646 26.6132 28.9079 25.3317 27.6264C24.0502 26.3449 22.3121 25.625 20.4998 25.625H10.2498C8.43752 25.625 6.69944 26.3449 5.41794 27.6264C4.13644 28.9079 3.4165 30.646 3.4165 32.4583V35.875" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -161,7 +161,7 @@
         </div>
         <div class="stat-box">
             <h2>Popularité</h2>
-            <p>Toutes les personnes qui apprécies votre travail</p>
+            <p>Toutes les personnes qui apprécient votre travail</p>
             <div class="value-box">
               <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9.9165 14.1667V31.1667" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>

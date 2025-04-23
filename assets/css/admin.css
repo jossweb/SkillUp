@@ -1,0 +1,77 @@
+@import url("assets.css");
+
+body {
+    background-color: var(--alt-bg);
+    color: var(--color);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    font-weight: 500;
+    background-color: var(--skillup-pink);
+    border-radius: 8px;
+    padding: 25px;
+}
+
+table {
+    width: 100%;
+    max-width: 1200px;
+    background-color: var(--bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: var(--bg);
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    padding: 15px;
+    color: var(--color);
+}
+
+thead td {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+tbody tr:hover {
+    background-color: var(--alt-bg);
+    transition: background-color 300ms ease;
+}
+
+tbody td {
+    border-bottom: 1px solid var(--border);
+}
+
+
+td:last-child {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    border: 0px;
+    background-color: var(--bg);
+    color: var(--color);
+}
+
+/* Message aucune demandes */
+p {
+    font-size: 20px;
+    color: var(--alt-color);
+    text-align: center;
+    margin: 60px;
+    border: 2px var(--border) solid;
+    border-radius: var(--radius);
+    padding: 50px;
+}
