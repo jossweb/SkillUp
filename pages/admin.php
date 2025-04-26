@@ -53,6 +53,8 @@
         $request->bindParam(':kid', $keyId);
         $request->bindParam(':id', $_POST['user']);
         $request->execute();
+
+        header("Location: " . $_SERVER['PHP_SELF']);
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {

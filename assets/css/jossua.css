@@ -397,9 +397,8 @@ input{
     margin-left: 0px
 }
 .infos h2{
-    padding-left: 1%;
-    padding-top: 15px;
-    font-size: 25px;
+    padding: 15px;
+    font-size: 20px;
 }
 .infos p{
     padding-left: 1%;
@@ -1011,6 +1010,7 @@ input{
 #dash{
     display: flex;
     justify-content: center;
+    flex-direction: column;
 }
 h1 {
     margin: 0;
@@ -1278,6 +1278,8 @@ table tr td button{
     margin-left: auto;
     width: auto;
     padding: none;
+    position: absolute;
+    right: 0;
 }
 .infos .headband .cross {
     position: absolute;
@@ -1392,6 +1394,8 @@ form .mini-inputs .input-group .little-input {
     border: var(--border) 1px solid;
     width: 100%;
     border-radius: 0;
+    padding-bottom: 30px;
+    margin-top: 10px;
 }
 .teacher-request button:hover{
     background-color: var(--border);
@@ -1435,4 +1439,12 @@ form .mini-inputs .input-group .little-input {
     border: none;
     color: var(--color);
     z-index: 100;
+}
+.teacher-request .teacher-button{
+    margin-top: 0;
+    padding: 15px;
+}
+#logout{
+    border: solid 2px var(--border);
+    width: 100%;
 }

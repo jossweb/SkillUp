@@ -88,6 +88,7 @@ function AddTeacherRequest($text){
     $request->bindParam(':id', $result['id'] );
     $request->bindParam(':text', $text );
     $request->execute();
+    header("Location: " . $_SERVER['PHP_SELF']);
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['avatar-gen'])) {
@@ -145,9 +146,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php
             if($result['role'] == 'professeur'){
                 echo "<div class='teacher-request'>
-                <button onclick=\"location.href='dashboard.php'\">Accéder au dashboard prof</button>
-                <button onclick=\"location.href='../api'\">API</button>
-                <button id='logout' onclick=\"location.href='logout.php'\">Deconnection</button>
+                <button class='teacher-button' onclick=\"location.href='dashboard.php'\">Accéder au dashboard prof</button>
+                <button class='teacher-button' onclick=\"location.href='../api'\">API</button>
               </div>";
             }
             else{
@@ -161,6 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </form></div>";
                 }
             }?>
+            <button id='logout' onclick="location.href='logout.php'">Deconnection</button>
         <div class="delete-account">
             <h2>Zone de danger</h2>
             <p>Cette action est permanente et ne pourra pas être annulée.</p>

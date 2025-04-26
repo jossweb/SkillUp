@@ -10,7 +10,7 @@ if(LogsCheck()){
             $sql_chapter = 'INSERT INTO Chapitres (titre, cours_id) VALUES (:name, :cours_id)';
             $request_chapter = $db->prepare($sql_chapter);
             $request_chapter->bindParam(':name', $_POST["name"]);
-            $request_chapter->bindParam(':cours_id', $idCours);
+            $request_chapter->bindParam(':cours_id', $_POST["cours_id"]);
             $request_chapter->execute();
             $chapter_id = $db->lastInsertId();
             $dir_path = '../md_files/' . $_POST["cours_id"];

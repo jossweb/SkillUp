@@ -15,7 +15,7 @@
     $request->execute();
     $result = $request->fetch(PDO::FETCH_ASSOC);
     if($result['role'] != 'professeur'){
-        header('Location:  connection.php');
+        header('Location:  ../pages/connection.php');
         exit();
     }
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -327,12 +327,6 @@
                         <td>Int</td>
                         <td>Oui</td>
                         <td>l'id du cours associé au nouveau chapitre</td>
-                    </tr>
-                    <tr>
-                        <td>categorie</td>
-                        <td>String</td>
-                        <td>Oui</td>
-                        <td>la catégorie du cours (voir catégorie dans la documentation)</td>
                     </tr>
                     <tr>
                         <td>md</td>

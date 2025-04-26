@@ -12,8 +12,10 @@
         $request->bindParam(':token', $_COOKIE['user_token']);
         $request->execute();
         setcookie('token_api', '', time() - 3600, '/');
+        setcookie('user_token', '', time() - 3600, '/');
         session_destroy();
-        header("Location : connection.php");
+        header("Location: connection.php");
+        exit;
     }
 
 ?>
