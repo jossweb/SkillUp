@@ -3,10 +3,10 @@ session_start();
 require_once("../include/connectdb.php"); 
 require_once("../include/sessionManager.php");
 $titre = SITE_NAME . ' - connexion/inscription';
-$db =  connectDB();//connexion à la db
-$message = ""; // Variable pour stocker les messages d'erreur ou de succès
+$db =  connectDB();//connect to db
+$message = ""; // message success or error
 
-if(IsConnected($_SERVER['REMOTE_ADDR'])){
+if(IsConnected()){
     header('Location: profile.php');
     exit();
 }
@@ -105,10 +105,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/connection.css">
+    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/jossua.css">
     <title><?php echo $titre; ?></title>
 </head>
-<body>
+<body id="connection">
+<button onclick="location.href='../'" class="home">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house">
+        <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+        <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+    </svg>
+</button>
     <div class="content">
         <?php if ($message): ?>
                     <div class="message"><?php echo $message; ?></div>
@@ -130,11 +136,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="mini-inputs">
                     <div class="input-group">
                         <label for="name">Nom</label>
-                        <input type="text" id="name" name="name" maxlength="40"/>
+                        <input type="text" class="little-input" id="name" name="name" maxlength="40"/>
                     </div>
                     <div class="input-group">
                         <label for="firstName">Prénom</label>
-                        <input type="text" id="firstName" name="firstName" maxlength="15"/>
+                        <input type="text" class="little-input" name="firstName" maxlength="15"/>
                     </div>
                 </div>
                 <label for="email">Email</label>
@@ -145,9 +151,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="password" id="check-pass" maxlength="255" name="cPassword"/>
                 <button type="submit" name="registrationForm">Inscription</button>
             </form>
-            <a href="../">Accueil</a>
         </section>
     </div>
 </body>
-<script src="../<?php echo JS_PATH; ?>/forms.js"></script>
+<script src="../<?php echo JS_PATH; ?>/jossua.js"></script>
 </html>

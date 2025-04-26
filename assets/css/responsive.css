@@ -68,6 +68,10 @@
     .cross{
         display: block !important;
     }
+    #responsive {
+        display: block !important;
+        opacity: 1 !important;
+    }
     /*profile*/
     .stats-header {
         flex-direction: column;

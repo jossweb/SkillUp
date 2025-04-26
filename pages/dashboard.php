@@ -88,9 +88,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/dashboard.css"> 
+    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/jossua.css"> 
     <title><?php echo htmlspecialchars($titre);?></title>
-<body>
+<body id="dash">
   <?php
     if (isset($_SESSION['message'])) {
       if($message='Success'){
@@ -102,6 +102,9 @@
     }
   ?>
   <div class="stats-container">
+    <button onclick="location.href='../'" class="backhome">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    </button>
     <div class="top">
       <img src="<?php echo $avatar ?>" alt="profile picture" class="avatar">
       <div class="title">
@@ -250,7 +253,7 @@
         <h2>Supprimer ce cours ?</h2>
         <p>Cette opération ne peut pas être annulée</p>
         <div class="button-container">
-            <button onclick="CloseDeleteCheck()">Annuler</button>
+            <button onclick="CloseDeleteCheckDash()">Annuler</button>
             <form method="POST">
               <input type="hidden" id="id-c" name="id">
               <button type="submit" id="delete" name="delete" onclick="CloseDeleteCheck()">Supprimer ce cours</button>
@@ -258,7 +261,66 @@
         </div>
     </div>
 </body>
-<script src="../<?php echo JS_PATH; ?>/forms.js"></script>
+<script src="../<?php echo JS_PATH; ?>/jossua.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="../<?php echo JS_PATH; ?>/dashboard.js"></script>
+<script>
+  var blurredBg = document.getElementById('blurred-bg');
+  var popup = document.getElementById('delete-check');
+  var hiddenInput = document.getElementById('id-c');
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const formattedDate = `${day}/${month}`
+
+  document.addEventListener("DOMContentLoaded", function () {
+  var ctx = document.getElementById("myBarChart").getContext("2d");
+
+  function getLast7Days() {
+    const dates = [];
+    const today = new Date();
+
+    for (let i = 30; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - i);
+
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+
+      dates.push(`${day}/${month}`);
+    }
+
+    return dates;
+  }
+  var myBarChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+    labels: getLast7Days(),
+    datasets: [
+      {
+        
+      label: "Nouveaux inscrits cette semaine",
+      data: [8, 10, 2, 7, 17, 15, 19, 8, 10, 2, 7, 17, 15, 19, 8, 10, 2, 7, 17, 15, 19, 8, 10, 2, 7, 17, 15, 19, 25, 19, 3],
+      backgroundColor: "rgba(160, 66, 240, 0.8)",
+      borderColor: "rgba(0, 0, 0, 1)",
+      borderWidth: 1,
+      },
+    ],
+    },
+    options: {
+    responsive: true,
+    maintainAspectRatio: false, 
+    plugins: {
+      legend: {
+      position: 'top',
+      },
+    },
+    scales: {
+      y: {
+      beginAtZero: true,
+      },
+    },
+    },
+  });
+  });
+</script>
 </html>

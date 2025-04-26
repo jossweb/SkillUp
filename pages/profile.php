@@ -2,6 +2,7 @@
 session_start();
 require_once("../include/connectdb.php"); 
 require_once("../include/sessionManager.php");
+require_once("../include/tools.php");
 if(!IsConnected()){
     header('Location:  connection.php');
     exit();
@@ -23,39 +24,6 @@ $request->bindParam(':id', $result['id']);
 $request->execute();
 $profRequest = $request->fetch(PDO::FETCH_ASSOC);
 
-function getAvatar(){
-    global $new_avatar;
-    if (!isset($_POST['prompt']) || empty($_POST['prompt'])) {
-        return null;
-    }
-
-    $prompt = $_POST['prompt'];
-
-    $url = "https://remyweb.fr/emoji.php";
-    $data = ['prompt' => $prompt];
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']); 
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
-    $response = curl_exec($curl);
-    if (curl_errno($curl)) {
-        echo "<h1>Erreur cURL : " . curl_error($curl) . "</h1>";
-        curl_close($curl);
-        return;
-    }
-    curl_close($curl);
-    $decodedResponse = json_decode($response, true);
-
-    if (isset($decodedResponse['imagePath'])) {
-        $imagePath = htmlspecialchars($decodedResponse['imagePath']);
-        $new_avatar = 'https://remyweb.fr/' . $imagePath;
-        $_SESSION['new_avatar'] = $new_avatar;
-    } else {
-        echo "<h1>Erreur : Réponse invalide</h1>";
-        echo "<pre>" . htmlspecialchars($response) . "</pre>";
-    }
-}
 function SetNewAvatar() {
     if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){
         global $new_avatar, $result;
@@ -135,27 +103,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         DeleteUser();
     }
     if (isset($_POST['teacher'])) {
-        if(CheckInTeacherTable()){
-            //afficher l'erreur
-        }else{
+        if(!CheckInTeacherTable()){
             AddTeacherRequest($_POST['cv']);
         }
     }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/profile.css">
+    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/jossua.css">
     <title><?php echo htmlspecialchars($titre); ?></title>
 </head>
-<body>
+<body id="profile">
     <section class="infos">
         <div class="user-info">
             <div class="headband">
-                <a href="../" class="cross">&crarr; </a>
+                <button onclick="location.href='../'" class="cross">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-arrow-left-icon lucide-circle-arrow-left"><circle cx="12" cy="12" r="10"/><path d="M16 12H8"/><path d="m12 8-4 4 4 4"/></svg>
+                </button>
                 <button id="generatePopup" onclick="OpenAvatarPopup()">
                     <img src="<?php echo htmlspecialchars($avatar) ?>" alt="Your profile picture" class="avatar"/>
                 </button>
@@ -163,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <h2><?php echo htmlspecialchars($result['prenom'])?></h2>
             <p><?php echo htmlspecialchars($result['e_mail'])?></p>
-            <a href="reset-pass.php"><button>Changer mon mot de passe</button></a>
+            <button onclick="location.href='reset-pass.php'" class="hover">Changer mon mot de passe</button>
             
         </div>
         <div class="change-info">
@@ -171,12 +139,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="POST">
                 <input type="test" id="new-name" name="new-name" placeholder="<?php echo $result['nom']?>" required>
                 <input type="test" id="new-firstname" name="new-firstname" placeholder="<?php echo $result['prenom']?>" required>
-                <button type="submit" id="change-infos" name='change-infos' onclick="OpenMessagePopup()">Enregistrer</button>
+                <button class="hover" type="submit" id="change-infos" name='change-infos' onclick="OpenMessagePopup()">Enregistrer</button>
             </form>
         </div>
         <?php
             if($result['role'] == 'professeur'){
-               echo "<div class='teacher-request'><button>Accéder au dashboard prof</button></div>";
+                echo "<div class='teacher-request'>
+                <button onclick=\"location.href='dashboard.php'\">Accéder au dashboard prof</button>
+                <button onclick=\"location.href='../api'\">API</button>
+                <button id='logout' onclick=\"location.href='logout.php'\">Deconnection</button>
+              </div>";
             }
             else{
                 if ($profRequest) {
@@ -207,14 +179,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
     <div class="popup" id="message-pop">
-        <button class="cross" onclick="CloseMessagePopup()">X</button>
+        <button class="cross" onclick="CloseMessagePopup()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
         <h2>Message :</h2>
         <p>Vos informations ont été modifiées avec succès !</p>
         <button id="Okk" onclick="CloseMessagePopup()">D'accord !</button>
     </div>
 
     <div class="popup" id="new-pp">
-        <button onclick="CloseAvatarPopup()" class="cross">X</button>
+        <button onclick="CloseAvatarPopup()" class="cross">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
         <h2>Changer mon avatar</h2>
         <div class="avatar-container">
             <img src="<?php echo $avatar ?>">
@@ -233,5 +209,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
        </form>
     </div>
 </body>
-<script src="../<?php echo JS_PATH; ?>/profile.js"></script>
+<script src="../<?php echo JS_PATH; ?>/jossua.js"></script>
+<script>
+    var blurredBg = document.getElementById('blurred-bg');
+    var deleteMyAccount = document.getElementById('delete');
+    var deletePopup = document.getElementById('delete-check');
+    var okClosePopup = document.getElementById('Okk');
+    var newPP = document.getElementById('new-pp');
+    var loading = document.getElementById('loading-emo');
+    var message = document.getElementById('message-pop');
+
+    document.addEventListener("DOMContentLoaded", function () {
+        if (localStorage.getItem('avatarPopupOpen') === 'true') {
+            OpenAvatarPopup(); 
+        }
+        if(localStorage.getItem('messagePopOpen') === 'true'){
+            OpenMessagePopup();
+        }
+        if(localStorage.getItem('deletePopup') === 'true'){
+            OpenDeleteCheck();
+        }
+    });
+</script>
 </html>
