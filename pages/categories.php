@@ -69,20 +69,20 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <ul>
                 <li><a href="#">Accueil</a></li>
-                <li><a href="#">Formations</a></li>
+                <li><a href="formations.php">Formations</a></li>
                 <li><a href="categories.php">Catégories</a></li>
-                <li><a href="#">Page</a></li>
+                
             </ul>
             
             <div class="profil">
                 <!--Mode clair-->
-                <a href="#">
+                <a href="connection.php">
                     <svg class="profil-light" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#000000" viewBox="0 0 24 24">
                         <path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2c-3.1 0-9.3 1.6-9.3 4.8V22h18.6v-3.2C21.3 15.6 15.1 14 12 14z"/>
                     </svg>
                 </a>
                 <!--Mode sombre-->
-                <a href="#">
+                <a href="connection.php">
                     <svg class="profil-dark" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#FFFFFF" viewBox="0 0 24 24">
                         <path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2c-3.1 0-9.3 1.6-9.3 4.8V22h18.6v-3.2C21.3 15.6 15.1 14 12 14z"/>
                     </svg>
@@ -94,8 +94,8 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <section class="grid-container">
                 <?php foreach ($categories as $categorie): ?>
                     <div class="category">
-                        <a href="test_recherche.php?categorie=<?php echo urlencode ($categorie['id'])?>">
-                            <img src="../assets/images/<?php echo htmlspecialchars($categorie['image']); ?>" alt="Image de <?php echo htmlspecialchars($categorie['nom']); ?>">
+                        <a href="formations.php">
+                            <img src="<?php echo '../' . htmlspecialchars($categorie['url_image']); ?>" alt="Image de <?php echo htmlspecialchars($categorie['nom']); ?>">
                             <h2><?php echo htmlspecialchars($categorie['nom']); ?></h2>
                         </a>
                         <p><?php echo htmlspecialchars($categorie['description']); ?></p>
