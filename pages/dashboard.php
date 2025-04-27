@@ -88,9 +88,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/dashboard.css"> 
+    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/jossua.css"> 
     <title><?php echo htmlspecialchars($titre);?></title>
-<body>
+<body id="dash">
   <?php
     if (isset($_SESSION['message'])) {
       if($message='Success'){
@@ -102,6 +102,9 @@
     }
   ?>
   <div class="stats-container">
+    <button onclick="location.href='../'" class="backhome">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    </button>
     <div class="top">
       <img src="<?php echo $avatar ?>" alt="profile picture" class="avatar">
       <div class="title">
@@ -129,7 +132,7 @@
       <div class="stats-header">
         <div class="stat-box">
             <h2>Total étudiants</h2>
-            <p>Toute les personnes inscrites à vos cours</p>
+            <p>Toutes les personnes inscrites à vos cours</p>
             <div class="value-box">
               <svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M27.3332 35.875V32.4583C27.3332 30.646 26.6132 28.9079 25.3317 27.6264C24.0502 26.3449 22.3121 25.625 20.4998 25.625H10.2498C8.43752 25.625 6.69944 26.3449 5.41794 27.6264C4.13644 28.9079 3.4165 30.646 3.4165 32.4583V35.875" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -137,9 +140,9 @@
                 <path d="M37.5835 35.8751V32.4584C37.5824 30.9444 37.0784 29.4736 36.1508 28.277C35.2232 27.0803 33.9245 26.2257 32.4585 25.8472" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M27.3335 5.34717C28.8034 5.72352 30.1062 6.57837 31.0365 7.77695C31.9669 8.97553 32.4719 10.4497 32.4719 11.967C32.4719 13.4843 31.9669 14.9584 31.0365 16.157C30.1062 17.3556 28.8034 18.2104 27.3335 18.5868" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <p class="value"><?php echo $nb_inscription?></p>
+              <p class="value"><?php echo htmlspecialchars($nb_inscription)?></p>
               <?php if($nb_inscription - $nb_inscription_yesterday > 0){
-                echo '<p> + '. $nb_inscription_yesterday ." inscription aujourd'hui <p>";
+                echo '<p> + '. htmlspecialchars($nb_inscription_yesterday) ." inscription aujourd'hui <p>";
               } 
               ?> 
             </div>
@@ -154,14 +157,14 @@
               </svg>
               <p class="value"><?php echo $nb_vues?></p>
               <?php if($nb_inscription - $nb_inscription_yesterday > 0){
-                echo '<p> + '. $nb_inscription_yesterday ." inscription aujourd'hui <p>";
+                echo '<p> + '. htmlspecialchars($nb_inscription_yesterday) ." inscription aujourd'hui <p>";
               } 
               ?> 
             </div>
         </div>
         <div class="stat-box">
             <h2>Popularité</h2>
-            <p>Toutes les personnes qui apprécies votre travail</p>
+            <p>Toutes les personnes qui apprécient votre travail</p>
             <div class="value-box">
               <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9.9165 14.1667V31.1667" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -169,7 +172,7 @@
               </svg>
               <p class="value"><?php echo $nb_likes?></p>
               <?php if($nb_inscription - $nb_inscription_yesterday > 0){
-                echo '<p> + '. $nb_inscription_yesterday ." inscription aujourd'hui <p>";
+                echo '<p> + '. htmlspecialchars($nb_inscription_yesterday) ." inscription aujourd'hui <p>";
               } 
               ?> 
             </div>
@@ -250,7 +253,7 @@
         <h2>Supprimer ce cours ?</h2>
         <p>Cette opération ne peut pas être annulée</p>
         <div class="button-container">
-            <button onclick="CloseDeleteCheck()">Annuler</button>
+            <button onclick="CloseDeleteCheckDash()">Annuler</button>
             <form method="POST">
               <input type="hidden" id="id-c" name="id">
               <button type="submit" id="delete" name="delete" onclick="CloseDeleteCheck()">Supprimer ce cours</button>
@@ -258,27 +261,12 @@
         </div>
     </div>
 </body>
-<script src="../<?php echo JS_PATH; ?>/forms.js"></script>
+<script src="../<?php echo JS_PATH; ?>/jossua.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   var blurredBg = document.getElementById('blurred-bg');
   var popup = document.getElementById('delete-check');
   var hiddenInput = document.getElementById('id-c');
-
-  function OpenPopup(id){
-    blurredBg.style.display = "flex";
-    blurredBg.style.opacity = 1;
-    popup.style.display = "flex";
-    popup.style.opacity = 1;
-    hiddenInput.value = id;
-    
-  }
-  function CloseDeleteCheck(){
-    blurredBg.style.display = "none";
-    blurredBg.style.opacity = 0;
-    popup.style.display = "none";
-    popup.style.opacity = 0;
-  }
   const today = new Date();
   const day = String(today.getDate()).padStart(2, '0');
   const month = String(today.getMonth() + 1).padStart(2, '0');

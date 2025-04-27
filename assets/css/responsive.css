@@ -53,6 +53,29 @@
     .popup .button-container form {
         width: 30% !important;
     }
+    /*Editor*/
+    .left-bar{
+        display: none;
+        width: 100% !important;
+        max-width: none !important;
+    }
+    #new-name{
+        width: 70%;
+    }
+    .burger{
+        display: block !important;
+    }
+    .cross{
+        display: block !important;
+    }
+    #responsive {
+        display: block !important;
+        opacity: 1 !important;
+    }
+    /*profile*/
+    .stats-header {
+        flex-direction: column;
+    }
 }
 /* Desktop (1025px et plus) */
 @media screen and (min-width: 1025px) {

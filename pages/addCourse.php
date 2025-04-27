@@ -2,6 +2,7 @@
     session_start();
     require_once("../include/connectdb.php"); 
     require_once("../include/sessionManager.php");
+    require_once("../include/tools.php");
     if(!IsConnected()){
         header('Location:  connection.php');
         exit();
@@ -58,11 +59,12 @@
         header('Location:  addCourse.php?cours=' . $idCours);
         exit();
     }
-    function ChangeName($name) {
+    function ChangeName($name, $cat) {
         global $db;
-        $sql = "UPDATE Cours SET Cours.nom = :name WHERE Cours.id = :id";
+        $sql = "UPDATE Cours SET Cours.nom = :name, Cours.categorie_id = :categorie WHERE Cours.id = :id";;
         $request = $db->prepare($sql);
         $request->bindParam(":name", $name);
+        $request->bindParam(":categorie", $cat);
         $request->bindParam(":id", $_GET['cours']);
         $request->execute() ;
     }
@@ -134,9 +136,23 @@
         header('Location: addCourse.php?cours=' . $_GET['cours']);
         exit();
     }
+    function SetNewAvatar() {
+        if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){
+            global $new_avatar, $result;
+            $db = connectDB();
+            $sql = "UPDATE Cours SET illustration_url = :avatarUrl WHERE id = :id";
+            $request = $db->prepare($sql);
+            $request->bindParam(':avatarUrl', $_SESSION['new_avatar'] );
+            $request->bindParam(':id', $_GET['cours']);
+            $request->execute();
+            $_SESSION['new_avatar'] = null;
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            exit();
+        }
+    }
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST["change-name"])) {
-            ChangeName($_POST["name"]);
+            ChangeName($_POST["name"], $_POST["categorie"]);
         }
         if (isset($_POST["description-b"])) {
             ChangeDescription($_POST["description"]);
@@ -153,7 +169,14 @@
         if (isset($_POST["delete-chap"])){
             DeleteChap() ;
         }
+        if (isset($_POST['avatar-gen'])) {
+            getAvatar();
+        }
+        if (isset($_POST['agreeAvatar'])) {
+            SetNewAvatar();
+        }
     }
+
     //Check if the user connected is the teacher who own this course and get infos on course
     $sql_check = "SELECT Cours.nom, Cours.illustration_url, Cours.description, Cours.categorie_id FROM Cours WHERE Cours.prof_id = :id AND Cours.id = :cid";
     $request_check = $db->prepare($sql_check);
@@ -165,7 +188,7 @@
        header("Location: dashboard.php");
        exit();
     }
-    function FindLineById(array $chapitres, int $idRecherche): ?array {
+    function FindLineById($chapitres, $idRecherche){
         foreach ($chapitres as $chapitre) {
             if ($chapitre['id'] == $idRecherche) {
                 return $chapitre;
@@ -214,121 +237,239 @@
             exit();
         }
     }
+    //get chapters infos
+    $sql_cat = "SELECT Categories.nom, Categories.id FROM Categories";
+    $request = $db->prepare($sql_cat);
+    $request->execute();
+    $categories = $request->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/addCourses.css"> 
+    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/jossua.css"> 
     <title><?php echo htmlspecialchars($titre);?></title>
 </head>
 <body>
-    <section class="left-bar">
-        <div class="cours-primary-infos">
-            <img src="<?php echo $result_check['illustration_url']?>"/>
-            <div>
+    <nav>
+        <div class="logo" aria-label="SkillUp"></div>
+        <button id="back" onclick="location.href='dashboard.php'">Dashboard</button>
+        <button name="save-md" onclick="save()">Enregistrer</button>
+    </nav>
+    <div class="page-content">
+        <section class="left-bar" id="left-bar">
+            <button class="cross" id="responsive" onclick="ResponsiveSys(false)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>            </button>
+            <div class="cours-primary-infos">
+                <button id="generatePopup" onclick="OpenAvatarPopup()">
+                    <img src="<?php echo $result_check['illustration_url'] ?>" alt="Your profile picture" class="avatar"/>
+                </button>
+                <div>
+                    <form method="POST" class="row">
+                        <div>
+                            <input class="f-name" name="name" type="text" maxlength="255" value="<?php echo $result_check['nom']?>" required>
+                            <select name="categorie" id="categorie">
+                                <?php
+                                    foreach ($categories as $category) {
+                                        $selected = '';
+                                        if (!empty($result_check['categorie_id']) && $result_check['categorie_id'] == $category['id']) {
+                                            $selected = 'selected';
+                                        }
+                                        echo '<option value="' . $category['id'] . '" ' . $selected . '>' . $category['nom'] . '</option>';
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <button type="submit" name="change-name">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil">
+                                <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                <path d="m15 5 4 4"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="description">
                 <form method="POST">
-                    <input class="f-name" name="name" type="text" maxlength="255" value="<?php echo $result_check['nom']?>" required>
-                    <button type="submit" name="change-name">
+                    <div class="description-head row">
+                        <h2 for="description">Description du cours</h2>
+                        <button type="submit" name="description-b">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+                        </button>
+                    </div>
+                    <textarea type="textfield" name="description"><?php echo $result_check['description']?></textarea>
+                </form>
+            </div>
+            <div class="chapter">
+                <div class="description-head">
+                    <h2 for="description">Chapitres</h2>
+                    <form method="POST" id="add-chapter" class="row">
+                        <button type="submit" name="add-chapter">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>                
+                        </button>
+                    </form>
+                </div>
+                <div class="chapter-container">
+                    <?php
+                        $nbChap = 0;
+                        foreach ($results_chapters as $chapter) {
+                            echo "<button onclick='ChangeActiveChapter(" . htmlspecialchars($chapter["id"]) . ")'>" . htmlspecialchars($chapter['titre']) . "</button>";
+                            $nbChap ++ ;
+                        }   
+                    ?>
+                </div>
+            </div>
+        </section>
+        <section class="main-part" id="main-part">
+            <button class="burger" onclick="ResponsiveSys(true)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu-icon lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
+            <div class="head">
+                <form method="POST" class="row">
+                    <input type="text" name="new-name" id="new-name" value="<?php echo htmlspecialchars($_COOKIE['activeChapTitle']) ?>">
+                    <button type="submit" name="chap-name" class="save-name-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil">
                             <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
                             <path d="m15 5 4 4"/>
-                        </svg>
+                        </svg>   
                     </button>
                 </form>
-            </div>
-        </div>
-        <div class="description">
-            <form method="POST">
-                <div class="description-head">
-                    <h2 for="description">Description du cours</h2>
-                    <button type="submit" name="description-b">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
-                    </button>
-                </div>
-                <textarea type="textfield" name="description"><?php echo $result_check['description']?></textarea>
-            </form>
-        </div>
-        <div class="chapter">
-            <div class="description-head">
-                <h2 for="description">Chapitres</h2>
-                <form method="POST">
-                    <button type="submit" name="add-chapter">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>                
-                    </button>
-                </form>
-            </div>
-            <div class="chapter-container">
                 <?php
-                    $nbChap = 0;
-                    foreach ($results_chapters as $chapter) {
-                        echo "<button onclick='ChangeActiveChapter(" . $chapter["id"] . ")'>" . $chapter['titre'] . "</button>";
-                        $nbChap ++ ;
-                    }   
+                    if ($nbChap > 1) {
+                        echo '<form class="deleteForm" method="POST">
+                            <button name="delete-chap" class="delete">Supprimer</button>
+                        </form>';
+                    }
                 ?>
-            </div>
-        </div>
-    </section>
-    <section class="main-part">
-        <div class="head">
-            <form method="POST">
-                <input type="text" name="new-name" value="<?php echo $_COOKIE['activeChapTitle'] ?>">
-                <button type="submit" name="chap-name" class="save-name-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil">
-                        <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
-                        <path d="m15 5 4 4"/>
-                    </svg>   
-                 </button>
-            </form>
-            <?php
-                if ($nbChap > 1) {
-                    echo '<form class="deleteForm" method="POST">
-                        <button name="delete-chap" class="delete">Supprimer</button>
-                    </form>';
-                }
-            ?>
 
-        </div>
-        <div class="toggle-bar">
-            <div class="toggle">
-                <button id="to-edit" onclick="ShowEdit()">Modifer</button>
-                <button id="to-preview" onclick="ShowPreview()">Aperçu</button>
             </div>
-        </div>
-        <div class="edit" id="edit">
-            <div class="tool-bar">
-                <div class="button-container">
-                    <button onclick="AddToMd('**Gras**')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bold-icon lucide-bold"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8"/></svg>
-                    </button>
-                    <button onclick="AddToMd('__Italic__')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-italic-icon lucide-italic"><line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/></svg>
-                    </button>
-                    <button onclick="AddToMd('# ')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading1-icon lucide-heading-1"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="m17 12 3-2v8"/></svg>
-                    </button>
-                    <button onclick="AddToMd('## ')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading2-icon lucide-heading-2"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1"/></svg>
-                    </button>
+            <div class="chapter-content">
+                <div class="toggle-bar">
+                    <div class="toggle">
+                        <button id="to-edit" class="selected" onclick="ShowEdit()">Modifer</button>
+                        <button id="to-preview" onclick="ShowPreview()">Aperçu</button>
+                    </div>
+                </div>
+                <div class="edit" id="edit">
+                    <div class="tool-bar">
+                        <div class="button-container">
+                            <button onclick="AddToMd('*Gras*')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bold-icon lucide-bold"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8"/></svg>
+                            </button>
+                            <button onclick="AddToMd('_Italic_')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-italic-icon lucide-italic"><line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/></svg>
+                            </button>
+                            <button onclick="AddToMd('# ')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading1-icon lucide-heading-1"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="m17 12 3-2v8"/></svg>
+                            </button>
+                            <button onclick="AddToMd('## ')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading2-icon lucide-heading-2"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1"/></svg>
+                            </button>
+                            <button onclick="AddToMd('### ')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heading3-icon lucide-heading-3"><path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="M17.5 10.5c1.7-1 3.5 0 3.5 1.5a2 2 0 0 1-2 2"/><path d="M17 17.5c2 1.5 4 .3 4-1.5a2 2 0 0 0-2-2"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-editor">
+                        <textarea id="md-editor" name="md-editor"></textarea>
+                        <div id="md" value=""></div>
+                    </div>
+                </div>
+                <div id="preview" class="preview">
+                    <div id="md-output">
+
+                    </div>
                 </div>
             </div>
-            <div class="text-editor">
-                <form method="POST">
-                    <button name="save-md" onclick="save()">Enregistrer</button>
-                    <textarea id="md-editor" name="md-editor"></textarea>
-                    <div id="md" value=""></div>
-                </form>
+        </section>
+        <div class="blurred-bg" id="blurred-bg"></div>
+        <div class="popup" id="new-pp">
+            <button onclick="CloseAvatarPopup()" class="cross">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>            </button>
+             </button>
+            <h2>Changer mon avatar</h2>
+            <div class="avatar-container">
+                <img src="<?php echo  htmlspecialchars($result_check['illustration_url'])?>">
+                <?php if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){echo "<p>&#x2794;</p><img src=". $_SESSION['new_avatar']  ." alt='nouveau avatar' />";}?>
             </div>
+                <?php if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){echo "<form method='POST'><button name='agreeAvatar' id='agreeAvatar'>Accepter l'avatar</button></form>";}?>
+            
+            <form method="POST">
+                <label for="prompt">Mon avatar doit ressembler à :</label>
+                <input id="prompt" name="prompt" type="text">
+                <button id="generate" name="avatar-gen" onclick="ShowLoading()">Générer mon avatar</button>
+                <div class="loading-part" id="loading-emo">
+                    <p>Chargement</p>
+                    <div id="spinner"></div>
+                </div>
+            </form>
         </div>
-        <div id="preview" class="preview">
-            <div id="md-output">
-
-            </div>
-        </div>
-
-    </section>
+    </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.3/purify.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="../<?php echo JS_PATH; ?>/texteditor.js"></script>
+<script src="../<?php echo JS_PATH; ?>/jossua.js"></script>
+<script>
+var mdEditor = document.getElementById('md-editor');
+var preview = document.getElementById('preview');
+var edit = document.getElementById('edit');
+var toEdit = document.getElementById('to-edit');
+var toPrev = document.getElementById('to-preview');
+
+var leftBar = document.getElementById('left-bar');
+var mainPart = document.getElementById('main-part');
+
+const urlParams = new URLSearchParams(window.location.search);
+const cours = urlParams.get('cours');
+
+mdEditor.value = GetMd();
+
+//drag and drop system 
+mdEditor.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  mdEditor.style.border = "2px dashed #aaa";
+});
+
+mdEditor.addEventListener('dragleave', () => {
+  mdEditor.style.border = "";
+});
+
+mdEditor.addEventListener('drop', async (e) => {
+  e.preventDefault();
+  mdEditor.style.border = "3px";
+  const files = e.dataTransfer.files;
+  if (!files.length) return;
+  const file = files[0];
+
+  if (!file.type.startsWith('image/')) {
+    alert("Le fichier n'est pas une image. \n Veuillez entrer une image valide");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = async function () {
+    const base64 = reader.result; 
+    const markdownImage = `![image](${base64})`;
+
+    const savedPath = await SaveImg(markdownImage);
+
+    if (savedPath) {
+      const cursorPos = mdEditor.selectionStart;
+      const before = mdEditor.value.substring(0, cursorPos);
+      const after = mdEditor.value.substring(cursorPos);
+      const markdownFinal = `![image](${savedPath})`; // ----------- !! 
+      mdEditor.value = before + markdownFinal + after;
+    } else {
+      alert("Erreur lors de la sauvegarde de l'image.");
+    }
+  };
+
+  reader.readAsDataURL(file);
+});
+
+var blurredBg = document.getElementById('blurred-bg');
+var newPP = document.getElementById('new-pp');
+var loading = document.getElementById('loading-emo');
+</script>
 </html>
