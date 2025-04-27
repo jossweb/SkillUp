@@ -110,11 +110,12 @@ $resultat = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php foreach ($resultat as $row): ?>
                         <li class="resultat">
                             <a href="detail.php?id=<?php echo htmlspecialchars($row['id']); ?>">
-                            <h2 class="titre">'. htmlspecialchars($row["nom"]) . '</h2>';
-                            <p class="description">' . htmlspecialchars($row["description"]) . '</p>';
+                            <h2 class="titre"><?php echo htmlspecialchars($row["nom"]); ?></h2>;
+                            <p class="description"><?php echo htmlspecialchars($row["description"]); ?></p>;
                             <?php if (!empty($row['illustration_url'])): ?>
                                     <span><img src="../assets/images/<?php echo htmlspecialchars($row['image']); ?>" alt="Image de <?php echo htmlspecialchars($row['illustration_url']); ?>"></span>
                             <?php endif; ?>
+                            </a>
                         </li>;
                     <?php endforeach; ?>
                         

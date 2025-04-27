@@ -2,7 +2,7 @@
 // Inclure la connexion
 session_start(); 
 require_once("../include/config.php"); 
-require_once("../include/connectdb.php");//je ne sais pas si c'est nécessaire vu que ce n'est pas dans la db 
+require_once("../include/connectdb.php");
 $db = connectDB();
 
 
