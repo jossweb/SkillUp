@@ -92,30 +92,23 @@ $titre = SITE_NAME . ' - ' . htmlspecialchars($formation['nom']);
 
     <main class="details">
         <section class="hero">
-            <div class="image-container"> <!--Ici je n'ai pas pu récupérer les images de la table categorie or ce sont elles qu'on veut utiliser-->   
-                <?php if (!empty($formation['illustration_url'])): ?>
-                    <img src="assets/images/<?php echo htmlspecialchars($formation['illustration_url']); ?>" alt="Illustration du cours <?php echo htmlspecialchars($formation['nom']); ?>">
-                    <?php endif; ?>
-</div>
-
-<div class="title-container">
-    <h1><?php echo htmlspecialchars($formation['nom']); ?></h1>
-</div>
+            <img src="<?php echo htmlspecialchars($categorie['image_url']); ?>" alt="Illustration" class="hero-image">
+            <h1><?php echo htmlspecialchars($formation['nom']); ?></h1> 
 </section>
 
 <section class="description">
-    <p><?php echo htmlspecialchars($formation['description']); ?></p>
+    <p><strong>Description :</strong> <?php echo htmlspecialchars($formation['description']); ?></p>
 </section>
 
 <section class="info">
     <ul> <!--pas de durée ni de likes dans la table Cours-->
-        <li><img src="assets/images/clock.svg" alt="Duree"> Durée: <span><?php echo $formation['duree']; ?></span></li>
-        <li><img src="assets/images/heart.svg" alt="Likes"> <span><?php echo $formation['likes']; ?></span>J'aime </li>
+        <li><img src="assets/images/clock.svg" alt="Duree"> Durée: 20h ?></span></li>
+        <li><img src="assets/images/heart.svg" alt="Likes"> 140 ?></span>J'aime </li>
 </ul>
 </section>
 
 <section class="button">
-    <button class="enroll-button">S'inscrire</button>
+    <a href="addCourse.php" class="enroll-button">S'inscrire</a>
 </section>
 </main>
 

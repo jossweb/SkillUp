@@ -29,7 +29,7 @@
     nav a {
         text-decoration: none;
         color: var(--color);
-        font-family: "Onset", sans-serif;
+        font-family: "Onest", sans-serif;
     }
     .logo{
         display: inline-flex;
@@ -94,7 +94,7 @@
         margin-right: 15px;
     }
 
-    .resultat hover{
+    .resultat:hover{
         background-color: var(--alt-color);
         cursor: pointer;
     }
@@ -109,7 +109,7 @@
         justify-content: center;
     }
 
-    .barre input [type="text"] {
+    .barre input[type="text"] {
         color:var(--alt-color);
         text-align: left;
         border: none;
@@ -118,7 +118,7 @@
 
     select{
         color: var(--color);
-        border: 1 px var(--border) solid var(--color);
+        border: 1px var(--border) solid var(--color);
         border-radius: 5px;
         padding: 8px 15px;
         font-size:0.9em;
