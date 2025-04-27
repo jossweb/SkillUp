@@ -92,8 +92,12 @@ $titre = SITE_NAME . ' - ' . htmlspecialchars($formation['nom']);
 
     <main class="details">
         <section class="hero">
-            <img src="<?php echo htmlspecialchars($categorie['image_url']); ?>" alt="Illustration" class="hero-image">
-            <h1><?php echo htmlspecialchars($formation['nom']); ?></h1> 
+        <?php foreach ($detail as $dt): ?>
+                    <div class="detail">
+                        <a href="categories.php">
+                            <img src="<?php echo '../' . htmlspecialchars($dt['url_image']); ?>" alt="Image de <?php echo htmlspecialchars($categorie['nom']); ?>">
+        </a>
+                <?php endforeach; ?>
 </section>
 
 <section class="description">

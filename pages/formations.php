@@ -4,20 +4,28 @@ require_once("../include/config.php");
 require_once("../include/connectdb.php");
 $titre = SITE_NAME . ' - Formations';
 $db = connectDB();//connexion à la db
-//Récupération des paramètres
-$categorie = isset($_GET['categorie']) ? $_GET['categorie'] : '';
-$recherche = isset($_GET['recherche']) ? $_GET['recherche'] : '';
 
-$requete = "SELECT id, nom, description, illustration_url FROM Cours WHERE 1=1";
+//Je vérifie si un identifiant de catégorie est passée dans l'URL avec $GET
+if (isset($_GET['categorie'])) {
+    //Je récupère l'id de la cat depuis L'URL
+    $id = $_GET['categorie'];
+
+    //On affiche un message de confirmation
+    echo "<h1>Test de redirection</h1>";
+    echo "<p>Vous avez clique sur la catégorie avec L'ID : <strong>" . htmlspecialchars($id) . "</strong></p>";
+}else{
+    //Aucun identifiant passé dans L'URL
+    echo "<h1>Erreur</h1>";
+    echo "<p>Aucune catégorie selectionnée</p>";
+}
+
+$requete = "SELECT * FROM Cours";
 $param = [];
 
 
 if (!empty($categorie)) {
     $requete .= "AND categorie_id = '$categorie'";
     $param [':categorie'] = $categorie;
-} elseif (!empty($recherche)) {
-    $requete .= " AND (nom LIKE :recherche OR description LIKE :recherche)";
-    $param [':recherche'] = "%" . $recherche . "%";
 }
 // Préparer et exécuter avec PDO
 $stmt = $db->prepare($requete);
@@ -84,7 +92,6 @@ $resultat = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </nav>
         </header>
 
-        <main>
             <div class="barre">
                 <form action="formations.php" method="get">
                     <input type="text" name="recherche" placeholder="Formations diplômantes en C">
@@ -105,24 +112,20 @@ $resultat = $stmt->fetchAll(PDO::FETCH_ASSOC);
                </select>
             </div>
 
-            <ul class="liste">
-                <?php if (!empty($resultat)) : ?>
-                    <?php foreach ($resultat as $row): ?>
-                        <li class="resultat">
-                            <a href="detail.php?id=<?php echo htmlspecialchars($row['id']); ?>">
-                            <h2 class="titre"><?php echo htmlspecialchars($row["nom"]); ?></h2>;
-                            <p class="description"><?php echo htmlspecialchars($row["description"]); ?></p>;
-                            <?php if (!empty($row['illustration_url'])): ?>
-                                    <span><img src="../assets/images/<?php echo htmlspecialchars($row['image']); ?>" alt="Image de <?php echo htmlspecialchars($row['illustration_url']); ?>"></span>
-                            <?php endif; ?>
+<main>
+            <section class="liste">
+                    <?php foreach ($resultat as $formation): ?>
+                        <div class="resultat">
+                            <h2 class="titre"><?php echo htmlspecialchars($formation["nom"]); ?></h2>;
+                            <p class="description"><?php echo htmlspecialchars($formation["description"]); ?></p>;
                             </a>
-                        </li>;
+                    </div>
                     <?php endforeach; ?>
-                        
+                    </section>
+            
                 <?php else: ?>
                     <p> Aucune formation trouvée. </p>       
                 <?php endif; ?>
-            </ul>
         </main>
     </body>
 </html>
