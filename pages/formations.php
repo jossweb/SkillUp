@@ -19,7 +19,21 @@ $requete = "SELECT c.id, c.nom, c.description, c.illustration_url, cat.nom as ca
             WHERE 1=1";
 $param = [];
 
-if (!empty($categorie)) {
+// "Mes cours" (ID 16)
+if (!empty($categorie) && $categorie == 16) {
+    if (IsConnected() && isset($_COOKIE['user_token'])) {
+        $requete = "SELECT c.id, c.nom, c.description, c.illustration_url, cat.nom as categorie_nom 
+                   FROM Cours c 
+                   LEFT JOIN Categories cat ON c.categorie_id = cat.id 
+                   INNER JOIN Inscriptions i ON c.id = i.cours_id 
+                   INNER JOIN sessions s ON i.etudiant_id = s.user_id 
+                   WHERE s.token = :token";
+        $param[':token'] = $_COOKIE['user_token'];
+    } else {
+        header("Location: connection.php");
+        exit;
+    }
+} elseif (!empty($categorie)) {
     $requete .= " AND c.categorie_id = :categorie";
     $param[':categorie'] = $categorie;
 }

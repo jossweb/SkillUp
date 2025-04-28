@@ -93,8 +93,8 @@ INSERT INTO `Categories` (`id`, `nom`, `description`, `date_creation`) VALUES
 (12, 'Algorithmique', 'Étudiez les structures de données et les algorithmes fondamentaux pour résoudre des problèmes complexes.', '2025-04-23 20:01:05'),
 (13, 'Informatique Théorique', 'Approfondissez les bases mathématiques et logiques de l’informatique.', '2025-04-23 20:01:05'),
 (14, 'UX/UI Design', 'Apprenez à concevoir des interfaces utilisateurs intuitives et attrayantes.', '2025-04-23 20:01:05'),
-(15, 'Robotique', 'Initiez-vous à la programmation et au contrôle de robots autonomes.', '2025-04-23 20:01:05');
-
+(15, 'Robotique', 'Initiez-vous à la programmation et au contrôle de robots autonomes.', '2025-04-23 20:01:05'),
+(16, 'Mes cours', 'Cette catégorie affiche uniquement les cours auxquels vous êtes inscrit.', CURRENT_TIMESTAMP);
 -- --------------------------------------------------------
 
 --
