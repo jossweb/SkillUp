@@ -280,7 +280,6 @@ form .mini-inputs .input-group {
     text-align: center;
     background-color: var(--skillup-pink);
     color: #fff;
-    width: 200px;
     height: auto;
     padding: 8px;
     border-radius: var(--radius);
@@ -1041,6 +1040,7 @@ input{
     display: flex;
     justify-content: center;
     flex-direction: column;
+    align-items: center;
 }
 h1 {
     margin: 0;
