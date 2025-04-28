@@ -105,7 +105,7 @@ header p{
 }
 .token button:hover{
     background-color: #777777;
-    transition: 500ms ease-in-out;
+    transition: 300ms ease-in-out;
 }
 .token p{
     align-self: center;
@@ -138,7 +138,7 @@ label{
 table{
     margin-top: 10px;
     width: 95%;
-    border: 2px solid var(--border);
+    border: 1px var(--border) solid;
     margin-left: auto;
     margin-right: auto;
     border-collapse: collapse;
@@ -295,32 +295,42 @@ a{
 }
 a:hover{
     color: var(--border);
-    transition: 500ms ease-in;
+    transition: 300ms ease-in;
 }
 /*profile*/
+body#profile{
+    padding: 20px;
+}
+
 .infos{
     display: flex;
     flex-direction: column;
-    background-color: var(--alt-bg);
-    width: 40%;
+    width: 90%;
+    height: auto;
     max-width: 600px;
     justify-content: left;
     border-radius: var(--radius);
     border: none;
     text-align: left;
     margin: auto;
+    gap: 20px;
 }
 .infos .user-info{
-    border: 2px var(--border) solid;
+    width: 100%;
+    position: relative;
+    padding-bottom: 20px;
+    border: 1px var(--border) solid;
     border-radius: var(--radius);
     padding-bottom: 10px;
+    background-color: var(--alt-bg);
 }
 .change-info{
-    border: 2px var(--border) solid;
+    border: 1px var(--border) solid;
     border-radius: var(--radius);
     margin-top: 20px;
     padding-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 10px; 
+    background-color: var(--alt-bg);
 }
 input{
     width: 98%;
@@ -340,19 +350,29 @@ input{
     outline: none;
 }
 .delete-account{
-    border: 2px var(--border) solid;
+    border: 1px var(--border) solid;
     border-radius: var(--radius);
     margin-top: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
+    background-color: var(--alt-bg);
 }
+
+#user-details {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+    gap: 5px;
+}
+
 .infos .headband{
     background-color: var(--skillup-pink);
-    border-top-left-radius: var(--radius);
-    border-top-right-radius: var(--radius);
+    border-top-left-radius: calc(var(--radius) - 1px );
+    border-top-right-radius: calc(var(--radius) - 1px);
     width: 100%;
-    height: 70px;
-    margin-bottom: 50px;
+    height: 80px;
+    margin-bottom: 35px;
     position: relative;
 }
 .infos .headband .cross{
@@ -361,32 +381,36 @@ input{
 }
 .avatar{
     margin-top: 4px;
-    margin-left: 20px;
     border-radius: 50px;
     width: 100px;
     height: 100px;
+    object-fit: cover;
+    transition: 350ms filter ease-in-out;
 }
 .avatar:hover{
     filter: brightness(40%);
-    transition: 250ms ease-in;
 }
 .infos button{
-    width: 98%;
+    width: 93%;
     display: block;
     margin-left: auto;
     margin-right: auto;
     border-radius: var(--radius);
-    padding: 15px;
-    margin-top: 30px;
+    padding: 12px;
+    margin-top: 15px;
     font-size: 14px;
     background-color: var(--bg);
     color: var(--color);
-    border: none;
+    border: var(--border) 1px solid;
     border-radius: var(--radius);
+    transition: background-color 300ms ease;
+    cursor: pointer;
 }
+
 #generatePopup{
     float: left;
     width: auto;
+    border: none;
     margin: 0px;
     padding-top: 0px;
 }
@@ -397,11 +421,11 @@ input{
     margin-left: 0px
 }
 .infos h2{
-    padding: 15px;
+    padding: 5px 15px;
     font-size: 20px;
 }
 .infos p{
-    padding-left: 1%;
+    padding-left: 15px;
     font-size: 16px;
 }
 .loading-part{
@@ -446,7 +470,7 @@ input{
 }
 #message-pop button:hover{
     background-color: var(--border);
-    transition: 500ms ease-in-out;
+    transition: 300ms ease-in-out;
 }
 .popup .button-container{
     width: 100%;
@@ -522,9 +546,10 @@ input{
     flex-direction: column;
 }
 .teacher-request{
-    border: 2px solid var(--border);
+    border: 1px var(--border) solid;
     border-radius: var(--radius);
     margin-top: 20px;
+    background-color: var(--alt-bg);
 }
 .teacher-request #inprogress{
     padding: 10px;
@@ -532,6 +557,15 @@ input{
     font-weight: 400;
     padding-bottom: 20px;
 }
+
+.change-info,
+.teacher-request,
+.delete-account {
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
 .logo {
     width: 100px;
     height: 40px;
@@ -555,7 +589,7 @@ input{
     width: 25%;
     max-width: 550px;
     min-width: 400px;
-    border-right: 2px var(--border) solid;
+    border-right: 1px var(--border) solid;
     color: var(--color);
     padding-bottom: 10px;
 }
@@ -774,7 +808,7 @@ input{
 }
 .main-part .tool-bar button:hover{
     background-color: var(--border);
-    transition: 500ms ease;
+    transition: 300ms ease;
 }
 .text-editor{
     position: relative;
@@ -955,10 +989,6 @@ input{
     overflow: hidden;
 }
 
-#generatePopup:hover{
-    filter: brightness(40%);
-    transition: 250ms ease-in;
-}
 #generatePopup{
     float: left;
     width: auto;
@@ -1086,7 +1116,6 @@ h1 {
   }
   .avatar{
     margin-top: 4px;
-    margin-left: 20px;
     border-radius: 50px;
     width: 100px;
     height: 100px;
@@ -1262,12 +1291,21 @@ table tr td button{
 }
 .popup .button-container button:hover{
     background-color: var(--border);
-    transition: 500ms ease-in-out;
+    transition: 300ms ease;
 }
+
 .delete-account button{
     background-color: #DF2E4E;
+    color: var(--bg);
     border: 0px;
+    cursor: pointer;
 }
+
+.delete-account button:hover{
+    background-color: #be2541;
+    transition: 300ms ease;
+}
+
 .popup .cross, button.cross, .cross{
     background-color: transparent;
     color: var(--color);
@@ -1277,7 +1315,7 @@ table tr td button{
     border: none;
     margin-left: auto;
     width: auto;
-    padding: none;
+    padding: 0;
     position: absolute;
     right: 0;
 }
@@ -1291,6 +1329,7 @@ table tr td button{
     padding: 0;
     width: auto;
     color: var(--alt-bg);
+    cursor: pointer;
 }
 form .mini-inputs .input-group .little-input {
     width: 100% !important;
@@ -1393,24 +1432,23 @@ form .mini-inputs .input-group .little-input {
     margin: 0;
     border: var(--border) 1px solid;
     width: 100%;
-    border-radius: 0;
     padding-bottom: 30px;
     margin-top: 10px;
 }
 .teacher-request button:hover{
     background-color: var(--border);
-    transition: 500ms ease-in-out;
+    transition: 300ms ease-in-out;
 }
 #logout:hover{
-    background-color: #816e006e;
-    transition: 500ms ease-in-out;
+    background-color: var(--border);
+    transition: 300ms ease;
 }
 .hover{
     padding-bottom: 5px;
 }
 .hover:hover{
     background-color: var(--border);
-    transition: 500ms ease-in-out;
+    transition: 300ms ease-in-out;
 }
 .backhome{
     color: var(--color);
@@ -1445,6 +1483,8 @@ form .mini-inputs .input-group .little-input {
     padding: 15px;
 }
 #logout{
-    border: solid 2px var(--border);
+    cursor: pointer;
+    background-color: var(--bg);
+    border: 1px var(--border) solid;
     width: 100%;
 }

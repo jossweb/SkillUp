@@ -17,7 +17,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 18px;
+  padding: 0px 5%;
   background-color: var(--alt-bg);
   border-bottom: solid 1px var(--border);
 }
@@ -33,6 +33,117 @@ nav a {
   text-decoration: none;
   color: var(--color);
   transition: all 200ms ease;
+}
+
+.burger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.burger-menu span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: var(--color);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.burger-toggle {
+  display: none;
+}
+
+.burger-toggle:checked ~ .burger-menu span:first-child {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.burger-toggle:checked ~ .burger-menu span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-toggle:checked ~ .burger-menu span:last-child {
+  transform: translateY(-8px) rotate(-45deg);
+}
+.burger-toggle:checked ~ body {
+  overflow: hidden;
+  height: 100vh;
+}
+
+.logo {
+  z-index: 101;
+  position: relative;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  transition: transform 400ms ease-in-out;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+.mobile {
+  display: none;
+  margin: 0px;
+}
+
+.mobile-profile-btn {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px;
+  border-radius: 30px !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 8px 15px !important;
+}
+
+.mobile-profile-btn img {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.mobile-profile-btn span {
+  color: var(--alt-bg);
+  font-weight: 500;
+}
+
+.mobile-login-btn {
+  margin-top: 15px;
+}
+
+.profile-btn {
+  background: var(--skillup-alt-pink);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  transition: border-radius 300ms;
+}
+
+.profile-btn:hover {
+  border-radius: 30%;
+  background: var(--skillup-alt-pink);
+}
+
+.profile-btn img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: border-radius 300ms;
+}
+
+.profile-btn:hover img {
+  border-radius: 30%;
 }
 
 nav a:hover {
@@ -58,7 +169,8 @@ header div {
   margin: auto;
 }
 
-#hg, #bd {
+#hg,
+#bd {
   position: absolute;
   z-index: -2;
   min-width: 550px;
@@ -73,7 +185,6 @@ header div {
   bottom: -21%;
   right: -12%;
 }
-
 
 header div h1 {
   font-size: 3rem;
@@ -102,11 +213,11 @@ button:hover {
 }
 
 #scroll {
-  position:  absolute;
+  position: absolute;
   bottom: 3%;
   border-radius: 99px;
   border: 1px solid var(--border);
-  background-color:  var(--bg);
+  background-color: var(--bg);
   color: var(--color);
   display: flex;
   align-items: center;
@@ -121,7 +232,9 @@ button:hover {
 }
 
 @keyframes scroll {
-  0%, 30%, 60% {
+  0%,
+  30%,
+  60% {
     transform: translateY(0);
     box-shadow: none;
   }
@@ -224,6 +337,7 @@ section {
     box-shadow: none;
     background-size: cover;
     background-repeat: no-repeat;
+    background: var(--alt-bg);
   }
   .step-card {
     box-shadow: none !important;
@@ -238,8 +352,13 @@ section {
     background-size: cover;
     background-repeat: no-repeat;
   }
-  #hg, #bd {
-    stroke: #A042F0;
+  #hg,
+  #bd {
+    stroke: #a042f0;
+    stroke-width: 1px;
+  }
+  .shape {
+    stroke: #a042f0;
     stroke-width: 1px;
   }
 }
@@ -311,6 +430,7 @@ section {
   margin: 0 auto;
   padding: 2px 0px;
   overflow: hidden;
+  background-color: var(--bg);
 }
 
 .faq-item {
@@ -456,4 +576,223 @@ footer {
 
 .footer-col a:hover {
   color: var(--color);
+}
+
+.trending-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.trending-card {
+  width: 300px;
+  background-color: var(--alt-bg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  display: flex;
+   flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.trending-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.trending-image {
+  width: 100%;
+  height: 150px;
+  min-height: 150px;
+  overflow: hidden;
+}
+
+.trending-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 500ms ease;
+  background-color: var(--skillup-alt-pink);
+}
+
+.trending-card:hover .trending-image img {
+  transform: scale(1.05);
+}
+
+.trending-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 16px;
+  align-items: flex-start;
+}
+
+.trending-category {
+  font-size: 0.8rem;
+  color: var(--skillup-pink);
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.trending-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--color);
+}
+
+.trending-desc {
+  font-size: 0.9rem;
+  color: var(--alt-color);
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.trending-link {
+  display: inline-block;
+  color: var(--color);
+  font-weight: 600;
+  text-decoration: none;
+  position: relative;
+  transition: all 200ms ease;
+}
+
+.trending-link:hover {
+  color: var(--skillup-pink);
+}
+
+.no-courses {
+  text-align: center;
+  color: var(--alt-color);
+  font-style: italic;
+  padding: 30px 0;
+}
+
+.testimonials-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.testimonial-card {
+  width: 350px;
+  background-color: var(--alt-bg);
+  border-radius: var(--radius);
+  padding: 25px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transition: transform 300ms ease, box-shadow 300ms ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-content {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.testimonial-avatar {
+  width: 60px;
+  height: 60px;
+  min-height: 60px; /* sinon l'image est étirée */
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 15px;
+  background-color: var(--skillup-alt-pink);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.testimonial-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.testimonial-stars {
+  color: var(--skillup-pink);
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.testimonial-text {
+  color: var(--alt-color);
+  font-style: italic;
+  margin-bottom: 20px;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.testimonial-author {
+  font-weight: 600;
+  color: var(--color);
+  margin-bottom: 5px;
+}
+
+.testimonial-role {
+  font-size: 0.9rem;
+  color: var(--alt-color);
+}
+.shape {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  z-index: -1;
+}
+
+.shape-top-right {
+  top: 0;
+  right: 0;
+}
+
+.shape-bottom-left {
+  bottom: 0;
+  left: 0;
+}
+
+.shape-top-left {
+  top: 0;
+  left: 0;
+}
+
+.shape-bottom-right {
+  bottom: 0;
+  right: 0;
+}
+
+section {
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+.shape {
+  animation: float 8s ease-in-out infinite;
+}
+
+#faq .shape {
+  opacity: 0.6;
 }

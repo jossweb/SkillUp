@@ -1,167 +1,265 @@
-@import url("assets.css");
-@import url("responsive.css");
+@import url(../css/assets.css);
 
-    body {
-        background-color: var(--bg);
-        color: var(--color);
-        width:100vw;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        font-family: "Onest", sans-serif;
+
+header {
+  position: relative;
+  flex-direction: column;
+  height: 60vh;
+  min-height: 400px;
+  max-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin: auto;
+  padding: 0 20px;
+  max-width: 800px;
+  z-index: 1;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.hero-content p {
+  font-weight: 500;
+  color: var(--alt-color);
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.search-container {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 15px;
+}
+
+.search-container form {
+  display: flex;
+  gap: 10px;
+}
+
+.search-container input {
+  flex: 1;
+  height: 48px;
+  background-color: var(--alt-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 20px;
+  font-size: 16px;
+  color: var(--color);
+}
+
+.search-container input:focus {
+  outline: none;
+  border-color: var(--skillup-pink);
+}
+
+.search-container button {
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+main {
+  padding: 30px 5%;
+  flex: 1;
+}
+
+.filters-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.results-count {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.filters {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.filters select {
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background-color: var(--alt-bg);
+  color: var(--color);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.filters select:focus {
+  outline: none;
+  border-color: var(--skillup-pink);
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.course-card {
+  background-color: var(--alt-bg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.no-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--color);
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.course-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.course-category {
+  font-size: 0.8rem;
+  color: var(--skillup-pink);
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.course-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: var(--color);
+  line-height: 1.3;
+}
+
+.course-description {
+  font-size: 0.95rem;
+  color: var(--alt-color);
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.no-results {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: var(--alt-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  margin: 30px auto;
+  max-width: 600px;
+}
+
+.no-results h2 {
+  margin-top: 0;
+  color: var(--color);
+  font-size: 1.5rem;
+}
+
+.no-results p {
+  color: var(--alt-color);
+  margin-bottom: 20px;
+}
+
+.reset-link {
+  display: inline-block;
+  color: var(--skillup-pink);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 8px 16px;
+  border: 1px solid var(--skillup-pink);
+  border-radius: var(--radius);
+  transition: all 0.3s ease;
+}
+
+.reset-link:hover {
+  background-color: var(--skillup-pink);
+  color: white;
+}
+
+/* je met le responsive ici pour overwrite le repsonsive des elements de responsive.css */
+@media (max-width: 768px) {
+  header {
+    height: 50vh;
+  }
+  
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-content p {
+    font-size: 1.1rem;
+  }
+  
+  .filters-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filters {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .filters select {
+    flex: 1;
+  }
+  
+  .search-container form {
+    flex-direction: column;
+  }
+  
+  .search-container button {
+    width: 100%;
+  }
+  
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .search-container input {
+    padding: 15px 20px;
+    width: 100%;
     }
-    nav {
-        width: 100%;
-        height: 65px;
-        display: flex;
-        justify-content: space-between;
+    .search-container form {
+        width: 80%;
         align-items: center;
-        padding: 0px 12px;
-        background-color: var(--alt-bg);
-        border-bottom: solid 1px var(--border);
     }
-    nav ul {
-        display: flex;
-        list-style: none;
-        align-items: center;
-        gap: 5%;
-    }
-    nav a {
-        text-decoration: none;
-        color: var(--color);
-        font-family: "Onset", sans-serif;
-    }
-    .logo{
-        display: inline-flex;
-        justify-items: left;
-    }
-    .logo-light {
-        display: inline;
-    }
-    .logo-dark {
-        display: none;
-    }
-
-    @media (prefers-color-scheme: dark) {
-        .logo-light {
-            display: none;
-        }
-        .logo-dark {
-            display: inline;
-        }
-    }
-
-    main {
-        padding: 20px;
-    }
-
-    .liste{
-        list-style:none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .resultat{
-        background-color: var(--bg);
-        color:var(--color);
-        border: var(--border) solid 1px;
-        border-radius: 5px;
-        padding: 15px;
-        margin-bottom: 15px;
-        transition: background-color 300ms ease, background-image 125ms ease, color 125ms ease, border-color 300ms ease;
-    }
-    
-    .titre{
-        color: var(--color);
-        margin-top: 0;
-        margin-bottom: 5px;
-        font-size: 1.2em;
-    }
-
-    .description{
-        color: var(--alt-color);
-        font-size: 0.95em;
-        line-height: 1.4;
-        margin-bottom: 10px;
-    }
-
-    .info{
-        color: var(--alt-color);
-        font-size: 0.85em;
-    }
-    
-    .info span{
-        margin-right: 15px;
-    }
-
-    .resultat hover{
-        background-color: var(--alt-color);
-        cursor: pointer;
-    }
-
-    .barre{
-        display: flex;
-        gap:10px;
-        background-color: var(--bg);
-        padding: 15px 20px;
-        box-sizing: border-box;
-        border-radius: 10px;
-        justify-content: center;
-    }
-
-    .barre input [type="text"] {
-        color:var(--alt-color);
-        text-align: left;
-        border: none;
-        outline: none;
-    }
-
-    select{
-        color: var(--color);
-        border: 1 px var(--border) solid var(--color);
-        border-radius: 5px;
-        padding: 8px 15px;
-        font-size:0.9em;
-        background-color: var(--bg);
-        cursor:pointer;
-    }
-
-    button{
-        background-color: var(--bg);
-        color:var(--color);
-        border: none;
-        padding: 10px 15px;
-        cursor: pointer;
-        border-radius: 10px;
-        transition: background-color 300ms ease, background-image 125ms ease, color 125ms ease, border-color 300ms ease;
-    }
-
-    button:hover {
-        background-color: var(--alt-bg);
-    }
-    
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
+}

@@ -1,50 +1,128 @@
 <?php
-// Inclure la connexion
 session_start(); 
 require_once("../include/config.php"); 
-require_once("../include/connectdb.php");//je ne sais pas si c'est nécessaire vu que ce n'est pas dans la db 
+require_once("../include/connectdb.php");
+require_once("../include/sessionManager.php");
 $db = connectDB();
-
 
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_cours = $_GET['id'];
 
-        try{
-            //Récupérer infos du cours
-            $stmt_cours = $db->prepare("SELECT nom, description, illustration_url FROM Cours WHERE id = :id");
-            $stmt_cours->bindParam(':id', $id_cours, PDO::PARAM_INT);
-            $stmt_cours->execute();
-            $formation = $stmt_cours->fetch(PDO::FETCH_ASSOC);
+    try {
+        // Récupérer infos du cours
+        $stmt_cours = $db->prepare("SELECT c.id, c.nom, c.description, c.illustration_url, c.prof_id, 
+                                   u.prenom, u.nom as nom_prof, 
+                                   cat.nom as categorie_nom 
+                                   FROM Cours c
+                                   LEFT JOIN Utilisateurs u ON c.prof_id = u.id
+                                   LEFT JOIN Categories cat ON c.categorie_id = cat.id
+                                   WHERE c.id = :id");
+        $stmt_cours->bindParam(':id', $id_cours, PDO::PARAM_INT);
+        $stmt_cours->execute();
+        $formation = $stmt_cours->fetch(PDO::FETCH_ASSOC);
 
-            if (!$formation) {
-                header("Location: formations.php");
+        if (!$formation) {
+            header("Location: formations.php");
+            exit();
+        }
+
+        // Récupérer le nombre de likes (favoris)
+        $stmt_likes = $db->prepare("SELECT COUNT(*) as total FROM Favoris WHERE cours_id = :id");
+        $stmt_likes->bindParam(':id', $id_cours, PDO::PARAM_INT);
+        $stmt_likes->execute();
+        $likes = $stmt_likes->fetch(PDO::FETCH_ASSOC);
+        $formation['likes'] = $likes['total'];
+
+        // Récupérer les chapitres du cours pour afficher le nombre
+        $stmt_chapitres = $db->prepare("SELECT COUNT(*) as total FROM Chapitres WHERE cours_id = :id");
+        $stmt_chapitres->bindParam(':id', $id_cours, PDO::PARAM_INT);
+        $stmt_chapitres->execute();
+        $chapitres_count = $stmt_chapitres->fetch(PDO::FETCH_ASSOC);
+        $nb_chapitres = $chapitres_count['total'];
+
+        // Vérifier si l'utilisateur est inscrit à ce cours
+        $is_inscrit = false;
+        if (IsConnected()) {
+            $sql = 'SELECT id FROM Utilisateurs WHERE id = (SELECT user_id FROM sessions WHERE token = :token)';
+            $request = $db->prepare($sql);
+            $request->bindParam(':token', $_COOKIE['user_token']);
+            $request->execute();
+            $user = $request->fetch(PDO::FETCH_ASSOC);
+            
+            if ($user) {
+                $stmt_inscrit = $db->prepare("SELECT id FROM Inscriptions WHERE etudiant_id = :user_id AND cours_id = :cours_id");
+                $stmt_inscrit->bindParam(':user_id', $user['id'], PDO::PARAM_INT);
+                $stmt_inscrit->bindParam(':cours_id', $id_cours, PDO::PARAM_INT);
+                $stmt_inscrit->execute();
+                $is_inscrit = $stmt_inscrit->rowCount() > 0;
+            }
+        }
+
+        // Si l'utilisateur s'inscrit au cours
+        if (isset($_POST['inscription']) && IsConnected()) {
+            $sql = 'SELECT id FROM Utilisateurs WHERE id = (SELECT user_id FROM sessions WHERE token = :token)';
+            $request = $db->prepare($sql);
+            $request->bindParam(':token', $_COOKIE['user_token']);
+            $request->execute();
+            $user = $request->fetch(PDO::FETCH_ASSOC);
+            
+            if ($user && !$is_inscrit) {
+                // Ajouter l'inscription
+                $stmt_inscription = $db->prepare("INSERT INTO Inscriptions (etudiant_id, cours_id) VALUES (:user_id, :cours_id)");
+                $stmt_inscription->bindParam(':user_id', $user['id'], PDO::PARAM_INT);
+                $stmt_inscription->bindParam(':cours_id', $id_cours, PDO::PARAM_INT);
+                $stmt_inscription->execute();
+                
+                // Ajouter une entrée dans la table Vues
+                $stmt_vue = $db->prepare("INSERT INTO Vues (utilisateur_id, cours_id) VALUES (:user_id, :cours_id)");
+                $stmt_vue->bindParam(':user_id', $user['id'], PDO::PARAM_INT);
+                $stmt_vue->bindParam(':cours_id', $id_cours, PDO::PARAM_INT);
+                $stmt_vue->execute();
+                
+                // Rediriger pour éviter la soumission multiple du formulaire
+                header("Location: detail.php?id=" . $id_cours);
                 exit();
             }
-
-        }catch (PDOException $e) {
-            die("Erreur lors de la récupération des détails de la formation : " . $e->getMessage());
         }
-    }else{
-        header("Location: formations.php");
-        exit();
-    }      
+
+    } catch (PDOException $e) {
+        die("Erreur lors de la récupération des détails de la formation : " . $e->getMessage());
+    }
+} else {
+    header("Location: formations.php");
+    exit();
+}      
+
 $titre = SITE_NAME . ' - ' . htmlspecialchars($formation['nom']);
+
+$avatar = "../assets/images/user.svg";
+if (IsConnected()) {
+    $sql = 'SELECT Utilisateurs.avatar_url FROM sessions INNER JOIN Utilisateurs ON Utilisateurs.id = sessions.user_id WHERE sessions.token = :token';
+    $request = $db->prepare($sql);
+    $request->bindParam(':token', $_COOKIE['user_token']);
+    $request->execute();
+    $result = $request->fetch(PDO::FETCH_ASSOC);
+    
+    if ($result && isset($result['avatar_url']) && $result['avatar_url'] != null) {
+        $avatar = $result['avatar_url'];
+    }
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
-
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title><?php echo $titre; ?> </title>
-        <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/detail.css">
-    </head>
-    <body>
-        <header>
-            <nav>
-                <div class="logo">
-                    <!--Mode clair-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $titre; ?></title>
+    <link rel="stylesheet" type="text/css" href="../<?php echo CSS_PATH; ?>/detail.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <!--Mode clair-->
+                                    <!--Mode clair-->
                     <svg class="logo-light" width="88" height="20" viewBox="0 0 88 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_328_52)">
                             <path d="M6.14108 16.0043C5.16361 16.0043 4.2428 15.8596 3.37866 15.57C2.51452 15.2805 1.78495 14.81 1.18997 14.1585C0.594984 13.5071 0.198328 12.6457 0 11.5744H2.31619C2.50035 12.1824 2.79784 12.6602 3.20866 13.0076C3.61949 13.3406 4.09406 13.5722 4.63237 13.7025C5.18486 13.8328 5.73734 13.8979 6.28983 13.8979C6.81398 13.8979 7.30272 13.8256 7.75604 13.6808C8.22353 13.536 8.60602 13.2971 8.90351 12.9642C9.201 12.6312 9.34975 12.1969 9.34975 11.6612C9.34975 11.2559 9.27183 10.9229 9.116 10.6623C8.96017 10.4017 8.7406 10.1918 8.45727 10.0326C8.18811 9.85885 7.86229 9.72132 7.4798 9.61998C7.04064 9.47521 6.56607 9.35215 6.05609 9.25081C5.56027 9.14948 5.06445 9.03366 4.56863 8.90337C4.08697 8.77307 3.63365 8.60659 3.20866 8.40391C2.85451 8.25914 2.50743 8.08541 2.16744 7.88274C1.84162 7.66558 1.55829 7.41223 1.31746 7.12269C1.07664 6.81868 0.87831 6.46399 0.72248 6.05863C0.580818 5.65328 0.509986 5.19001 0.509986 4.66884C0.509986 3.97394 0.616233 3.38038 0.828728 2.88817C1.05539 2.39595 1.3458 1.98335 1.69995 1.65038C2.06828 1.31741 2.48618 1.05682 2.95367 0.868622C3.43532 0.665943 3.93823 0.521173 4.46238 0.43431C4.98653 0.347448 5.49652 0.304017 5.99234 0.304017C6.89898 0.304017 7.73479 0.448787 8.49977 0.738327C9.26475 1.02787 9.89515 1.49113 10.391 2.12812C10.901 2.75063 11.1772 3.57582 11.2197 4.60369H9.03101C8.97434 4.05357 8.79018 3.61925 8.47852 3.30076C8.18103 2.96779 7.80562 2.73616 7.3523 2.60586C6.89898 2.46109 6.41733 2.38871 5.90734 2.38871C5.53902 2.38871 5.17069 2.4249 4.80237 2.49729C4.43405 2.55519 4.09406 2.67101 3.7824 2.84473C3.48491 3.00398 3.24408 3.22114 3.05992 3.4962C2.88992 3.77126 2.80492 4.11147 2.80492 4.51683C2.80492 4.86428 2.87576 5.17553 3.01742 5.4506C3.15908 5.71118 3.35741 5.93558 3.6124 6.12378C3.88156 6.2975 4.17905 6.44951 4.50488 6.5798C5.09986 6.81144 5.75151 6.9924 6.45983 7.12269C7.16814 7.23851 7.83395 7.40499 8.45727 7.62215C8.91059 7.76692 9.33558 7.94788 9.73224 8.16504C10.1289 8.36772 10.4689 8.62106 10.7522 8.92508C11.0355 9.21462 11.2551 9.56207 11.4109 9.96743C11.5668 10.3583 11.6447 10.8143 11.6447 11.3355C11.6447 12.1897 11.4959 12.9207 11.1984 13.5288C10.901 14.1223 10.4972 14.6001 9.98723 14.962C9.47724 15.3239 8.88934 15.5917 8.22353 15.7655C7.55771 15.9247 6.86356 16.0043 6.14108 16.0043Z" fill="black"/>
@@ -79,48 +157,89 @@ $titre = SITE_NAME . ' - ' . htmlspecialchars($formation['nom']);
                                 <rect width="88" height="20" fill="white"/>
                             </clipPath>
                         </defs>
-                    </svg>        
+                    </svg>              
             </div>
-                <ul>
-                    <li><a href="pageAccueil"> Accueil </a> </li>
-                    <li><a href="formations.php"> Formations </a> </li>
-                    <li><a href="categorie.php"> Catégories </a> </li>
-                    <li><a href="connection.php"> <img src="../assets/images/user.svg" alt="user"> </a> </li>
-                </ul>
-            </nav>
-        </header>
+            <ul>
+                <li><a href="/"> Accueil </a> </li>
+                <li><a href="formations.php"> Formations </a> </li>
+                <li><a href="categories.php"> Catégories </a> </li>
+            </ul>
+            <?php if (IsConnected()): ?>
+                <a href="profile.php"> 
+                    <img src="<?php echo htmlspecialchars($avatar); ?>" alt="Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                </a>
+            <?php else: ?>
+                <a href="connection.php"> 
+                    <img src="../assets/images/user.svg" alt="Se connecter">
+                </a>
+            <?php endif; ?>
+        </nav>
+    </header>
 
     <main class="details">
         <section class="hero">
-            <div class="image-container"> <!--Ici je n'ai pas pu récupérer les images de la table categorie or ce sont elles qu'on veut utiliser-->   
+            <div class="image-container">   
                 <?php if (!empty($formation['illustration_url'])): ?>
-                    <img src="assets/images/<?php echo htmlspecialchars($formation['illustration_url']); ?>" alt="Illustration du cours <?php echo htmlspecialchars($formation['nom']); ?>">
+                    <img src="<?php echo htmlspecialchars($formation['illustration_url']); ?>" alt="Illustration du cours <?php echo htmlspecialchars($formation['nom']); ?>">
+                <?php else: ?>
+                    <div class="no-image">Pas d'image</div>
+                <?php endif; ?>
+            </div>
+
+            <div class="title-container">
+                <h1><?php echo htmlspecialchars($formation['nom']); ?></h1>
+                <div class="author-info">
+                    <span>Par <?php echo htmlspecialchars($formation['prenom'] . ' ' . $formation['nom_prof']); ?></span>
+                </div>
+                <div>
+                    <span class="course-category"><?php echo htmlspecialchars($formation['categorie_nom'] ?? 'Non catégorisé'); ?></span>
+                </div>
+            </div>
+        </section>
+
+        <section class="description">
+            <p><?php echo htmlspecialchars($formation['description']); ?></p>
+        </section>
+
+        <section class="info">
+            <ul>
+                <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v10l4.24 4.24"/>
+                        <circle cx="12" cy="12" r="10"/>
+                    </svg>
+                    <span><?php echo $nb_chapitres; ?> chapitre(s)</span>
+                </li>
+                <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    <span><?php echo $formation['likes']; ?> J'aime</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="course-actions">
+            <?php if (!$is_inscrit && $nb_chapitres > 0): ?>
+                <form method="POST">
+                    <?php if (IsConnected()): ?>
+                        <button type="submit" name="inscription" class="enroll-button">S'inscrire au cours</button>
+                    <?php else: ?>
+                        <a href="connection.php" class="enroll-button">Se connecter pour s'inscrire</a>
                     <?php endif; ?>
-</div>
+                </form>
+            <?php elseif ($is_inscrit && $nb_chapitres > 0): ?>
+                <a href="course_viewer.php?id=<?php echo $id_cours; ?>" class="view-course-button">Consulter le cours</a>
+            <?php elseif ($nb_chapitres == 0): ?>
+                <div>
+                    <p>Ce cours ne contient pas encore de chapitres.</p>
+                </div>
+            <?php endif; ?>
+        </section>
+    </main>
 
-<div class="title-container">
-    <h1><?php echo htmlspecialchars($formation['nom']); ?></h1>
-</div>
-</section>
-
-<section class="description">
-    <p><?php echo htmlspecialchars($formation['description']); ?></p>
-</section>
-
-<section class="info">
-    <ul> <!--pas de durée ni de likes dans la table Cours-->
-        <li><img src="assets/images/clock.svg" alt="Duree"> Durée: <span><?php echo $formation['duree']; ?></span></li>
-        <li><img src="assets/images/heart.svg" alt="Likes"> <span><?php echo $formation['likes']; ?></span>J'aime </li>
-</ul>
-</section>
-
-<section class="button">
-    <button class="enroll-button">S'inscrire</button>
-</section>
-</main>
-
-<footer>
-</footer>
+    <footer>
+    </footer>
 </body>
 </html>
 

@@ -28,6 +28,9 @@
     box-sizing: border-box;
     font-family: "Onest", sans-serif;
     font-optical-sizing: auto;
+    /* retirer l'highlight bleu sur mobile de stackoverflow: */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
     transition: background-color 300ms ease, background-image 125ms ease, color 125ms ease, border-color 300ms ease;
 }
 

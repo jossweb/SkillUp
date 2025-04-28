@@ -16,7 +16,7 @@ $request->execute();
 $result = $request->fetch(PDO::FETCH_ASSOC);
 $avatar = $result['avatar_url'];
 if($avatar == null){
-    $avatar = 'https://remyweb.fr/images/1356835268082008064.webp';
+    $avatar = '../assets/images/user.svg';
 }
 $sql_prof_requests = "SELECT DemandeProf.id FROM DemandeProf WHERE DemandeProf.id_utilisateur = :id";
 $request = $db->prepare( $sql_prof_requests);
@@ -130,8 +130,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </button>
             </div>
 
-            <h2><?php echo htmlspecialchars($result['prenom'])?></h2>
-            <p><?php echo htmlspecialchars($result['e_mail'])?></p>
+            <div id="user-details">
+                <h2><?php echo htmlspecialchars($result['prenom'])?></h2>
+                <p><?php echo htmlspecialchars($result['e_mail'])?></p>
+            </div>
             <button onclick="location.href='reset-pass.php'" class="hover">Changer mon mot de passe</button>
             
         </div>

@@ -1,5 +1,5 @@
 <?php
-require_once("../include/connectdb.php"); 
+require_once("connectdb.php"); 
 
 function IsConnected(): bool {
     $db = connectDB();
