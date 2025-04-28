@@ -388,7 +388,7 @@
             <button onclick="CloseAvatarPopup()" class="cross">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>            </button>
              </button>
-            <h2>Changer mon avatar</h2>
+            <h2>Changer l'avatar</h2>
             <div class="avatar-container">
                 <img src="<?php echo  htmlspecialchars($result_check['illustration_url'])?>">
                 <?php if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){echo "<p>&#x2794;</p><img src=". $_SESSION['new_avatar']  ." alt='nouveau avatar' />";}?>
@@ -396,9 +396,9 @@
                 <?php if(isset($_SESSION['new_avatar']) && $_SESSION['new_avatar'] !== null){echo "<form method='POST'><button name='agreeAvatar' id='agreeAvatar'>Accepter l'avatar</button></form>";}?>
             
             <form method="POST">
-                <label for="prompt">Mon avatar doit ressembler à :</label>
+                <label for="prompt">L'avatar doit ressembler à :</label>
                 <input id="prompt" name="prompt" type="text">
-                <button id="generate" name="avatar-gen" onclick="ShowLoading()">Générer mon avatar</button>
+                <button id="generate" name="avatar-gen" onclick="ShowLoading()">Générer l'avatar</button>
                 <div class="loading-part" id="loading-emo">
                     <p>Chargement</p>
                     <div id="spinner"></div>

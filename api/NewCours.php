@@ -1,6 +1,4 @@
 <?php
-// ⚠️Ce endpoint n'a pas pour but d'être utilisé en production⚠️
-// Version de démontration github (code uniquement)
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(0);

@@ -8,7 +8,7 @@ require_once("../include/secureCheck.php");
 require_once("../include/tools.php");
 header('Content-Type: application/json');
 $db =  connectDB();
-if(false){ //you can't use this endpoint in prod
+if(false){ //you can't use this endpoint in prod, This endpoint was just intended for automatically filling the database using python scripts
     if(LogsCheck()){
         if (isset($_POST["firstname"]) && isset($_POST["email"]) && isset($_POST["pass"])) {
             $db =  connectDB();

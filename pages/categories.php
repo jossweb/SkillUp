@@ -68,7 +68,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </svg>        
             </div>
             <ul>
-                <li><a href="#">Accueil</a></li>
+                <li><a href="../">Accueil</a></li>
                 <li><a href="formations.php">Formations</a></li>
                 <li><a href="categories.php">Catégories</a></li>
                 
@@ -94,7 +94,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <section class="grid-container">
                 <?php foreach ($categories as $categorie): ?>
                     <div class="category">
-                        <a href="/pages/formations.php?categorie=<?php echo htmlspecialchars($categorie['id']); ?>">
+                        <a href="../pages/formations.php?categorie=<?php echo htmlspecialchars($categorie['id']); ?>">
                             <h2><?php echo htmlspecialchars($categorie['nom']); ?></h2>
                         </a>
                         <p><?php echo htmlspecialchars($categorie['description']); ?></p>

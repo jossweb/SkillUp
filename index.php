@@ -58,7 +58,7 @@ if (IsConnected()) {
                 fill="#A042F0" fill-opacity="0.3"></path>
         </svg>
         <nav>
-            <a href="/" class="logo" aria-label="SkillUp"></a>
+            <a href="./" class="logo" aria-label="SkillUp"></a>
             <input type="checkbox" id="burger-toggle" class="burger-toggle">
             <label for="burger-toggle" class="burger-menu">
                 <span></span>
@@ -67,9 +67,9 @@ if (IsConnected()) {
             </label>
             <div class="nav-links">
                 <ul>
-                    <li><a href="/">Accueil</a></li>
-                    <li><a href="/pages/formations.php">Formations</a></li>
-                    <li><a href="/pages/categories.php">Catégories</a></li>
+                    <li><a href="./">Accueil</a></li>
+                    <li><a href="pages/formations.php">Formations</a></li>
+                    <li><a href="pages/categories.php">Catégories</a></li>
                 </ul>
                 <div class="mobile">
                     <?php
@@ -101,12 +101,12 @@ if (IsConnected()) {
             <p>Apprenez à votre rythme, développez <br> vos compétences librement.</p>
             <?php if (IsConnected()) {
                 if ($result['role'] == 'professeur') { ?>
-                    <button onclick="location.href='/pages/dashboard.php';">Accéder à mon dashboard</button>
+                    <button onclick="location.href='pages/dashboard.php';">Accéder à mon dashboard</button>
                 <?php } else { ?>
-                    <button onclick="location.href='/pages/profile.php';">Accéder à mon profil</button>
+                    <button onclick="location.href='pages/profile.php';">Accéder à mon profil</button>
                 <?php }
             } else { ?>
-                <button onclick="location.href='/pages/connection.php';">Inscrivez-vous maintenant</button>
+                <button onclick="location.href='pages/connection.php';">Inscrivez-vous maintenant</button>
             <?php } ?>
         </div>
         <svg id="bd" width="549" height="477" viewBox="0 0 549 477" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -404,28 +404,28 @@ if (IsConnected()) {
                 <div class="footer-col">
                     <h3>Plateforme</h3>
                     <ul>
-                        <li><a href="/">Accueil</a></li>
-                        <li><a href="/pages/formations.php">Formations</a></li>
-                        <li><a href="/pages/categories.php">Catégories</a></li>
-                        <li><a href="/pages/dashboard.php">Tableau de Bord</a></li>
+                        <li><a href="./">Accueil</a></li>
+                        <li><a href="pages/formations.php">Formations</a></li>
+                        <li><a href="pages/categories.php">Catégories</a></li>
+                        <li><a href="pages/dashboard.php">Tableau de Bord</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h3>Catégories</h3>
                     <ul>
-                        <li><a href="/pages/formations.php?categorie=12">Algorithmique</a></li>
-                        <li><a href="/pages/formations.php?categorie=9">Architecture Logicielle</a></li>
-                        <li><a href="/pages/formations.php?categorie=6">Base de Données</a></li>
-                        <li><a href="/pages/formations.php?categorie=10">Cloud Computing</a></li>
+                        <li><a href="pages/formations.php?categorie=12">Algorithmique</a></li>
+                        <li><a href="pages/formations.php?categorie=9">Architecture Logicielle</a></li>
+                        <li><a href="pages/formations.php?categorie=6">Base de Données</a></li>
+                        <li><a href="pages/formations.php?categorie=10">Cloud Computing</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <ul>
-                        <li><a href="/pages/formations.php?categorie=2">Cybersécurité</a></li>
-                        <li><a href="/pages/formations.php?categorie=7">Développement Mobile</a></li>
-                        <li><a href="/pages/formations.php?categorie=1">Développement Web</a></li>
-                        <li><a href="/pages/formations.php?categorie=11">DevOps</a></li>
-                        <li><a href="/pages/formations.php?categorie=13">Sciences & Ingénierie</a></li>
+                        <li><a href="pages/formations.php?categorie=2">Cybersécurité</a></li>
+                        <li><a href="pages/formations.php?categorie=7">Développement Mobile</a></li>
+                        <li><a href="pages/formations.php?categorie=1">Développement Web</a></li>
+                        <li><a href="pages/formations.php?categorie=11">DevOps</a></li>
+                        <li><a href="pages/formations.php?categorie=13">Sciences & Ingénierie</a></li>
                     </ul>
                 </div>
             </div>

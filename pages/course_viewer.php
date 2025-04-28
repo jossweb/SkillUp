@@ -157,7 +157,7 @@ $titre = SITE_NAME . ' - ' . htmlspecialchars($formation['nom']) . ' - ' . htmls
 <body>
     <!-- A PARTIR DE LA LANDING : -->
     <nav>
-        <a href="/" class="logo" aria-label="SkillUp"></a>
+        <a href="../" class="logo" aria-label="SkillUp"></a>
         <input type="checkbox" id="burger-toggle" class="burger-toggle">
         <label for="burger-toggle" class="burger-menu">
             <span></span>
@@ -166,19 +166,19 @@ $titre = SITE_NAME . ' - ' . htmlspecialchars($formation['nom']) . ' - ' . htmls
         </label>
         <div class="nav-links">
             <ul>
-                <li><a href="/">Accueil</a></li>
-                <li><a href="/pages/formations.php">Formations</a></li>
-                <li><a href="/pages/categories.php">Catégories</a></li>
+                <li><a href="../">Accueil</a></li>
+                <li><a href="../pages/formations.php">Formations</a></li>
+                <li><a href="../pages/categories.php">Catégories</a></li>
             </ul>
             <div class="mobile">
                 <?php
                 if (IsConnected()) {
-                    echo '<button class="profile-btn mobile-profile-btn" onclick="location.href=\'/pages/profile.php\';">
+                    echo '<button class="profile-btn mobile-profile-btn" onclick="location.href=\'../pages/profile.php\';">
                                 <img src="' . htmlspecialchars($avatar) . '" alt="Profil">
                                 <span>Mon compte</span>
                                 </button>';
                 } else {
-                    echo '<button class="mobile-login-btn" onclick="location.href=\'pages/connection.php\';">Se connecter</button>';
+                    echo '<button class="mobile-login-btn" onclick="location.href=\'../pages/connection.php\';">Se connecter</button>';
                 }
                 ?>
             </div>
@@ -186,11 +186,11 @@ $titre = SITE_NAME . ' - ' . htmlspecialchars($formation['nom']) . ' - ' . htmls
         <div class="desktop">
             <?php
             if (IsConnected()) {
-                echo '<button class="profile-btn" onclick="location.href=\'/pages/profile.php\';">
+                echo '<button class="profile-btn" onclick="location.href=\'../pages/profile.php\';">
                             <img src="' . htmlspecialchars($avatar) . '" alt="Profil">
                             </button>';
             } else {
-                echo '<button onclick="location.href=\'pages/connection.php\';">Se connecter</button>';
+                echo '<button onclick="location.href=\'../pages/connection.php\';">Se connecter</button>';
             }
             ?>
         </div>
@@ -300,28 +300,28 @@ $titre = SITE_NAME . ' - ' . htmlspecialchars($formation['nom']) . ' - ' . htmls
                 <div class="footer-col">
                     <h3>Plateforme</h3>
                     <ul>
-                        <li><a href="/">Accueil</a></li>
-                        <li><a href="/pages/formations.php">Formations</a></li>
-                        <li><a href="/pages/categories.php">Catégories</a></li>
-                        <li><a href="/pages/dashboard.php">Tableau de Bord</a></li>
+                        <li><a href="../">Accueil</a></li>
+                        <li><a href="../pages/formations.php">Formations</a></li>
+                        <li><a href="../pages/categories.php">Catégories</a></li>
+                        <li><a href="../pages/dashboard.php">Tableau de Bord</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h3>Catégories</h3>
                     <ul>
-                        <li><a href="/pages/formations.php?categorie=12">Algorithmique</a></li>
-                        <li><a href="/pages/formations.php?categorie=9">Architecture Logicielle</a></li>
-                        <li><a href="/pages/formations.php?categorie=6">Base de Données</a></li>
-                        <li><a href="/pages/formations.php?categorie=10">Cloud Computing</a></li>
+                        <li><a href="../pages/formations.php?categorie=12">Algorithmique</a></li>
+                        <li><a href="../pages/formations.php?categorie=9">Architecture Logicielle</a></li>
+                        <li><a href="../pages/formations.php?categorie=6">Base de Données</a></li>
+                        <li><a href="../pages/formations.php?categorie=10">Cloud Computing</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <ul>
-                        <li><a href="/pages/formations.php?categorie=2">Cybersécurité</a></li>
-                        <li><a href="/pages/formations.php?categorie=7">Développement Mobile</a></li>
-                        <li><a href="/pages/formations.php?categorie=1">Développement Web</a></li>
-                        <li><a href="/pages/formations.php?categorie=11">DevOps</a></li>
-                        <li><a href="/pages/formations.php?categorie=13">Sciences & Ingénierie</a></li>
+                        <li><a href="../pages/formations.php?categorie=2">Cybersécurité</a></li>
+                        <li><a href="../pages/formations.php?categorie=7">Développement Mobile</a></li>
+                        <li><a href="../pages/formations.php?categorie=1">Développement Web</a></li>
+                        <li><a href="../pages/formations.php?categorie=11">DevOps</a></li>
+                        <li><a href="../pages/formations.php?categorie=13">Sciences & Ingénierie</a></li>
                     </ul>
                 </div>
             </div>

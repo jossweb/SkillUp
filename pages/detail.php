@@ -180,7 +180,6 @@ if (IsConnected()) {
         <nav>
             <div class="logo">
                 <!--Mode clair-->
-                <!--Mode clair-->
                 <svg class="logo-light" width="88" height="20" viewBox="0 0 88 20" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_328_52)">
@@ -244,7 +243,7 @@ if (IsConnected()) {
                 </svg>
             </div>
             <ul>
-                <li><a href="/"> Accueil </a> </li>
+                <li><a href="../"> Accueil </a> </li>
                 <li><a href="formations.php"> Formations </a> </li>
                 <li><a href="categories.php"> Catégories </a> </li>
             </ul>

@@ -126,9 +126,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <form id="login-form" class="isSelected" method="POST" action="connection.php">
                 <label for="email">Email</label>
-                <input type="email" id="email" maxlength="255" name="email">
+                <input type="email" id="email" maxlength="255" name="email" required>
                 <label for="password">Mot de passe</label>
-                <input type="password" id="password" maxlength="255" name="password"/>
+                <input type="password" id="password" maxlength="255" name="password" required/>
                 <button type="submit" name="connectionForm">Connexion</button>
                 
             </form>
@@ -136,19 +136,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="mini-inputs">
                     <div class="input-group">
                         <label for="name">Nom</label>
-                        <input type="text" class="little-input" id="name" name="name" maxlength="40"/>
+                        <input type="text" class="little-input" id="name" name="name" maxlength="40" required/>
                     </div>
                     <div class="input-group">
                         <label for="firstName">Prénom</label>
-                        <input type="text" class="little-input" name="firstName" maxlength="15"/>
+                        <input type="text" class="little-input" name="firstName" maxlength="15" required/>
                     </div>
                 </div>
                 <label for="email">Email</label>
-                <input type="email" id="email" maxlength="255" name="email">
+                <input type="email" id="email" maxlength="255" name="email" required>
                 <label for="password" >Mot de passe</label>
-                <input type="password" id="password" maxlength="255" name="password"/>
+                <input type="password" id="password" minlength="8" maxlength="255" name="password" required/>
                 <label for="check-pass">Confirmation</label>
-                <input type="password" id="check-pass" maxlength="255" name="cPassword"/>
+                <input type="password" id="check-pass" minlength="8" maxlength="255" name="cPassword" required/>
                 <button type="submit" name="registrationForm">Inscription</button>
             </form>
         </section>

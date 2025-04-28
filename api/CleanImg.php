@@ -2,10 +2,10 @@
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(0);
-
 require_once("../include/connectdb.php");
 require_once("../include/secureCheck.php");
 header('Content-Type: application/json');
+
 if(LogsCheck()){
     if (isset($_POST["token"]) && isset($_POST["markdown"]) && isset($_POST["chapter"]) && isset($_POST["cours"])) {
         if (CheckToken($_POST['token'])) {

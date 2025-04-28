@@ -3,8 +3,10 @@
 body{
     display: block;
     background-color: var(--bg);
-    height: 100vh;
     color: var(--color);
+}
+#connection{
+    height: 100vh;
 }
 nav{
     border-bottom: 1px solid var(--border);
@@ -1035,6 +1037,8 @@ input{
     padding: 24px;
     align-self: center;
     position: relative;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 #dash{
     display: flex;
@@ -1487,4 +1491,10 @@ form .mini-inputs .input-group .little-input {
     background-color: var(--bg);
     border: 1px var(--border) solid;
     width: 100%;
+}
+.green{
+    color: green;
+}
+svg{
+    color: var(--color)
 }
