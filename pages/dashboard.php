@@ -50,25 +50,21 @@
 
 
     //get graph data
-    $date = (new DateTime())->modify('-31 days')->format('Y-m-d');
-    $sql_data = "SELECT Inscriptions.date_inscription, COUNT(Inscriptions.id) AS count FROM Inscriptions INNER JOIN Cours ON Inscriptions.cours_id = Cours.id INNER JOIN Utilisateurs ON Cours.prof_id = Utilisateurs.id WHERE Utilisateurs.e_mail = :email AND Inscriptions.date_inscription > :date GROUP BY Inscriptions.date_inscription ORDER BY Inscriptions.date_inscription DESC";
+    $date = (new DateTime())->modify('-30 days')->format('Y-m-d');
+    $sql_data = "SELECT DATE(Inscriptions.date_inscription) AS date, COUNT(Inscriptions.id) AS count FROM Inscriptions INNER JOIN Cours ON Inscriptions.cours_id = Cours.id INNER JOIN Utilisateurs ON Cours.prof_id = Utilisateurs.id WHERE Utilisateurs.e_mail = :email AND Inscriptions.date_inscription >= :date GROUP BY date ORDER BY date ASC";
     $request_data = $db->prepare($sql_data);
     $request_data->bindParam(':email', $result["e_mail"]);
     $request_data->bindParam(':date', $date);
     $request_data->execute();
-    $result_data = $request_data->fetchAll(PDO::FETCH_ASSOC);
+    $result_data = $request_data->fetchAll(PDO::FETCH_KEY_PAIR);
 
     //prepare theses values for js
-    if($result_data){
-      $counts = [];
-      for ($i = 0; $i <= 30 - count($result_data); $i++) {
-        $counts[] = 0; 
-      }
-      foreach ($result_data as $row) {
-          $counts[] = (int) $row['count'];
-      }
-      $counts_json = json_encode($counts);
+    $counts = [];
+    for ($i = 0; $i <= 30; $i++) {
+        $currentDate = (new DateTime())->modify("-$i days")->format('Y-m-d');
+        $counts[] = isset($result_data[$currentDate]) ? (int)$result_data[$currentDate] : 0;
     }
+    $counts_json = json_encode(array_reverse($counts));
 
     //get courses infos
     $sql_courses = "SELECT Cours.id, Cours.nom, Cours.illustration_url, Cours.description, Categories.nom AS 'cat_nom', COUNT(Vues.id) AS 'Vues', COUNT(Inscriptions.id) AS 'Inscrits', COUNT(Favoris.id) AS 'like' FROM Cours INNER JOIN Utilisateurs ON Cours.prof_id = Utilisateurs.id LEFT JOIN Vues ON Cours.id = Vues.cours_id LEFT JOIN Inscriptions ON Cours.id = Inscriptions.cours_id LEFT JOIN Favoris ON Cours.id = Favoris.cours_id LEFT JOIN Categories ON Categories.id = Cours.categorie_id WHERE Utilisateurs.id = :id GROUP BY Cours.id;";

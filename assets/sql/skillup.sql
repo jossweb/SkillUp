@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : dim. 27 avr. 2025 à 08:43
+-- Généré le : mar. 29 avr. 2025 à 09:53
 -- Version du serveur : 8.0.40
 -- Version de PHP : 8.3.14
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `skillup`
+-- Base de données : `skillup2`
 --
 
 -- --------------------------------------------------------
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `ApiLogs` (
   `id` int NOT NULL,
-  `ip` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `succes` tinyint(1) NOT NULL DEFAULT '0',
   `date_heure` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -59,7 +59,11 @@ INSERT INTO `ApiLogs` (`id`, `ip`, `succes`, `date_heure`) VALUES
 (18, '::1', 1, '2025-04-27 10:38:44'),
 (19, '::1', 1, '2025-04-27 10:39:50'),
 (20, '::1', 1, '2025-04-27 10:40:00'),
-(21, '::1', 1, '2025-04-27 10:40:07');
+(21, '::1', 1, '2025-04-27 10:40:07'),
+(22, '::1', 1, '2025-04-27 11:53:39'),
+(23, '::1', 1, '2025-04-28 18:31:42'),
+(24, '::1', 1, '2025-04-28 19:15:09'),
+(25, '::1', 1, '2025-04-28 20:32:20');
 
 -- --------------------------------------------------------
 
@@ -94,7 +98,8 @@ INSERT INTO `Categories` (`id`, `nom`, `description`, `date_creation`) VALUES
 (13, 'Informatique Théorique', 'Approfondissez les bases mathématiques et logiques de l’informatique.', '2025-04-23 20:01:05'),
 (14, 'UX/UI Design', 'Apprenez à concevoir des interfaces utilisateurs intuitives et attrayantes.', '2025-04-23 20:01:05'),
 (15, 'Robotique', 'Initiez-vous à la programmation et au contrôle de robots autonomes.', '2025-04-23 20:01:05'),
-(16, 'Mes cours', 'Cette catégorie affiche uniquement les cours auxquels vous êtes inscrit.', CURRENT_TIMESTAMP);
+(16, 'Mes cours', 'Cette catégorie affiche uniquement les cours auxquels vous êtes inscrit.', '2025-04-28 17:40:35');
+
 -- --------------------------------------------------------
 
 --
@@ -270,7 +275,7 @@ CREATE TABLE IF NOT EXISTS `Cours` (
   `illustration_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `categorie_id` int DEFAULT NULL,
-  `prof_id` int DEFAULT NULL,
+  `prof_id` int NOT NULL,
   `date_creation` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -294,7 +299,7 @@ INSERT INTO `Cours` (`id`, `nom`, `illustration_url`, `description`, `categorie_
 (48, 'MongoDB Optimisation', 'https://remyweb.fr/images/1365910736823386112.webp', 'Cours de démonstration réalisé par GPT-4o', 6, 281, '2025-04-26 22:41:42'),
 (49, 'React Native', 'https://remyweb.fr/images/1365911526036209664.webp', 'Cours de démonstration réalisé par GPT-4o', 7, 282, '2025-04-26 22:44:50'),
 (50, 'Xamarin Mobile', 'https://remyweb.fr/images/1365912184789401600.webp', 'Cours de démonstration réalisé par GPT-4o', 7, 283, '2025-04-26 22:47:27'),
-(51, 'POO avec C#', 'https://remyweb.fr/images/1365912822344581120.webp', 'Cours de démonstration réalisé par GPT-4o', 8, 284, '2025-04-26 22:50:02'),
+(51, 'POO avec C#', 'https://remyweb.fr/images/1365912184789401600.webp', 'Cours de démonstration réalisé par GPT-4o', 8, 284, '2025-04-26 22:50:02'),
 (52, 'Java Spring Boot', 'https://remyweb.fr/images/1365913850825670656.webp', 'Cours de démonstration réalisé par GPT-4o', 8, 6, '2025-04-26 22:54:05'),
 (53, 'Modélisation UML', 'https://remyweb.fr/images/1365914582236790784.webp', 'Cours de démonstration réalisé par GPT-4o', 9, 271, '2025-04-26 22:56:59'),
 (54, 'Microservices Docker', 'https://remyweb.fr/images/1365915235810017280.webp', 'Cours de démonstration réalisé par GPT-4o', 9, 272, '2025-04-26 22:59:34'),
@@ -315,8 +320,8 @@ INSERT INTO `Cours` (`id`, `nom`, `illustration_url`, `description`, `categorie_
 
 CREATE TABLE IF NOT EXISTS `DemandeProf` (
   `id` int NOT NULL,
-  `id_utilisateur` int DEFAULT NULL,
-  `presentation` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `id_utilisateur` int NOT NULL,
+  `presentation` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -325,7 +330,7 @@ CREATE TABLE IF NOT EXISTS `DemandeProf` (
 -- Structure de la table `Favoris`
 --
 
-CREATE TABLE IF NOT EXISTS `Favoris` (
+CREATE TABLE IF NOT EXISTS`Favoris` (
   `id` int NOT NULL,
   `utilisateur_id` int NOT NULL,
   `cours_id` int NOT NULL,
@@ -352,9 +357,16 @@ CREATE TABLE IF NOT EXISTS `Images` (
 CREATE TABLE IF NOT EXISTS `Inscriptions` (
   `id` int NOT NULL,
   `etudiant_id` int DEFAULT NULL,
-  `cours_id` int DEFAULT NULL,
+  `cours_id` int NOT NULL,
   `date_inscription` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `Inscriptions`
+--
+
+INSERT INTO `Inscriptions` (`id`, `etudiant_id`, `cours_id`, `date_inscription`) VALUES
+(1, 6, 37, '2025-04-28 17:26:37');
 
 -- --------------------------------------------------------
 
@@ -366,7 +378,7 @@ CREATE TABLE IF NOT EXISTS `KeyTable` (
   `key_id` int NOT NULL,
   `date_creation` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `actif` tinyint(1) NOT NULL DEFAULT '1',
-  `token` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+  `token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -410,7 +422,8 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `token`, `created_at`, `expires_at`) VALUES
-(16, 6, '$2y$10$jDPDmDZNVgqT5uhjJpbJkO5fYrE6/M6/mKQvlHUT7hVM7uhLKb0r.', '2025-04-27 08:39:24', '2025-04-28 06:39:24');
+(17, 6, '$2y$10$qsJ/aIXoEoYcVRfFYK1kU.BGmIuLkIz4q2XTbSQd.jBQt36aPrUzG', '2025-04-28 16:29:57', '2025-04-29 14:29:57'),
+(19, 6, '$2y$10$Ift/T/F8NGIG0M2rMb.kH..0t0GIx7gtehvA.HpRyxSygTbPhRFcu', '2025-04-28 18:47:14', '2025-04-29 16:47:14');
 
 -- --------------------------------------------------------
 
@@ -437,7 +450,7 @@ CREATE TABLE IF NOT EXISTS `Utilisateurs` (
 
 INSERT INTO `Utilisateurs` (`id`, `prenom`, `nom`, `e_mail`, `mot_de_passe`, `avatar_url`, `role`, `date_creation`, `admin`, `key_id`) VALUES
 (5, 'admin', NULL, 'admin@skillup.com', '$2y$10$Ik.Rg.BWGfle4Vx4ZGbtHuY8fw6eAXQcttYfezurbq9CG97QLkQ3m', NULL, 'professeur', NULL, 1, 2),
-(6, 'Jossua', 'FIGUEIRAS', 'test@jossua.com', '$2y$10$LscVQZXU37FxAfV4i75f.e5LDTzZE7Q7bEMJHXk58sBnNtW/EjyCq', NULL, 'professeur', '2025-04-26 11:37:57', 0, 1),
+(6, 'Jossua', 'FIGUEIRAS', 'test@jossua.com', '$2y$10$LscVQZXU37FxAfV4i75f.e5LDTzZE7Q7bEMJHXk58sBnNtW/EjyCq', 'https://remyweb.fr/images/1366606615003791360.webp', 'professeur', '2025-04-26 11:37:57', 0, 1),
 (271, 'Merveille-ai', 'bot', 'Merveille-ai@skillup.com', '$2y$10$UtbQibSD2XRpGb1lUTfAg.6xG8FBfjG84hs3Va1sby9oZ5hESaMnG', NULL, 'professeur', '2025-04-26 20:11:17', 0, 267),
 (272, 'Tenin-ai', 'bot', 'Tenin-ai@skillup.com', '$2y$10$TcYy9ggxjdgRdRWgpOqfj.Axu8l8szcRdOvZY8A.6qw6.1airCOaO', NULL, 'professeur', '2025-04-26 20:11:17', 0, 268),
 (273, 'Thomas-ai', 'bot', 'Thomas-ai@skillup.com', '$2y$10$nLxdYuCN79rPp0QCGU3vguUHitQcJqyZDLFeD3/YzDRT1LzkHnW6W', NULL, 'professeur', '2025-04-26 20:11:18', 0, 269),
@@ -20685,7 +20698,8 @@ INSERT INTO `Utilisateurs` (`id`, `prenom`, `nom`, `e_mail`, `mot_de_passe`, `av
 (20452, 'Clyde', 'bot', 'Clyde@gmail.com', '$2y$10$2lEwxuT.7mcJWOjy6Oeez.UNNtELnr1RZtw6F8WbNM6lYyQ8Mw68a', NULL, 'etudiant', '2025-04-27 08:33:40', 0, NULL),
 (20453, 'Sally', 'bot', 'Sally@gmail.com', '$2y$10$weea4YkfMLOYM.c85xVcAu8w01S9Ay6aJRvxq69CVLiAbUlNQSXUq', NULL, 'etudiant', '2025-04-27 08:33:41', 0, NULL),
 (20454, 'William', 'bot', 'William@gmail.com', '$2y$10$RzY/beBAps5YnGX8ONCIou5yTvlmXF8Yx.oR8GBZiXA9/d4a.rwGW', NULL, 'etudiant', '2025-04-27 08:33:41', 0, NULL),
-(20455, 'Carole', 'bot', 'Carole@gmail.com', '$2y$10$f.VXy6tCa5nQe5tof/B7O.xdgtHvXHdD53n/wRaTqMg8sWL2iqmcm', NULL, 'etudiant', '2025-04-27 08:33:41', 0, NULL);
+(20455, 'Carole', 'bot', 'Carole@gmail.com', '$2y$10$f.VXy6tCa5nQe5tof/B7O.xdgtHvXHdD53n/wRaTqMg8sWL2iqmcm', NULL, 'etudiant', '2025-04-27 08:33:41', 0, NULL),
+(20456, 'Jossua', 'FIGUEIRAS', 'jossufigueiras@icloud.com', '$2y$10$fSvosWHN45FlwWWCBv3xlunw4fcZOCSvaxtwv19lbcpyrAsFMiY2O', NULL, 'etudiant', '2025-04-28 18:37:22', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -20695,11 +20709,21 @@ INSERT INTO `Utilisateurs` (`id`, `prenom`, `nom`, `e_mail`, `mot_de_passe`, `av
 
 CREATE TABLE IF NOT EXISTS `Vues` (
   `id` int NOT NULL,
-  `utilisateur_id` int DEFAULT NULL,
+  `utilisateur_id` int NOT NULL,
   `cours_id` int NOT NULL,
   `date_vue` datetime DEFAULT CURRENT_TIMESTAMP,
   `ip_address` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `Vues`
+--
+
+INSERT INTO `Vues` (`id`, `utilisateur_id`, `cours_id`, `date_vue`, `ip_address`) VALUES
+(1, 6, 61, '2025-04-28 19:14:42', NULL),
+(2, 6, 37, '2025-04-28 19:15:17', NULL),
+(3, 6, 37, '2025-04-28 19:26:37', NULL),
+(4, 6, 42, '2025-04-28 21:21:18', NULL);
 
 --
 -- Index pour les tables déchargées
@@ -20801,13 +20825,13 @@ ALTER TABLE `Vues`
 -- AUTO_INCREMENT pour la table `ApiLogs`
 --
 ALTER TABLE `ApiLogs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT pour la table `Categories`
 --
 ALTER TABLE `Categories`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT pour la table `Chapitres`
@@ -20843,7 +20867,7 @@ ALTER TABLE `Images`
 -- AUTO_INCREMENT pour la table `Inscriptions`
 --
 ALTER TABLE `Inscriptions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `KeyTable`
@@ -20855,19 +20879,19 @@ ALTER TABLE `KeyTable`
 -- AUTO_INCREMENT pour la table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT pour la table `Utilisateurs`
 --
 ALTER TABLE `Utilisateurs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20456;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20457;
 
 --
 -- AUTO_INCREMENT pour la table `Vues`
 --
 ALTER TABLE `Vues`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Contraintes pour les tables déchargées
@@ -20883,47 +20907,13 @@ ALTER TABLE `Chapitres`
 -- Contraintes pour la table `Cours`
 --
 ALTER TABLE `Cours`
-  ADD CONSTRAINT `cle_etrangere_cours_appartient_categorie` FOREIGN KEY (`categorie_id`) REFERENCES `Categories` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `cle_etrangere_cours_cree_par_prof` FOREIGN KEY (`prof_id`) REFERENCES `Utilisateurs` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `cle_etrangere_cours_cree_par_prof` FOREIGN KEY (`prof_id`) REFERENCES `Utilisateurs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `DemandeProf`
 --
 ALTER TABLE `DemandeProf`
   ADD CONSTRAINT `demandeprof_ibfk_1` FOREIGN KEY (`id_utilisateur`) REFERENCES `Utilisateurs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `Favoris`
---
-ALTER TABLE `Favoris`
-  ADD CONSTRAINT `cle_etrangere_favoris_cours` FOREIGN KEY (`cours_id`) REFERENCES `Cours` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `cle_etrangere_favoris_utilisateur` FOREIGN KEY (`utilisateur_id`) REFERENCES `Utilisateurs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `Images`
---
-ALTER TABLE `Images`
-  ADD CONSTRAINT `images_ibfk_1` FOREIGN KEY (`id_chapitre`) REFERENCES `Chapitres` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `Inscriptions`
---
-ALTER TABLE `Inscriptions`
-  ADD CONSTRAINT `cle_etrangere_inscriptions_concerne_cours` FOREIGN KEY (`cours_id`) REFERENCES `Cours` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `cle_etrangere_inscriptions_etudiant` FOREIGN KEY (`etudiant_id`) REFERENCES `Utilisateurs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `Utilisateurs`
---
-ALTER TABLE `Utilisateurs`
-  ADD CONSTRAINT `fk_key_id` FOREIGN KEY (`key_id`) REFERENCES `KeyTable` (`key_id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `Vues`
---
-ALTER TABLE `Vues`
-  ADD CONSTRAINT `cle_etrangere_vues_cours` FOREIGN KEY (`cours_id`) REFERENCES `Cours` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `cle_etrangere_vues_utilisateur` FOREIGN KEY (`utilisateur_id`) REFERENCES `Utilisateurs` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

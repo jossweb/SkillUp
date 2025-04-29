@@ -74,7 +74,7 @@ if (IsConnected()) {
                 <div class="mobile">
                     <?php
                     if (IsConnected()) {
-                        echo '<button class="profile-btn mobile-profile-btn" onclick="location.href=\'/pages/profile.php\';">
+                        echo '<button class="profile-btn mobile-profile-btn" onclick="location.href=\'pages/profile.php\';">
                                     <img src="' . htmlspecialchars($avatar) . '" alt="Profil">
                                     <span>Mon compte</span>
                                   </button>';
@@ -87,7 +87,7 @@ if (IsConnected()) {
             <div class="desktop">
                 <?php
                 if (IsConnected()) {
-                    echo '<button class="profile-btn" onclick="location.href=\'/pages/profile.php\';">
+                    echo '<button class="profile-btn" onclick="location.href=\'pages/profile.php\';">
                                 <img src="' . htmlspecialchars($avatar) . '" alt="Profil">
                               </button>';
                 } else {
@@ -431,6 +431,11 @@ if (IsConnected()) {
             </div>
         </div>
     </footer>
+    <div id="cookie">
+            <h2>Utilisation des Cookies</h2>
+            <p>Ce site web utilise des cookies indispensable à son fonctionnement. Aucunes de vos données ne seront utilisées !</p>
+            <div class="progress-bar"></div>
+    </div>
     <script>
         // mon objectif etait de tout faire en CSS malheureusement j'ai pas le choix
         // si je veux bloquer le scroll de la page
@@ -457,7 +462,11 @@ if (IsConnected()) {
                 });
             }
         });
+        setTimeout(HideCookiePopup, 8000);
+
+        function HideCookiePopup(){
+            document.getElementById('cookie').style.opacity = "0";
+        }
     </script>
 </body>
-
 </html>
